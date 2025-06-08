@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios registrados</title>
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo">
+    <h1>Usuarios Registrados</h1>
+  </header>
+  <nav class="barra-botones">
+    <a href="menu-admin.html">🏠 Inicio</a>
+    <a href="asistencia.html">📋 Sistema de asistencia</a>
+    <a href="#">📁 Materiales</a>
+    <a href="agregar-usuario.html">➕ Agregar usuarios</a>
+    <a href="usuarios.html">👤 Usuarios</a>
+    <a href="login.html">🚪 Cerrar sesión</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+  </nav>
+  
+  <main class="contenido-menu">
+    <div class="tabla-contenedor">
+      <h2>Lista de usuarios registrados</h2>
+      <table id="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        <!-- Usuarios cargados por JavaScript -->
+      </tbody>
+    </table>
+    <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
+    <!-- Modal de edición -->
+<div id="modal-editar" class="modal" style="display: none;">
+    <div class="modal-contenido">
+      <h3>Editar Usuario</h3>
+      <form id="form-editar-usuario">
+        <input type="hidden" id="edit-id">
+        
+        <label for="edit-nombre">Nombre:</label>
+        <input type="text" id="edit-nombre" required>
+        
+        <label for="edit-usuario">Usuario:</label>
+        <input type="text" id="edit-usuario" required>
+        
+        <label for="edit-tipo">Tipo:</label>
+        <select id="edit-tipo" required>
+          <option value="admin">Administrativo</option>
+          <option value="docente">Docente</option>
+          <option value="alumno">Alumno</option>
+        </select>
+        
+        <button type="submit">Guardar cambios</button>
+        <button type="button" onclick="cerrarModal()">Cancelar</button>
+      </form>
+    </div>
+  </div>  
+  </main>
+
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <script>
+    async function cargarUsuarios() {
+      const respuesta = await fetch("/api/usuarios");
+      const datos = await respuesta.json();
+      const cuerpo = document.querySelector("#tabla-usuarios tbody");
+      cuerpo.innerHTML = "";
+
+      datos.forEach(usuario => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${usuario.id}</td>
+          <td>${usuario.nombre}</td>
+          <td>${usuario.usuario}</td>
+          <td>${usuario.tipo}</td>
+          <td>
+            <button onclick="eliminarUsuario(${usuario.id})">🗑️ Eliminar</button>
+            <button onclick="modificarUsuario(${usuario.id})">✏️ Editar</button>
+          </td>
+        `;
+        cuerpo.appendChild(fila);
+      });
+    }
+
+    async function eliminarUsuario(id) {
+      if (confirm("¿Estás seguro de eliminar este usuario?")) {
+        const respuesta = await fetch(`/api/usuarios/${id}`, {
+          method: "DELETE"
+        });
+        const resultado = await respuesta.json();
+        if (respuesta.ok) {
+          alert("Usuario eliminado");
+          cargarUsuarios();
+        } else {
+          document.getElementById("mensaje").innerText = resultado.error;
+        }
+      }
+    }
+
+    function modificarUsuario(id) {
+      alert("⚠️ Función de edición en desarrollo para el usuario ID: " + id);
+      // Aquí podrías abrir un modal o redirigir a otra página para editar
+    }
+
+    window.onload = cargarUsuarios;
+    let usuariosGlobal = [];
+
+function modificarUsuario(id) {
+  const usuario = usuariosGlobal.find(u => u.id === id);
+  if (!usuario) return alert("Usuario no encontrado");
+
+  document.getElementById("edit-id").value = usuario.id;
+  document.getElementById("edit-nombre").value = usuario.nombre;
+  document.getElementById("edit-usuario").value = usuario.usuario;
+  document.getElementById("edit-tipo").value = usuario.tipo;
+
+  document.getElementById("modal-editar").style.display = "flex";
+}
+
+function cerrarModal() {
+  document.getElementById("modal-editar").style.display = "none";
+}
+
+document.getElementById("form-editar-usuario").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const id = document.getElementById("edit-id").value;
+  const datos = {
+    nombre: document.getElementById("edit-nombre").value,
+    usuario: document.getElementById("edit-usuario").value,
+    tipo: document.getElementById("edit-tipo").value
+  };
+
+  const respuesta = await fetch(`/api/usuarios/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos)
+  });
+
+  const resultado = await respuesta.json();
+
+  if (respuesta.ok) {
+    alert("✅ Usuario actualizado");
+    cerrarModal();
+    cargarUsuarios();
+  } else {
+    alert("❌ Error: " + resultado.error);
+  }
+});
+
+  </script>
+</body>
+</html>

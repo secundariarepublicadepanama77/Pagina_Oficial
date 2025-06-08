@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Administrador</title>
+  <link rel="stylesheet" href="admon.css" />
+</head>
+<body>
+  <div class="background-split">
+    <div class="login-card">
+      <div class="icon-container">
+        <img src="img/logo.png" alt="Logo escuela" />
+      </div>
+      <h1 class="indicacion">Inicia sesión</h1>
+
+      <form id="login-form">
+        <input type="text" id="usuario" placeholder="Usuario" required />
+        <input type="password" id="password" placeholder="Contraseña" required />
+        <div class="botones">
+          <a href="asistencia.html" class="btn volver">Volver</a>
+          <button type="submit" class="btn ingresar">Ingresar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const usuario = document.getElementById("usuario").value;
+      const contrasena = document.getElementById("password").value;
+
+fetch("http://localhost:3000/api/login-admin", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ usuario, contrasena })
+})
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("sesionIniciada", "true");
+          window.location.href = "admon.html";
+        } else {
+          alert("❌ " + data.mensaje);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("⚠️ Error al conectar con el servidor");
+      });
+    });
+  </script>
+</body>
+</html>

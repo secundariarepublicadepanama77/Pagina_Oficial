@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Asistencia</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+  <a href="menu-admin.html" class="btn-home">🏠 Menú principal</a>
+
+  <div class="contenedor">
+    <div class="tarjeta">
+      <img src="img/logo.png" alt="Logo" class="logo">
+      <h1 class="nombre-rojo">ESCUELA SECUNDARIA N.77</h1>
+      <h2 class="nombre-azul">"REPÚBLICA DE PANAMÁ"</h2>
+      <div class="hora" id="hora">--:--:--</div>
+      <div class="fecha" id="fecha">--</div>
+
+      <p class="instruccion">Escanea tu credencial o escribe tu matrícula:</p>
+
+      <form id="form-asistencia">
+        <input type="text" id="matricula" name="matricula" placeholder="Matrícula" autofocus required>
+        <div class="botones">
+          <a href="login2.html" class="btn rojo">Ingresar al sistema</a>
+          <button type="submit" class="btn rojo">Registrar</button>
+        </div>
+      </form>
+
+      <p class="footer">Desarrollado por la Academia de Tecnología.</p>
+    </div>
+  </div>
+
+  <script>
+    // ⏰ Mostrar hora y fecha
+    function actualizarReloj() {
+      const ahora = new Date();
+      document.getElementById("hora").textContent = ahora.toLocaleTimeString("es-MX");
+      document.getElementById("fecha").textContent = ahora.toLocaleDateString("es-MX", {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+
+    // 📤 Registrar asistencia
+    document.getElementById("form-asistencia").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const matricula = document.getElementById("matricula").value.trim();
+      if (!matricula) return;
+
+      try {
+        const res = await fetch("http://localhost:3000/api/registrar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ matricula })
+        });
+
+        const data = await res.json();
+
+        const url = new URL("confirmacion.html", window.location.origin);
+        url.searchParams.set("nombre", data.nombre || "");
+        url.searchParams.set("tipo", data.tipo || "");
+        url.searchParams.set("foto", data.foto || "");
+        url.searchParams.set("registro", data.registro || "fallido");
+        url.searchParams.set("hora", data.hora || new Date().toLocaleTimeString());
+
+        window.location.href = url.toString();
+
+      } catch (error) {
+        alert("❌ Error al conectar con el servidor.");
+        console.error(error);
+      }
+    });
+    let temporizadorQR;
+document.getElementById("matricula").addEventListener("input", function () {
+  clearTimeout(temporizadorQR);
+  temporizadorQR = setTimeout(() => {
+    const valor = this.value.trim();
+    if (valor.length >= 4) {
+      document.getElementById("form-asistencia").requestSubmit();
+    }
+  }, 500);
+});
+  </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registrar Usuario</title>
+  <link rel="stylesheet" href="registro_usuario.css">
+</head>
+<body>
+  <div class="contenedor">
+    <h1>Registrar Usuario</h1>
+    <form id="form-registro">
+      <input type="text" id="matricula" placeholder="Matrícula" required />
+      <input type="text" id="nombres" placeholder="Nombres" required />
+      <input type="text" id="apellido_paterno" placeholder="Apellido paterno" required />
+      <input type="text" id="apellido_materno" placeholder="Apellido materno" required />
+      <select id="grado">
+        <option value=""> Grado </option>
+        <option value="Primero">Primero</option>
+        <option value="Segundo">Segundo</option>
+        <option value="Tercero">Tercero</option>
+      </select>  
+      <select id="grupo">
+        <option value=""> Grupo </option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+      </select>    
+      <select id="ciclo" required>
+        <option value="">Ciclo escolar</option>
+        <option value="2024-2025">2024-2025</option>
+        <option value="2025-2026">2025-2026</option>
+        <option value="2026-2027">2026-2027</option>
+        <option value="2027-2028">2027-2028</option>
+        <option value="2028-2029">2028-2029</option>
+        <option value="2029-2030">2029-2030</option>
+      </select> 
+      <select id="tipo" required>
+        <option value="">Selecciona tipo</option>
+        <option value="Alumno">Alumno</option>
+        <option value="Maestro">Maestro</option>
+        <option value="Administrativo">Administrativo</option>
+      </select>
+      <input type="text" id="foto" placeholder="URL de foto (opcional)" />
+      <div id="preview" style="display:none; text-align:center; margin-bottom:15px;">
+        <p>Vista previa:</p>
+        <img id="foto-preview" src="" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+        <p id="foto-error" style="color:red;"></p>
+      </div>      
+      <div class="botones">
+        <button type="submit">Registrar</button>
+        <a href="admon.html" class="btn-volver">Volver</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // 🔹 Validación y envío del formulario
+    document.getElementById("form-registro").addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const datos = {
+        matricula: document.getElementById("matricula").value.trim(),
+        nombres: document.getElementById("nombres").value.trim(),
+        apellido_paterno: document.getElementById("apellido_paterno").value.trim(),
+        apellido_materno: document.getElementById("apellido_materno").value.trim(),
+        grado: document.getElementById("grado").value.trim(),
+        grupo: document.getElementById("grupo").value.trim(),
+        ciclo_escolar: document.getElementById("ciclo").value.trim(),
+        tipo: document.getElementById("tipo").value.trim(),
+        foto: document.getElementById("foto").value.trim()
+      };
+  
+      const res = await fetch('http://localhost:3000/api/matriculas', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      });
+  
+      const result = await res.json();
+      alert(result.mensaje);
+      if (result.success) {
+        document.getElementById("form-registro").reset();
+        document.getElementById("preview").style.display = "none";
+      }
+    });
+  
+    // 🔹 Vista previa y validación de imagen
+    const inputFoto = document.getElementById("foto");
+  const previewDiv = document.getElementById("preview");
+  const previewImg = document.getElementById("foto-preview");
+  const errorMsg = document.getElementById("foto-error");
+
+  function mostrarError() {
+    errorMsg.textContent = "⚠️ Esta imagen no se pudo cargar. Verifica el enlace.";
+    previewImg.style.display = "none";
+  }
+
+  inputFoto.addEventListener("input", () => {
+    const url = inputFoto.value.trim();
+
+    if (!url) {
+      previewDiv.style.display = "none";
+      previewImg.src = "";
+      errorMsg.textContent = "";
+      return;
+    }
+
+    previewImg.onload = () => {
+      previewImg.style.display = "block";
+      errorMsg.textContent = "";
+    };
+
+    previewImg.onerror = mostrarError;
+
+    previewImg.src = url;
+    previewDiv.style.display = "block";
+  });
+  </script>
+  
+</body>
+</html>
+

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Título de la página</title>
+  <link rel="stylesheet" href="estilo-global.css" />
+</head>
+<body>
+
+  <!-- Encabezado con logo y título -->
+  <header>
+    <div class="franja bandera"></div>
+    <div class="header-contenido">
+      <img src="img/logo.png" alt="Logo de la escuela" class="logo">
+      <h1>Escuela Secundaria N. 77 “República de Panamá”</h1>
+    </div>
+
+    <!-- Menú con botón hamburguesa -->
+    <nav>
+      <button class="menu-toggle" aria-label="Abrir menú">☰</button>
+      <ul class="nav-bar">
+        <li><a href="index.html"><span>🏠</span> Inicio</a></li>
+        <li><a href="noticias.html"><span>📰</span> Noticias</a></li>
+        <li><a href="historia.html"><span>📜</span> Historia</a></li>
+        <li><a href="docente.html"><span>👨‍🏫</span> Docentes</a></li>
+        <li><a href="instalaciones.html"><span>🏫</span> Instalaciones</a></li>
+        <li><a href="login.html"><span>🔒</span> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="contenido-principal">
+    <div class="caja-bienvenida">
+      <h2>¡Bienvenidos a nuestra escuela!</h2>
+      <p>Información de los docentes, ¡Próximamente!</p>
+    </div>
+  </main>  
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>  
+
+  <!-- Script del menú hamburguesa -->
+  <script>
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const navBar = document.querySelector(".nav-bar");
+
+    toggleBtn.addEventListener("click", () => {
+      navBar.classList.toggle("open");
+    });
+  </script>
+
+</body>
+</html>

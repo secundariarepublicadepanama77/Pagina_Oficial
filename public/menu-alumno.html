@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Alumno</title>
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo">
+    <h1>Panel del Alumno</h1>
+  </header>
+
+  <!-- Barra de botones del alumno -->
+  <nav class="barra-botones">
+    <a href="menu-alumno.html">🏠 Inicio</a>
+    <a href="#">📅 Horario</a>
+    <a class="disabled">📝 Tareas</a>
+    <a class="disabled">🎓 Calificaciones</a>
+    <a class="disabled">💬 Mensajes</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="contenido-menu">
+    <p>Bienvenido al panel del alumno. Aquí puedes consultar tus actividades escolares.</p>
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+  <script>
+    function cerrarSesion() {
+      // Aquí puedes limpiar variables si usas localStorage o sessionStorage
+      // localStorage.clear(); // si usas almacenamiento local
+      // sessionStorage.clear(); // si usas sesión
+  
+      // Redireccionar al login
+      window.location.href = "login.html";
+    }
+  </script>
+  
+</body>
+</html>
+

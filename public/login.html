@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="fondo-login">
+    <div class="formulario-contenedor">
+      <img src="img/logo.png" alt="Logo escuela" class="logo-login">
+      <h2>Inicia sesión</h2>
+
+      <form id="form-login">
+        <input type="text" id="usuario" placeholder="Usuario" required>
+        <input type="password" id="contrasena" placeholder="Contraseña" required>
+        <div class="botones">
+          <a href="index.html" class="btn-volver">Volver</a>
+          <button type="submit" class="btn-ingresar">Ingresar</button>
+        </div>
+      </form>      
+
+      <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
+    </div>
+  </div>
+  <script>
+    document.getElementById("form-login").addEventListener("submit", async function (event) {
+      event.preventDefault();
+  
+      const datos = {
+        usuario: document.getElementById("usuario").value.trim(),
+        contrasena: document.getElementById("contrasena").value
+      };
+  
+      try {
+        const respuesta = await fetch("https://backend-secundaria77.onrender.com/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos)
+        });
+  
+        const resultado = await respuesta.json();
+        const mensaje = document.getElementById("mensaje");
+  
+        if (respuesta.ok) {
+          if (resultado.tipo === "admin") {
+            window.location.href = "menu-admin.html";
+          } else if (resultado.tipo === "docente") {
+            window.location.href = "menu-docente.html";
+          } else if (resultado.tipo === "alumno") {
+            window.location.href = "menu-alumno.html";
+          } else {
+            mensaje.innerText = "❌ Tipo de usuario no reconocido: " + resultado.tipo;
+          }
+        } else {
+          mensaje.innerText = "❌ " + resultado.error;
+        }
+      } catch (error) {
+        document.getElementById("mensaje").innerText = "❌ Error al conectar con el servidor";
+      }
+    });
+  </script>
+  
+</body>
+</html>

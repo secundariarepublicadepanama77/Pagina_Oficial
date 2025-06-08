@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reporte de Conducta</title>
+  <link rel="stylesheet" href="reporte.css">
+</head>
+<body>
+  <div class="contenedor">
+    <h2>📋 Reporte de Conducta Individual</h2>
+
+    <form id="form-reporte">
+      <label>Nombre del alumno:</label>
+      <input type="text" id="nombre_alumno" readonly><br>
+
+      <label>Matrícula:</label>
+      <input type="text" id="matricula" readonly><br>
+
+      <label>Grado:</label>
+      <input type="text" id="grado" readonly>
+
+      <label>Grupo:</label>
+      <input type="text" id="grupo" readonly><br>
+
+      <label>Clase:</label>
+      <select id="clase" required>
+        <option value="">Selecciona</option>
+        <option>Español</option>
+        <option>Lectura</option>
+        <option>Inglés</option>
+        <option>Matemáticas</option>
+        <option>Ciencias</option>
+        <option>Geografía</option>
+        <option>Historia</option>
+        <option>F. C y E</option>
+        <option>Educación física</option>
+        <option>Vida saludable</option>
+        <option>Artes</option>
+        <option>Tutoría</option>
+        <option>Taller</option>
+        <option>Otro</option>
+      </select><br>
+
+      <label>Hora:</label>
+      <select id="hora" required>
+        <option value="">Selecciona</option>
+        <option>1a</option><option>2a</option><option>3a</option><option>4a</option>
+        <option>5a</option><option>6a</option><option>7a</option><option>8a</option>
+        <option>9a</option><option>1er descanso</option><option>2o descanso</option>
+      </select><br>
+
+      <label>Descripción de la conducta:</label><br>
+      <textarea id="descripcion" rows="5" required></textarea><br>
+
+      <input type="submit" value="Enviar Reporte">
+    </form>
+
+    <div id="mensaje"></div>
+  </div>
+
+  <script>
+    // Suponiendo que guardas los datos del alumno en localStorage al iniciar sesión
+    const alumno = JSON.parse(localStorage.getItem("alumnoSeleccionado") || "{}");
+    const profesor = localStorage.getItem("nombreUsuario") || "Anónimo";
+
+    document.getElementById("nombre_alumno").value = alumno.nombre || "";
+    document.getElementById("matricula").value = alumno.matricula || "";
+    document.getElementById("grado").value = alumno.grado || "";
+    document.getElementById("grupo").value = alumno.grupo || "";
+
+    document.getElementById("form-reporte").addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const data = {
+        matricula: document.getElementById("matricula").value,
+        nombre_alumno: document.getElementById("nombre_alumno").value,
+        grado: document.getElementById("grado").value,
+        grupo: document.getElementById("grupo").value,
+        clase: document.getElementById("clase").value,
+        hora: document.getElementById("hora").value,
+        descripcion: document.getElementById("descripcion").value,
+        quien_reporta: profesor
+      };
+
+      const res = await fetch("http://localhost:3000/api/reportes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      document.getElementById("mensaje").textContent = result.mensaje;
+      document.getElementById("form-reporte").reset();
+    });
+  </script>
+</body>
+</html>

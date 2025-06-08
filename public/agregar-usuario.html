@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Usuario</title>
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo">
+    <h1>Agregar Nuevo Usuario</h1>
+  </header>
+
+  <nav class="barra-botones">
+    <a href="menu-admin.html">🏠 Inicio</a>
+    <a href="asistencia.html">📋 Sistema de asistencia</a>
+    <a href="#">📁 Materiales</a>
+    <a href="agregar-usuario.html">➕ Agregar usuarios</a>
+    <a href="usuarios.html">👤 Usuarios</a>
+    <a href="login.html">🚪 Cerrar sesión</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+  </nav>
+  
+<main class="contenido-menu">
+  <div class="formulario-card">
+    <h2>Agregar nuevo usuario</h2>
+    <form id="form-agregar-usuario" class="form-grid">
+      <div class="campo">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" required>
+      </div>
+
+      <div class="campo">
+        <label for="usuario">Usuario</label>
+        <input type="text" id="usuario" name="usuario" required>
+      </div>
+
+      <div class="campo">
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" name="contrasena" required>
+      </div>
+
+      <div class="campo">
+        <label for="tipo">Tipo de usuario</label>
+        <select id="tipo" name="tipo" required>
+          <option value="">Selecciona una opción</option>
+          <option value="admin">Administrativo</option>
+          <option value="docente">Docente</option>
+          <option value="alumno">Alumno</option>
+        </select>
+      </div>
+
+      <div class="campo-boton">
+        <button type="submit">Agregar Usuario</button>
+      </div>
+    </form>
+
+    <div id="mensaje" class="mensaje"></div>
+  </div>
+</main>
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <script>
+    document.getElementById("form-agregar-usuario").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const datos = {
+        nombre: document.getElementById("nombre").value,
+        usuario: document.getElementById("usuario").value,
+        contrasena: document.getElementById("contrasena").value,
+        tipo: document.getElementById("tipo").value
+      };
+
+      const respuesta = await fetch("/api/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(datos)
+      });
+
+      const resultado = await respuesta.json();
+      const mensaje = document.getElementById("mensaje");
+
+      if (respuesta.ok) {
+        mensaje.innerText = "✅ Usuario agregado correctamente.";
+        mensaje.style.color = "green";
+        document.getElementById("form-agregar-usuario").reset();
+      } else {
+        mensaje.innerText = "❌ Error: " + resultado.error;
+        mensaje.style.color = "red";
+      }
+    });
+  </script>
+
+</body>
+</html>

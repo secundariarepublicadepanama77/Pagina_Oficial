@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usuarios Registrados</title>
+  <link rel="stylesheet" href="admon.css" />
+  <style>
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .btn-regresar {
+      background-color: #d32f2f;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .btn-regresar:hover {
+      background-color: #b71c1c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Usuarios Registrados</h1>
+
+  <div class="top-bar">
+    <input type="text" id="filtro" placeholder="Buscar por nombre o matrícula..." />
+    <a href="admon.html" class="btn-regresar">⬅ Volver al panel</a>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Matrícula</th>
+        <th>Nombre completo</th>
+        <th>Tipo</th>
+        <th>Grado</th>
+        <th>Grupo</th>
+        <th>Ciclo escolar</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tabla_usuarios">
+      <!-- Se llena dinámicamente -->
+    </tbody>
+  </table>
+
+  <!-- Formulario flotante de edición -->
+  <div id="modal-editar" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px gray; z-index:1000;">
+    <h3>Editar usuario</h3>
+    <form id="form-editar">
+      <input type="hidden" id="edit-matricula" />
+      <input type="text" id="edit-nombres" placeholder="Nombres" required /><br>
+      <input type="text" id="edit-apellido_paterno" placeholder="Apellido paterno" required /><br>
+      <input type="text" id="edit-apellido_materno" placeholder="Apellido materno" required /><br>
+      <input type="text" id="edit-grado" placeholder="Grado" /><br>
+      <input type="text" id="edit-grupo" placeholder="Grupo" /><br>
+      <input type="text" id="edit-ciclo" placeholder="Ciclo escolar" required /><br>
+      <select id="edit-tipo" required>
+        <option value="Alumno">Alumno</option>
+        <option value="Maestro">Maestro</option>
+        <option value="Administrativo">Administrativo</option>
+      </select><br><br>
+      <button type="submit">Guardar cambios</button>
+      <button type="button" onclick="cerrarEdicion()">Cancelar</button>
+    </form>
+  </div>
+
+  <script>
+    async function cargarUsuarios() {
+      const res = await fetch("/api/matriculas");
+      const data = await res.json();
+      const tbody = document.getElementById("tabla_usuarios");
+      tbody.innerHTML = "";
+
+      data.forEach(u => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${u.matricula}</td>
+          <td>${u.nombres} ${u.apellido_paterno} ${u.apellido_materno}</td>
+          <td>${u.tipo}</td>
+          <td>${u.grado || ''}</td>
+          <td>${u.grupo || ''}</td>
+          <td>${u.ciclo_escolar}</td>
+          <td>
+            <button onclick='editarUsuario(${JSON.stringify(u)})'>✏️ Editar</button>
+            <button onclick='eliminarUsuario("${u.matricula.trim()}")'>🗑️ Eliminar</button>
+
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function editarUsuario(usuario) {
+      document.getElementById("modal-editar").style.display = "block";
+      document.getElementById("edit-matricula").value = usuario.matricula;
+      document.getElementById("edit-nombres").value = usuario.nombres;
+      document.getElementById("edit-apellido_paterno").value = usuario.apellido_paterno;
+      document.getElementById("edit-apellido_materno").value = usuario.apellido_materno;
+      document.getElementById("edit-grado").value = usuario.grado || '';
+      document.getElementById("edit-grupo").value = usuario.grupo || '';
+      document.getElementById("edit-ciclo").value = usuario.ciclo_escolar;
+      document.getElementById("edit-tipo").value = usuario.tipo;
+    }
+
+    function cerrarEdicion() {
+      document.getElementById("modal-editar").style.display = "none";
+    }
+
+    function eliminarUsuario(matricula) {
+      if (confirm(`¿Estás seguro de eliminar al usuario con matrícula ${matricula}?`)) {
+        console.log("🧪 Intentando eliminar: ", matricula); // 👈 AGREGA ESTA LÍNEA
+        fetch("/api/matriculas/" + matricula, {
+          method: "DELETE"
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.mensaje);
+          if (data.success) cargarUsuarios();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("❌ Error al intentar eliminar el usuario.");
+        });
+      }
+    }
+
+    document.getElementById("form-editar").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const datos = {
+        matricula: document.getElementById("edit-matricula").value,
+        nombres: document.getElementById("edit-nombres").value,
+        apellido_paterno: document.getElementById("edit-apellido_paterno").value,
+        apellido_materno: document.getElementById("edit-apellido_materno").value,
+        grado: document.getElementById("edit-grado").value,
+        grupo: document.getElementById("edit-grupo").value,
+        ciclo_escolar: document.getElementById("edit-ciclo").value,
+        tipo: document.getElementById("edit-tipo").value,
+      };
+      const res = await fetch("/api/matriculas", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      });
+      const result = await res.json();
+      alert(result.mensaje);
+      if (result.success) {
+        cerrarEdicion();
+        cargarUsuarios();
+      }
+    });
+
+    document.getElementById("filtro").addEventListener("input", e => {
+      const valor = e.target.value.toLowerCase();
+      document.querySelectorAll("#tabla_usuarios tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(valor) ? "" : "none";
+      });
+    });
+
+    cargarUsuarios();
+  </script>
+</body>
+</html>

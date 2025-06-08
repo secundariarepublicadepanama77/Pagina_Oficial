@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Administrativo</title>
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo">
+    <h1>Panel Administrativo</h1>
+  </header>
+
+  <nav class="barra-botones">
+    <a href="menu-admin.html">🏠 Inicio</a>
+    <a href="asistencia.html">📋 Sistema de asistencia</a>
+    <a href="#">📁 Materiales</a>
+    <a href="agregar-usuario.html">➕ Agregar usuarios</a>
+    <a href="usuarios.html">👤 Usuarios</a>
+    <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+  </nav>
+
+  <main class="contenido-menu">
+    <p>Bienvenido al panel de control para administrativos.</p>
+  </main>
+
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+  <script>
+    function cerrarSesion() {
+      // Aquí puedes limpiar variables si usas localStorage o sessionStorage
+      // localStorage.clear(); // si usas almacenamiento local
+      // sessionStorage.clear(); // si usas sesión
+  
+      // Redireccionar al login
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
+
