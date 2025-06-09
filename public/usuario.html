@@ -36,7 +36,7 @@
     <a href="admon.html" class="btn-regresar">⬅ Volver al panel</a>
   </div>
 
-  <table>
+  <table id="tabla_usuarios">
     <thead>
       <tr>
         <th>Matrícula</th>
@@ -75,30 +75,33 @@
   </div>
 
   <script>
-    async function cargarUsuarios() {
-      const res = await fetch("/api/matriculas");
-      const data = await res.json();
-      const tbody = document.getElementById("tabla_usuarios");
-      tbody.innerHTML = "";
+async function cargarUsuarios() {
+  const res = await fetch("/api/matriculas");
+  const data = await res.json();
 
-      data.forEach(u => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${u.matricula}</td>
-          <td>${u.nombres} ${u.apellido_paterno} ${u.apellido_materno}</td>
-          <td>${u.tipo}</td>
-          <td>${u.grado || ''}</td>
-          <td>${u.grupo || ''}</td>
-          <td>${u.ciclo_escolar}</td>
-          <td>
-            <button onclick='editarUsuario(${JSON.stringify(u)})'>✏️ Editar</button>
-            <button onclick='eliminarUsuario("${u.matricula.trim()}")'>🗑️ Eliminar</button>
+  console.log("✅ Datos recibidos:", data); // ← Agregado para depurar
 
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+  const tbody = document.getElementById("tabla_usuarios");
+  tbody.innerHTML = "";
+
+  data.forEach(u => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${u.matricula}</td>
+      <td>${u.nombres} ${u.apellido_paterno} ${u.apellido_materno}</td>
+      <td>${u.tipo}</td>
+      <td>${u.grado || ''}</td>
+      <td>${u.grupo || ''}</td>
+      <td>${u.ciclo_escolar}</td>
+      <td>
+        <button onclick='editarUsuario(${JSON.stringify(u)})'>✏️ Editar</button>
+        <button onclick='eliminarUsuario("${u.matricula.trim()}")'>🗑️ Eliminar</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
 
     function editarUsuario(usuario) {
       document.getElementById("modal-editar").style.display = "block";
