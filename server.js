@@ -174,16 +174,20 @@ app.post("/api/matriculas", (req, res) => {
     res.status(201).json({ success: true, mensaje: "Usuario registrado correctamente" });
   });
 });
-app.get("/api/matriculas", (req, res) => {
-  const query = `SELECT * FROM matriculas ORDER BY id DESC`;
-  db.all(query, [], (err, rows) => {
-    if (err) {
-      console.error("Error al obtener registros:", err.message);
-      return res.status(500).json({ error: "Error al obtener registros" });
-    }
-    res.json(rows);
-  });
+app.get("/api/matriculas", async (req, res) => {
+  const { data, error } = await supabase
+    .from("matriculas")
+    .select("*")
+    .order("id", { ascending: false });
+
+  if (error) {
+    console.error("❌ Error al obtener matriculas:", error.message);
+    return res.status(500).json({ error: "Error al obtener matriculas" });
+  }
+
+  res.json(data);
 });
+
 app.post("/api/matriculas/editar", (req, res) => {
   const {
     id, matricula, nombres, apellido_paterno,
