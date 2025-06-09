@@ -42,33 +42,37 @@ app.post("/api/usuarios", (req, res) => {
 });
 
 // 🔐 LOGIN DE USUARIOS
-app.post("/api/login", (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { usuario, contrasena } = req.body;
 
-  if (!usuario || !contrasena) {
-    return res.status(400).json({ error: "Faltan campos" });
+  console.log("📨 Login recibido:", { usuario, contrasena });
+
+  const { data, error } = await supabase
+    .from("usuarios")
+    .select("*")
+    .eq("usuario", usuario)
+    .eq("contrasena", contrasena)
+    .limit(1);
+
+  if (error) {
+    console.error("❌ Error Supabase:", error.message);
+    return res.status(500).json({ error: "Error del servidor" });
   }
 
-  const query = `
-    SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?
-  `;
+  console.log("🧪 Resultado de Supabase:", data);
 
-  db.get(query, [usuario, contrasena], (err, row) => {
-    if (err) {
-      return res.status(500).json({ error: "Error del servidor" });
-    }
+  if (!data || data.length === 0) {
+    return res.status(401).json({ error: "Credenciales inválidas" });
+  }
 
-    if (!row) {
-      return res.status(401).json({ error: "Credenciales inválidas" });
-    }
-
-    res.json({
-      mensaje: "Inicio de sesión exitoso",
-      tipo: row.tipo, // 'admin', 'docente' o 'alumno'
-      nombre: row.nombre
-    });
+  const usuarioLogeado = data[0];
+  res.json({
+    mensaje: "Inicio de sesión exitoso",
+    tipo: usuarioLogeado.tipo,
+    nombre: usuarioLogeado.nombre
   });
 });
+
 // Obtener todos los usuarios
 app.get("/api/usuarios", (req, res) => {
     const query = `SELECT id, nombre, usuario, tipo FROM usuarios ORDER BY id DESC`;
