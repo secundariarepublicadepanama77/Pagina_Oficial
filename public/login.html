@@ -44,9 +44,10 @@
         const mensaje = document.getElementById("mensaje");
   
         if (respuesta.ok) {
-          if (resultado.tipo === "admin") {
-            window.location.href = "menu-admin.html";
-          } else if (resultado.tipo === "docente") {
+
+          if (resultado.tipo === "admin" || resultado.tipo === "administración") {
+  window.location.href = "menu-admin.html";
+} else if (resultado.tipo === "docente") {
             window.location.href = "menu-docente.html";
           } else if (resultado.tipo === "alumno") {
             window.location.href = "menu-alumno.html";
