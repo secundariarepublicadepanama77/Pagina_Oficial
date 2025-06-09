@@ -194,7 +194,6 @@ app.get("/api/matriculas", async (req, res) => {
   }
 });
 
-
 app.post("/api/matriculas/editar", (req, res) => {
   const {
     id, matricula, nombres, apellido_paterno,
