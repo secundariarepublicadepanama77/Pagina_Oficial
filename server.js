@@ -12,13 +12,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ✅ Solo esta línea es necesaria
 app.use(cors({
-  origin: "https://pagina-oficial-amhj.onrender.com"  // Aquí va tu dominio de frontend
+  origin: "https://pagina-oficial-amhj.onrender.com"
 }));
-// Middleware
-app.use(cors());
+
 app.use(express.json());
-app.use(express.static("public")); // Servir frontend desde /public
+app.use(express.static("public"));// Servir frontend desde /public
 
 // 🟢 AGREGAR USUARIO
 app.post("/api/usuarios", (req, res) => {
