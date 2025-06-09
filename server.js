@@ -20,6 +20,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static("public"));// Servir frontend desde /public
 
+
 // 🟢 AGREGAR USUARIO
 app.post("/api/usuarios", (req, res) => {
   const { nombre, usuario, contrasena, tipo } = req.body;
