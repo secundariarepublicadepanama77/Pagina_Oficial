@@ -70,101 +70,95 @@
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
+
   <script>
-    let usuariosGlobal = [];
-  
     async function cargarUsuarios() {
-      const respuesta = await fetch("/api/matriculas");
+      const respuesta = await fetch("/api/usuarios");
       const datos = await respuesta.json();
-      usuariosGlobal = datos;
       const cuerpo = document.querySelector("#tabla-usuarios tbody");
       cuerpo.innerHTML = "";
-  
+
       datos.forEach(usuario => {
         const fila = document.createElement("tr");
         fila.innerHTML = `
-          <td>${usuario.matricula}</td>
-          <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
+          <td>${usuario.id}</td>
+          <td>${usuario.nombre}</td>
+          <td>${usuario.usuario}</td>
           <td>${usuario.tipo}</td>
-          <td>${usuario.grado || ""}</td>
-          <td>${usuario.grupo || ""}</td>
-          <td>${usuario.ciclo_escolar || ""}</td>
           <td>
-            <button onclick="eliminarUsuario('${usuario.matricula}')">🗑️ Eliminar</button>
-            <button onclick="modificarUsuario('${usuario.matricula}')">✏️ Editar</button>
+            <button onclick="eliminarUsuario(${usuario.id})">🗑️ Eliminar</button>
+            <button onclick="modificarUsuario(${usuario.id})">✏️ Editar</button>
           </td>
         `;
         cuerpo.appendChild(fila);
       });
     }
-  
-    async function eliminarUsuario(matricula) {
+
+    async function eliminarUsuario(id) {
       if (confirm("¿Estás seguro de eliminar este usuario?")) {
-        const respuesta = await fetch(`/api/matriculas/${matricula}`, {
+        const respuesta = await fetch(`/api/usuarios/${id}`, {
           method: "DELETE"
         });
         const resultado = await respuesta.json();
-        if (respuesta.ok && resultado.success) {
-          alert("✅ Usuario eliminado");
+        if (respuesta.ok) {
+          alert("Usuario eliminado");
           cargarUsuarios();
         } else {
-          alert("❌ Error: " + resultado.mensaje);
+          document.getElementById("mensaje").innerText = resultado.error;
         }
       }
     }
-  
-    function modificarUsuario(matricula) {
-      const usuario = usuariosGlobal.find(u => u.matricula === matricula);
-      if (!usuario) return alert("Usuario no encontrado");
-  
-      document.getElementById("edit-id").value = usuario.matricula;
-      document.getElementById("edit-nombre").value = usuario.nombres;
-      document.getElementById("edit-apellido_paterno").value = usuario.apellido_paterno;
-      document.getElementById("edit-apellido_materno").value = usuario.apellido_materno;
-      document.getElementById("edit-grado").value = usuario.grado || "";
-      document.getElementById("edit-grupo").value = usuario.grupo || "";
-      document.getElementById("edit-ciclo").value = usuario.ciclo_escolar;
-      document.getElementById("edit-tipo").value = usuario.tipo;
-  
-      document.getElementById("modal-editar").style.display = "flex";
+
+    function modificarUsuario(id) {
+      alert("⚠️ Función de edición en desarrollo para el usuario ID: " + id);
+      // Aquí podrías abrir un modal o redirigir a otra página para editar
     }
-  
-    function cerrarModal() {
-      document.getElementById("modal-editar").style.display = "none";
-    }
-  
-    document.getElementById("form-editar-usuario").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const datos = {
-        matricula: document.getElementById("edit-id").value,
-        nombres: document.getElementById("edit-nombre").value,
-        apellido_paterno: document.getElementById("edit-apellido_paterno").value,
-        apellido_materno: document.getElementById("edit-apellido_materno").value,
-        grado: document.getElementById("edit-grado").value,
-        grupo: document.getElementById("edit-grupo").value,
-        ciclo_escolar: document.getElementById("edit-ciclo").value,
-        tipo: document.getElementById("edit-tipo").value
-      };
-  
-      const respuesta = await fetch("/api/matriculas", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      });
-  
-      const resultado = await respuesta.json();
-  
-      if (respuesta.ok && resultado.success) {
-        alert("✅ Usuario actualizado");
-        cerrarModal();
-        cargarUsuarios();
-      } else {
-        alert("❌ Error: " + resultado.mensaje);
-      }
-    });
-  
+
     window.onload = cargarUsuarios;
+    let usuariosGlobal = [];
+
+function modificarUsuario(id) {
+  const usuario = usuariosGlobal.find(u => u.id === id);
+  if (!usuario) return alert("Usuario no encontrado");
+
+  document.getElementById("edit-id").value = usuario.id;
+  document.getElementById("edit-nombre").value = usuario.nombre;
+  document.getElementById("edit-usuario").value = usuario.usuario;
+  document.getElementById("edit-tipo").value = usuario.tipo;
+
+  document.getElementById("modal-editar").style.display = "flex";
+}
+
+function cerrarModal() {
+  document.getElementById("modal-editar").style.display = "none";
+}
+
+document.getElementById("form-editar-usuario").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const id = document.getElementById("edit-id").value;
+  const datos = {
+    nombre: document.getElementById("edit-nombre").value,
+    usuario: document.getElementById("edit-usuario").value,
+    tipo: document.getElementById("edit-tipo").value
+  };
+
+  const respuesta = await fetch(`/api/usuarios/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos)
+  });
+
+  const resultado = await respuesta.json();
+
+  if (respuesta.ok) {
+    alert("✅ Usuario actualizado");
+    cerrarModal();
+    cargarUsuarios();
+  } else {
+    alert("❌ Error: " + resultado.error);
+  }
+});
+
   </script>
-  
 </body>
 </html>
