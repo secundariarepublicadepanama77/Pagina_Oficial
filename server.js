@@ -215,7 +215,8 @@ app.post("/api/matriculas/editar", (req, res) => {
   });
 });
 // 🔧 ACTUALIZAR USUARIO DE TABLA matriculas
-app.put("/api/matriculas", (req, res) => {
+// 🔧 ACTUALIZAR USUARIO DE TABLA matriculas CON SUPABASE
+app.put("/api/matriculas", async (req, res) => {
   const {
     matricula,
     nombres,
@@ -227,45 +228,45 @@ app.put("/api/matriculas", (req, res) => {
     tipo
   } = req.body;
 
-  const query = `
-    UPDATE matriculas SET 
-      nombres = ?, 
-      apellido_paterno = ?, 
-      apellido_materno = ?, 
-      grado = ?, 
-      grupo = ?, 
-      ciclo_escolar = ?, 
-      tipo = ?
-    WHERE matricula = ?
-  `;
+  const { error } = await supabase
+    .from("matriculas")
+    .update({
+      nombres,
+      apellido_paterno,
+      apellido_materno,
+      grado,
+      grupo,
+      ciclo_escolar,
+      tipo
+    })
+    .eq("matricula", matricula);
 
-  db.run(query, [nombres, apellido_paterno, apellido_materno, grado, grupo, ciclo_escolar, tipo, matricula], function(err) {
-    if (err) {
-      console.error("❌ Error al actualizar:", err.message);
-      return res.status(500).json({ success: false, mensaje: "Error al actualizar usuario" });
-    }
-    res.json({ success: true, mensaje: "Usuario actualizado correctamente" });
-  });
+  if (error) {
+    console.error("❌ Error al actualizar:", error.message);
+    return res.status(500).json({ success: false, mensaje: "Error al actualizar usuario" });
+  }
+
+  res.json({ success: true, mensaje: "Usuario actualizado correctamente" });
 });
+
 // 🗑️ ELIMINAR USUARIO DE MATRICULAS POR MATRÍCULA
-app.delete("/api/matriculas/:matricula", (req, res) => {
+// 🗑️ ELIMINAR USUARIO DE MATRICULAS POR MATRÍCULA CON SUPABASE
+app.delete("/api/matriculas/:matricula", async (req, res) => {
   const matricula = req.params.matricula;
-  console.log("➡️ Intentando eliminar matrícula:", matricula);
 
-  const query = `DELETE FROM matriculas WHERE matricula = ?`;
-  db.run(query, [matricula], function(err) {
-    if (err) {
-      console.error("❌ Error al eliminar:", err.message);
-      return res.status(500).json({ success: false, mensaje: "Error al eliminar" });
-    }
+  const { error } = await supabase
+    .from("matriculas")
+    .delete()
+    .eq("matricula", matricula);
 
-    if (this.changes === 0) {
-      return res.status(404).json({ success: false, mensaje: "Usuario no encontrado" });
-    }
+  if (error) {
+    console.error("❌ Error al eliminar:", error.message);
+    return res.status(500).json({ success: false, mensaje: "Error al eliminar" });
+  }
 
-    res.json({ success: true, mensaje: "Usuario eliminado correctamente" });
-  });
+  res.json({ success: true, mensaje: "Usuario eliminado correctamente" });
 });
+
 // 🕒 Registrar entrada o salida
 app.post("/api/registrar", (req, res) => {
   const { matricula } = req.body;
