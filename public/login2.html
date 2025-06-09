@@ -24,33 +24,38 @@
       </form>
     </div>
   </div>
-
   <script>
     document.getElementById("login-form").addEventListener("submit", function (e) {
       e.preventDefault();
-
+  
       const usuario = document.getElementById("usuario").value;
       const contrasena = document.getElementById("password").value;
-
-fetch("/api/login", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ usuario, contrasena })
-})
+  
+      fetch("https://backend-secundaria77.onrender.com/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuario, contrasena })
+      })
       .then(res => res.json())
       .then(data => {
-        if (data.success) {
-          localStorage.setItem("sesionIniciada", "true");
-          window.location.href = "admon.html";
-        } else {
-          alert("❌ " + data.mensaje);
+        if (data.success === false || !data.tipo) {
+          alert("❌ " + (data.mensaje || "Credenciales inválidas"));
+          return;
         }
+  
+        if (data.tipo !== "admin") {
+          alert("❌ Solo los administradores pueden acceder aquí");
+          return;
+        }
+  
+        localStorage.setItem("sesionIniciada", "true");
+        window.location.href = "admon.html";
       })
       .catch((err) => {
         console.error(err);
         alert("⚠️ Error al conectar con el servidor");
       });
     });
-  </script>
+  </script>  
 </body>
 </html>
