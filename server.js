@@ -74,13 +74,22 @@ app.post("/api/login", async (req, res) => {
 });
 
 // Obtener todos los usuarios
-app.get("/api/usuarios", (req, res) => {
-    const query = `SELECT id, nombre, usuario, tipo FROM usuarios ORDER BY id DESC`;
-    db.all(query, [], (err, rows) => {
-      if (err) return res.status(500).json({ error: "Error al obtener usuarios" });
-      res.json(rows);
-    });
-  });
+app.get("/api/usuarios", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("id, nombre, usuario, tipo")
+      .order("id", { ascending: false });
+
+    if (error) throw error;
+
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Error al obtener usuarios:", err.message);
+    res.status(500).json({ error: "Error al obtener usuarios" });
+  }
+});
+
 // Eliminar usuario por ID
 app.delete("/api/usuarios/:id", (req, res) => {
     const id = req.params.id;
