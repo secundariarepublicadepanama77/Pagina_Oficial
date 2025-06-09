@@ -31,7 +31,7 @@
       const usuario = document.getElementById("usuario").value;
       const contrasena = document.getElementById("password").value;
   
-      fetch("https://backend-secundaria77.onrender.com/api/login", {
+      fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ usuario, contrasena })
