@@ -131,7 +131,7 @@ app.delete("/api/usuarios/:id", (req, res) => {
         return res.status(401).json({ success: false, mensaje: "Credenciales inválidas" });
       }
   
-      if (row.tipo !== "admin") {
+      if (row.tipo !== "administración") {
         return res.status(403).json({ success: false, mensaje: "Acceso solo para administrativos" });
       }
   
