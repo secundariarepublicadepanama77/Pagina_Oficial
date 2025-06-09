@@ -174,19 +174,26 @@ app.post("/api/matriculas", (req, res) => {
     res.status(201).json({ success: true, mensaje: "Usuario registrado correctamente" });
   });
 });
+// 🔵 Obtener todos los usuarios registrados desde la tabla "matriculas"
 app.get("/api/matriculas", async (req, res) => {
-  const { data, error } = await supabase
-    .from("matriculas")
-    .select("*")
-    .order("id", { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from("matriculas")
+      .select("*")
+      .order("id", { ascending: false });
 
-  if (error) {
-    console.error("❌ Error al obtener matriculas:", error.message);
-    return res.status(500).json({ error: "Error al obtener matriculas" });
+    if (error) {
+      console.error("❌ Error al obtener matriculas:", error.message);
+      return res.status(500).json({ error: "Error al obtener usuarios registrados." });
+    }
+
+    res.json(data); // ✅ Devuelve todos los registros
+  } catch (err) {
+    console.error("❌ Error del servidor:", err.message);
+    res.status(500).json({ error: "Error inesperado del servidor." });
   }
-
-  res.json(data);
 });
+
 
 app.post("/api/matriculas/editar", (req, res) => {
   const {
