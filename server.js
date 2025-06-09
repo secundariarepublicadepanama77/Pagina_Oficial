@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { createClient } = require('@supabase/supabase-js');
 
+
 // 🔑 Usa tus datos reales de Supabase
 const supabaseUrl = process.env.SUPABASE_URL || "https://mhnzjhelbupyifdlpngv.supabase.co";
 const supabaseKey = process.env.SUPABASE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY";
@@ -11,6 +12,9 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors({
+  origin: "https://pagina-oficial-amhj.onrender.com"  // Aquí va tu dominio de frontend
+}));
 // Middleware
 app.use(cors());
 app.use(express.json());
