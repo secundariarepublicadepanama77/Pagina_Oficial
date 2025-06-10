@@ -366,15 +366,18 @@ app.post("/api/registrar", async (req, res) => {
   });
 });
 
-app.get("/registros", (req, res) => {
-  const query = "SELECT * FROM tabla_registro ORDER BY id DESC";
-  db.all(query, [], (err, rows) => {
-    if (err) {
-      console.error("❌ Error al obtener registros:", err.message);
-      return res.status(500).json({ error: "Error al obtener registros" });
-    }
-    res.json(rows);
-  });
+app.get("/registros", async (req, res) => {
+  const { data, error } = await supabase
+    .from("tabla_registro")
+    .select("*")
+    .order("id", { ascending: false });
+
+  if (error) {
+    console.error("❌ Error al obtener registros:", error.message);
+    return res.status(500).json({ error: "Error al obtener registros" });
+  }
+
+  res.json(data);
 });
 app.post("/actualizar-horarios", (req, res) => {
   const { id, entrada, salida } = req.body;
