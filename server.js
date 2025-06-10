@@ -20,21 +20,58 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static("public"));// Servir frontend desde /public
 
-
-// 🟢 AGREGAR USUARIO
+// 🟢 AGREGAR USUARIO COMPLETO
 app.post("/api/usuarios", (req, res) => {
-  const { nombre, usuario, contrasena, tipo } = req.body;
+  const {
+    nombre,
+    apellido_paterno,
+    apellido_materno,
+    usuario,
+    contrasena,
+    tipo,
+    grado,
+    grupo,
+    ciclo_escolar,
+    telegram_user,
+    foto
+  } = req.body;
 
-  if (!nombre || !usuario || !contrasena || !tipo) {
-    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  // Validación básica de campos obligatorios
+  if (!nombre || !apellido_paterno || !usuario || !contrasena || !tipo) {
+    return res.status(400).json({ error: "Faltan campos obligatorios" });
   }
 
   const stmt = `
-    INSERT INTO usuarios (nombre, usuario, contrasena, tipo)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO usuarios (
+      nombre,
+      apellido_paterno,
+      apellido_materno,
+      usuario,
+      contrasena,
+      tipo,
+      grado,
+      grupo,
+      ciclo_escolar,
+      telegram_user,
+      foto
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  db.run(stmt, [nombre, usuario, contrasena, tipo], function (err) {
+  const valores = [
+    nombre,
+    apellido_paterno,
+    apellido_materno || null,
+    usuario,
+    contrasena,
+    tipo,
+    grado || null,
+    grupo || null,
+    ciclo_escolar || null,
+    telegram_user || null,
+    foto || null
+  ];
+
+  db.run(stmt, valores, function (err) {
     if (err) {
       if (err.message.includes("UNIQUE")) {
         return res.status(400).json({ error: "El usuario ya existe" });
@@ -42,9 +79,10 @@ app.post("/api/usuarios", (req, res) => {
       return res.status(500).json({ error: "Error en el servidor" });
     }
 
-    res.status(201).json({ mensaje: "Usuario agregado", id: this.lastID });
+    res.status(201).json({ mensaje: "✅ Usuario agregado correctamente", id: this.lastID });
   });
 });
+
 
 // 🔐 LOGIN DE USUARIOS
 app.post("/api/login", async (req, res) => {
