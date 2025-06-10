@@ -28,6 +28,8 @@
       </form>
 
       <p class="footer">Desarrollado por la Academia de Tecnología.</p>
+      <p id="estado" class="footer"></p>
+
     </div>
   </div>
 
@@ -53,6 +55,13 @@ document.getElementById("form-asistencia").addEventListener("submit", async (e) 
 
   const matricula = document.getElementById("matricula").value.trim();
   if (!matricula) return;
+  document.getElementById("estado").textContent = "⏳ Registrando...";
+  if (!/^[a-zA-Z0-9]+$/.test(matricula)) {
+  alert("❌ Matrícula inválida. Solo letras y números.");
+  enviando = false;
+  return;
+}
+
 
   try {
     const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/registrar", {
@@ -76,6 +85,7 @@ document.getElementById("form-asistencia").addEventListener("submit", async (e) 
     console.error(error);
   } finally {
     enviando = false; // 🔓 Permite un nuevo intento
+    document.getElementById("estado").textContent = "";
   }
 });
     let temporizadorQR;
@@ -86,7 +96,7 @@ document.getElementById("matricula").addEventListener("input", function () {
     if (valor.length >= 4) {
       document.getElementById("form-asistencia").requestSubmit();
     }
-  }, 500);
+  }, 300);
 });
   </script>
 </body>

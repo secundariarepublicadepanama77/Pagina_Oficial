@@ -267,44 +267,46 @@ app.delete("/api/matriculas/:matricula", async (req, res) => {
   res.json({ success: true, mensaje: "Usuario eliminado correctamente" });
 });
 
-// 🕒 Registrar entrada o salida
 app.post("/api/registrar", async (req, res) => {
   const { matricula } = req.body;
-  const hoy = new Date().toISOString().slice(0, 10); // Formato YYYY-MM-DD
-  const horaActual = new Date().toLocaleTimeString("es-MX", {
-    timeZone: "America/Mexico_City"
-  });
+  const zonaHoraria = "America/Mexico_City";
 
-  // 1. Verifica si la matrícula existe en la tabla 'matriculas'
+  // Fecha y hora actual
+  const ahora = new Date();
+  const fechaHoy = ahora.toISOString().split("T")[0];
+  let horaActual = ahora.toLocaleTimeString("es-MX", { timeZone: zonaHoraria });
+
+  console.log("📌 Matricula buscada:", matricula);
+
+  // Buscar usuario por matrícula
   const { data: usuario, error: errorUsuario } = await supabase
     .from("matriculas")
     .select("*")
     .eq("matricula", matricula)
-    .single();
+    .maybeSingle();
+
+  console.log("👀 Resultado de Supabase:", usuario);
+  console.log("❌ Error Supabase:", errorUsuario?.message);
 
   if (errorUsuario || !usuario) {
-    console.error("❌ Usuario no encontrado:", errorUsuario?.message);
     return res.json({ tipo: "fallido" });
   }
 
-  // 2. Verifica si ya existe un registro para hoy
-  const { data: registros, error: errorConsulta } = await supabase
+  // Verificar si ya tiene registro hoy
+  const { data: registroHoy, error: errorRegistro } = await supabase
     .from("tabla_registro")
     .select("*")
     .eq("matricula", matricula)
-    .eq("fecha", hoy)
-    .order("id", { ascending: false })
-    .limit(1);
+    .eq("fecha", fechaHoy)
+    .maybeSingle();
 
-  const registroHoy = registros?.[0] || null;
-
-  if (errorConsulta) {
-    console.error("❌ Error al consultar registros:", errorConsulta.message);
+  if (errorRegistro) {
+    console.error("❌ Error al verificar registro existente:", errorRegistro.message);
     return res.status(500).json({ tipo: "fallido" });
   }
 
-  // 3. No hay registro → registrar entrada
   if (!registroHoy) {
+    // Registrar entrada
     const { error: errorInsertar } = await supabase
       .from("tabla_registro")
       .insert([{
@@ -317,12 +319,12 @@ app.post("/api/registrar", async (req, res) => {
         ciclo_escolar: usuario.ciclo_escolar,
         tipo: usuario.tipo,
         foto: usuario.foto,
-        fecha: hoy,
+        fecha: fechaHoy,
         hora_entrada: horaActual
       }]);
 
     if (errorInsertar) {
-      console.error("❌ Error al insertar entrada:", errorInsertar.message);
+      console.error("❌ Error al registrar entrada:", errorInsertar.message);
       return res.status(500).json({ tipo: "fallido" });
     }
 
@@ -333,13 +335,16 @@ app.post("/api/registrar", async (req, res) => {
       registro: "entrada",
       hora: horaActual
     });
-  }
 
-  // 4. Ya hay entrada, ¿tiene salida?
-  if (!registroHoy.hora_salida || registroHoy.hora_salida === "") {
+  } else if (!registroHoy.hora_salida || registroHoy.hora_salida === "") {
+    // Forzar nueva hora para salida
+    const salidaAhora = new Date();
+    salidaAhora.setSeconds(salidaAhora.getSeconds() + 1);
+    const horaSalida = salidaAhora.toLocaleTimeString("es-MX", { timeZone: zonaHoraria });
+
     const { error: errorSalida } = await supabase
       .from("tabla_registro")
-      .update({ hora_salida: horaActual })
+      .update({ hora_salida: horaSalida })
       .eq("id", registroHoy.id);
 
     if (errorSalida) {
@@ -352,18 +357,19 @@ app.post("/api/registrar", async (req, res) => {
       tipo: usuario.tipo,
       foto: usuario.foto,
       registro: "salida",
+      hora: horaSalida
+    });
+
+  } else {
+    // Ya tiene entrada y salida
+    return res.json({
+      nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
+      tipo: usuario.tipo,
+      foto: usuario.foto,
+      registro: "ya_registrado",
       hora: horaActual
     });
   }
-
-  // 5. Ya tiene entrada y salida → no permitir más
-  return res.json({
-    nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
-    tipo: usuario.tipo,
-    foto: usuario.foto,
-    registro: "ya_registrado",
-    hora: horaActual
-  });
 });
 
 app.get("/registros", async (req, res) => {
