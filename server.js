@@ -150,7 +150,7 @@ app.post("/api/matriculas", async (req, res) => {
     grado, grupo, ciclo_escolar, tipo, foto
   } = req.body;
 
-  console.log("📥 Datos recibidos:", req.body);  // 👈 AGREGA ESTA LÍNEA
+  console.log("📩 Datos recibidos:", req.body); // 👈 NUEVO
 
   const { data, error } = await supabase
     .from("matriculas")
@@ -169,12 +169,13 @@ app.post("/api/matriculas", async (req, res) => {
     ]);
 
   if (error) {
-    console.error("❌ Error al insertar:", error.message);
+    console.error("❌ Error al insertar en Supabase:", error.message); // 👈
     return res.status(500).json({ success: false, mensaje: "Error al registrar usuario" });
   }
 
   res.status(201).json({ success: true, mensaje: "Usuario registrado correctamente" });
 });
+
 // 🔵 Obtener todos los usuarios registrados desde la tabla "matriculas"
 app.get("/api/matriculas", async (req, res) => {
   try {
