@@ -278,7 +278,11 @@ app.post("/api/registrar", async (req, res) => {
     .from("matriculas")
     .select("*")
     .eq("matricula", matricula)
-    .single();
+    .maybeSingle();
+    
+    console.log("📌 Matricula buscada:", matricula);
+    console.log("👀 Resultado de Supabase:", usuario);
+    console.log("❌ Error Supabase:", errorUsuario?.message);
 
   if (errorUsuario || !usuario) {
     return res.json({ tipo: "fallido" });
