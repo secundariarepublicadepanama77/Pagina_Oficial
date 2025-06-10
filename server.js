@@ -117,13 +117,6 @@ app.post("/api/login", async (req, res) => {
     nombre: usuarioEncontrado.nombre
   });
 });
-
-  const usuarioLogeado = data[0];
-  res.json({
-    mensaje: "Inicio de sesión exitoso",
-    tipo: usuarioLogeado.tipo,
-    nombre: usuarioLogeado.nombre
-  });
 // Obtener todos los usuarios
 app.get("/api/usuarios", async (req, res) => {
   try {
