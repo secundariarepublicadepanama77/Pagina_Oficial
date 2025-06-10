@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: Pagina_Oficial
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    envVars:
+      - key: SUPABASE_URL
+        fromEnvVar: SUPABASE_URL
+      - key: SUPABASE_KEY
+        fromEnvVar: SUPABASE_KEY
