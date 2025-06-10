@@ -44,34 +44,40 @@
     actualizarReloj();
 
     // 📤 Registrar asistencia
-    document.getElementById("form-asistencia").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const matricula = document.getElementById("matricula").value.trim();
-      if (!matricula) return;
+        let enviando = false;
 
-      try {
-        const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/registrar", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ matricula })
-        });
+document.getElementById("form-asistencia").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (enviando) return; // ⛔ Previene múltiples envíos
+  enviando = true;
 
-        const data = await res.json();
+  const matricula = document.getElementById("matricula").value.trim();
+  if (!matricula) return;
 
-        const url = new URL("confirmacion.html", window.location.origin);
-        url.searchParams.set("nombre", data.nombre || "");
-        url.searchParams.set("tipo", data.tipo || "");
-        url.searchParams.set("foto", data.foto || "");
-        url.searchParams.set("registro", data.registro || "fallido");
-        url.searchParams.set("hora", data.hora || new Date().toLocaleTimeString());
-
-        window.location.href = url.toString();
-
-      } catch (error) {
-        alert("❌ Error al conectar con el servidor.");
-        console.error(error);
-      }
+  try {
+    const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/registrar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matricula })
     });
+
+    const data = await res.json();
+
+    const url = new URL("confirmacion.html", window.location.origin);
+    url.searchParams.set("nombre", data.nombre || "");
+    url.searchParams.set("tipo", data.tipo || "");
+    url.searchParams.set("foto", data.foto || "");
+    url.searchParams.set("registro", data.registro || "fallido");
+    url.searchParams.set("hora", data.hora || new Date().toLocaleTimeString());
+
+    window.location.href = url.toString();
+  } catch (error) {
+    alert("❌ Error al conectar con el servidor.");
+    console.error(error);
+  } finally {
+    enviando = false; // 🔓 Permite un nuevo intento
+  }
+});
     let temporizadorQR;
 document.getElementById("matricula").addEventListener("input", function () {
   clearTimeout(temporizadorQR);
