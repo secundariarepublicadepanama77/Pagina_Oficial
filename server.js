@@ -270,11 +270,12 @@ app.delete("/api/matriculas/:matricula", async (req, res) => {
 // 🕒 Registrar entrada o salida
 app.post("/api/registrar", async (req, res) => {
   const { matricula } = req.body;
-  const hoy = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const ahora = new Date();
-  const horaActual = new Date().toLocaleTimeString("es-MX", { timeZone: "America/Mexico_City" })
+  const hoy = new Date().toISOString().slice(0, 10); // Formato YYYY-MM-DD
+  const horaActual = new Date().toLocaleTimeString("es-MX", {
+    timeZone: "America/Mexico_City"
+  });
 
-  // 1. Buscar usuario en la tabla "matriculas"
+  // 1. Verifica si la matrícula existe en la tabla 'matriculas'
   const { data: usuario, error: errorUsuario } = await supabase
     .from("matriculas")
     .select("*")
@@ -282,10 +283,11 @@ app.post("/api/registrar", async (req, res) => {
     .single();
 
   if (errorUsuario || !usuario) {
+    console.error("❌ Usuario no encontrado:", errorUsuario?.message);
     return res.json({ tipo: "fallido" });
   }
 
-  // 2. Buscar si ya existe un registro de hoy
+  // 2. Verifica si ya existe un registro para hoy
   const { data: registros, error: errorConsulta } = await supabase
     .from("tabla_registro")
     .select("*")
@@ -294,15 +296,15 @@ app.post("/api/registrar", async (req, res) => {
     .order("id", { ascending: false })
     .limit(1);
 
-  const registroHoy = registros && registros.length > 0 ? registros[0] : null;
+  const registroHoy = registros?.[0] || null;
 
   if (errorConsulta) {
     console.error("❌ Error al consultar registros:", errorConsulta.message);
     return res.status(500).json({ tipo: "fallido" });
   }
 
+  // 3. No hay registro → registrar entrada
   if (!registroHoy) {
-    // 3. No hay registro → insertar entrada
     const { error: errorInsertar } = await supabase
       .from("tabla_registro")
       .insert([{
@@ -333,7 +335,7 @@ app.post("/api/registrar", async (req, res) => {
     });
   }
 
-  // 4. Ya hay registro, ¿tiene salida?
+  // 4. Ya hay entrada, ¿tiene salida?
   if (!registroHoy.hora_salida || registroHoy.hora_salida === "") {
     const { error: errorSalida } = await supabase
       .from("tabla_registro")
@@ -341,7 +343,7 @@ app.post("/api/registrar", async (req, res) => {
       .eq("id", registroHoy.id);
 
     if (errorSalida) {
-      console.error("❌ Error al actualizar salida:", errorSalida.message);
+      console.error("❌ Error al registrar salida:", errorSalida.message);
       return res.status(500).json({ tipo: "fallido" });
     }
 
@@ -354,7 +356,7 @@ app.post("/api/registrar", async (req, res) => {
     });
   }
 
-  // 5. Ya tiene entrada y salida
+  // 5. Ya tiene entrada y salida → no permitir más
   return res.json({
     nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
     tipo: usuario.tipo,
