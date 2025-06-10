@@ -28,54 +28,95 @@
   <div class="formulario-card">
     <h2>Agregar nuevo usuario</h2>
     <form id="form-agregar-usuario" class="form-grid">
+
       <div class="campo">
-        <label for="nombre">Nombre completo</label>
+        <label for="nombre">Nombre</label>
         <input type="text" id="nombre" name="nombre" required>
       </div>
-
+    
+      <div class="campo">
+        <label for="apellido_paterno">Apellido paterno</label>
+        <input type="text" id="apellido_paterno" name="apellido_paterno" required>
+      </div>
+    
+      <div class="campo">
+        <label for="apellido_materno">Apellido materno</label>
+        <input type="text" id="apellido_materno" name="apellido_materno">
+      </div>
+    
       <div class="campo">
         <label for="usuario">Usuario</label>
         <input type="text" id="usuario" name="usuario" required>
       </div>
-
+    
       <div class="campo">
         <label for="contrasena">Contraseña</label>
         <input type="password" id="contrasena" name="contrasena" required>
       </div>
-
+    
       <div class="campo">
         <label for="tipo">Tipo de usuario</label>
         <select id="tipo" name="tipo" required>
           <option value="">Selecciona una opción</option>
-          <option value="admin">Administrativo</option>
-          <option value="docente">Docente</option>
+          <option value="administrativo">Administrativo</option>
+          <option value="maestro">Maestro</option>
           <option value="alumno">Alumno</option>
         </select>
       </div>
-
+    
+      <div class="campo">
+        <label for="grado">Grado (solo alumnos)</label>
+        <input type="text" id="grado" name="grado">
+      </div>
+    
+      <div class="campo">
+        <label for="grupo">Grupo (solo alumnos)</label>
+        <input type="text" id="grupo" name="grupo">
+      </div>
+    
+      <div class="campo">
+        <label for="ciclo_escolar">Ciclo escolar</label>
+        <input type="text" id="ciclo_escolar" name="ciclo_escolar">
+      </div>
+    
+      <div class="campo">
+        <label for="telegram_user">Usuario de Telegram (@usuario)</label>
+        <input type="text" id="telegram_user" name="telegram_user">
+      </div>
+    
+      <div class="campo">
+        <label for="foto">URL de foto (opcional)</label>
+        <input type="text" id="foto" name="foto">
+      </div>
+    
       <div class="campo-boton">
         <button type="submit">Agregar Usuario</button>
       </div>
-    </form>
-
+    </form>    
     <div id="mensaje" class="mensaje"></div>
   </div>
 </main>
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
-
   <script>
     document.getElementById("form-agregar-usuario").addEventListener("submit", async function(event) {
       event.preventDefault();
-
+  
       const datos = {
         nombre: document.getElementById("nombre").value,
+        apellido_paterno: document.getElementById("apellido_paterno").value,
+        apellido_materno: document.getElementById("apellido_materno").value,
         usuario: document.getElementById("usuario").value,
         contrasena: document.getElementById("contrasena").value,
-        tipo: document.getElementById("tipo").value
+        tipo: document.getElementById("tipo").value,
+        grado: document.getElementById("grado").value,
+        grupo: document.getElementById("grupo").value,
+        ciclo_escolar: document.getElementById("ciclo_escolar").value,
+        telegram_user: document.getElementById("telegram_user").value,
+        foto: document.getElementById("foto").value
       };
-
+  
       const respuesta = await fetch("/api/usuarios", {
         method: "POST",
         headers: {
@@ -83,10 +124,10 @@
         },
         body: JSON.stringify(datos)
       });
-
+  
       const resultado = await respuesta.json();
       const mensaje = document.getElementById("mensaje");
-
+  
       if (respuesta.ok) {
         mensaje.innerText = "✅ Usuario agregado correctamente.";
         mensaje.style.color = "green";
@@ -96,7 +137,6 @@
         mensaje.style.color = "red";
       }
     });
-  </script>
-
+  </script>  
 </body>
 </html>
