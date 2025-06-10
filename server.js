@@ -268,76 +268,98 @@ app.delete("/api/matriculas/:matricula", async (req, res) => {
 });
 
 // 🕒 Registrar entrada o salida
-app.post("/api/registrar", (req, res) => {
+aapp.post("/api/registrar", async (req, res) => {
   const { matricula } = req.body;
-  const hoy = new Date().toISOString().slice(0, 10); // yyyy-mm-dd
+  const hoy = new Date().toISOString().slice(0, 10);
   const horaActual = new Date().toLocaleTimeString("es-MX");
 
-  db.get(`SELECT * FROM matriculas WHERE matricula = ?`, [matricula], (err, usuario) => {
-    if (err || !usuario) {
-      return res.json({ tipo: "fallido" });
+  // Buscar datos del usuario en Supabase
+  const { data: usuario, error: errorUsuario } = await supabase
+    .from("matriculas")
+    .select("*")
+    .eq("matricula", matricula)
+    .single();
+
+  if (errorUsuario || !usuario) {
+    return res.json({ tipo: "fallido" });
+  }
+
+  // Verificar si ya hay entrada registrada hoy
+  const { data: registrosHoy, error: errorConsulta } = await supabase
+    .from("tabla_registro")
+    .select("*")
+    .eq("matricula", matricula)
+    .eq("fecha", hoy)
+    .maybeSingle();
+
+  if (errorConsulta) {
+    console.error("❌ Error al consultar registros:", errorConsulta.message);
+    return res.status(500).json({ tipo: "fallido" });
+  }
+
+  if (!registrosHoy) {
+    // Registrar entrada
+    const { error: errorInsertar } = await supabase
+      .from("tabla_registro")
+      .insert([{
+        matricula: usuario.matricula,
+        nombres: usuario.nombres,
+        apellido_paterno: usuario.apellido_paterno,
+        apellido_materno: usuario.apellido_materno,
+        grado: usuario.grado,
+        grupo: usuario.grupo,
+        ciclo_escolar: usuario.ciclo_escolar,
+        tipo: usuario.tipo,
+        foto: usuario.foto,
+        fecha: hoy,
+        hora_entrada: horaActual
+      }]);
+
+    if (errorInsertar) {
+      console.error("❌ Error al insertar entrada:", errorInsertar.message);
+      return res.status(500).json({ tipo: "fallido" });
     }
 
-    db.get(
-      `SELECT * FROM tabla_registro WHERE matricula = ? AND fecha = ?`,
-      [matricula, hoy],
-      (err, registroExistente) => {
-        if (!registroExistente) {
-          // No hay registro aún, guardar entrada
-          const insertar = `
-            INSERT INTO tabla_registro (matricula, nombres, apellido_paterno, apellido_materno, grado, grupo, ciclo_escolar, tipo, foto, fecha, hora_entrada)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-          `;
-          db.run(insertar, [
-            usuario.matricula,
-            usuario.nombres,
-            usuario.apellido_paterno,
-            usuario.apellido_materno,
-            usuario.grado,
-            usuario.grupo,
-            usuario.ciclo_escolar,
-            usuario.tipo,
-            usuario.foto,
-            hoy,
-            horaActual
-          ], () => {
-            res.json({
-              nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
-              tipo: usuario.tipo,
-              foto: usuario.foto,
-              registro: "entrada",
-              hora: horaActual
-            });
-          });
-        } else if (!registroExistente.hora_salida) {
-          // Ya hay entrada, guardar salida
-          db.run(
-            `UPDATE tabla_registro SET hora_salida = ? WHERE id = ?`,
-            [horaActual, registroExistente.id],
-            () => {
-              res.json({
-                nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
-                tipo: usuario.tipo,
-                foto: usuario.foto,
-                registro: "salida",
-                hora: horaActual
-              });
-            }
-          );
-        } else {
-          // Ya tiene entrada y salida
-          res.json({
-            nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
-            tipo: usuario.tipo,
-            foto: usuario.foto,
-            registro: "ya_registrado",
-            hora: horaActual
-          });
-        }
-      }
-    );
-  });
+    return res.json({
+      nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
+      tipo: usuario.tipo,
+      foto: usuario.foto,
+      registro: "entrada",
+      hora: horaActual
+    });
+
+  } else if (!registrosHoy.hora_salida) {
+    // Registrar salida
+    const { error: errorSalida } = await supabase
+      .from("tabla_registro")
+      .update({ hora_salida: horaActual })
+      .eq("id", registrosHoy.id);
+
+    if (errorSalida) {
+      console.error("❌ Error al registrar salida:", errorSalida.message);
+      return res.status(500).json({ tipo: "fallido" });
+    }
+
+    return res.json({
+      nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
+      tipo: usuario.tipo,
+      foto: usuario.foto,
+      registro: "salida",
+      hora: horaActual
+    });
+
+  } else {
+    // Ya está registrada entrada y salida
+    return res.json({
+      nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
+      tipo: usuario.tipo,
+      foto: usuario.foto,
+      registro: "ya_registrado",
+      hora: horaActual
+    });
+  }
 });
+
 app.get("/registros", (req, res) => {
   const query = "SELECT * FROM tabla_registro ORDER BY id DESC";
   db.all(query, [], (err, rows) => {
