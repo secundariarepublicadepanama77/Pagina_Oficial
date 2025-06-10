@@ -144,35 +144,34 @@ app.delete("/api/usuarios/:id", (req, res) => {
     });
   }); 
 // 📝 Registrar nuevo usuario en la tabla matriculas
-app.post("/api/matriculas", (req, res) => {
+aapp.post("/api/matriculas", async (req, res) => {
   const {
-    matricula,
-    nombres,
-    apellido_paterno,
-    apellido_materno,
-    grado,
-    grupo,
-    ciclo_escolar,
-    tipo,
-    foto
+    matricula, nombres, apellido_paterno, apellido_materno,
+    grado, grupo, ciclo_escolar, tipo, foto
   } = req.body;
 
-  if (!matricula || !nombres || !apellido_paterno || !apellido_materno || !ciclo_escolar || !tipo) {
-    return res.status(400).json({ success: false, mensaje: "Faltan campos obligatorios" });
+  const { data, error } = await supabase
+    .from("matriculas")
+    .insert([
+      {
+        matricula,
+        nombres,
+        apellido_paterno,
+        apellido_materno,
+        grado,
+        grupo,
+        ciclo_escolar,
+        tipo,
+        foto
+      }
+    ]);
+
+  if (error) {
+    console.error("❌ Error al insertar:", error.message);
+    return res.status(500).json({ success: false, mensaje: "Error al registrar usuario" });
   }
 
-  const query = `
-    INSERT INTO matriculas (matricula, nombres, apellido_paterno, apellido_materno, grado, grupo, ciclo_escolar, tipo, foto)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  db.run(query, [matricula, nombres, apellido_paterno, apellido_materno, grado, grupo, ciclo_escolar, tipo, foto], function(err) {
-    if (err) {
-      console.error("Error al insertar en matriculas:", err.message);
-      return res.status(500).json({ success: false, mensaje: "Error al registrar usuario" });
-    }
-    res.status(201).json({ success: true, mensaje: "Usuario registrado correctamente" });
-  });
+  res.status(201).json({ success: true, mensaje: "Usuario registrado correctamente" });
 });
 // 🔵 Obtener todos los usuarios registrados desde la tabla "matriculas"
 app.get("/api/matriculas", async (req, res) => {
@@ -214,7 +213,6 @@ app.post("/api/matriculas/editar", (req, res) => {
     res.json({ success: true, mensaje: "Usuario actualizado correctamente" });
   });
 });
-// 🔧 ACTUALIZAR USUARIO DE TABLA matriculas
 // 🔧 ACTUALIZAR USUARIO DE TABLA matriculas CON SUPABASE
 app.put("/api/matriculas", async (req, res) => {
   const {
@@ -249,7 +247,6 @@ app.put("/api/matriculas", async (req, res) => {
   res.json({ success: true, mensaje: "Usuario actualizado correctamente" });
 });
 
-// 🗑️ ELIMINAR USUARIO DE MATRICULAS POR MATRÍCULA
 // 🗑️ ELIMINAR USUARIO DE MATRICULAS POR MATRÍCULA CON SUPABASE
 app.delete("/api/matriculas/:matricula", async (req, res) => {
   const matricula = req.params.matricula;

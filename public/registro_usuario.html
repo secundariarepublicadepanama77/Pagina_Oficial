@@ -73,7 +73,7 @@
         foto: document.getElementById("foto").value.trim()
       };
   
-      const res = await fetch('http://localhost:3000/api/matriculas', {
+      const res = await fetch('https://pagina-oficial-amhj.onrender.com/api/matriculas', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
