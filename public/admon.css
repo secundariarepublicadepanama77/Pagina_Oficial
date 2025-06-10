@@ -286,3 +286,15 @@ tbody tr:hover {
   color: #333;
   text-align: right;
 }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .fila-arriba,
+  .fila-abajo {
+    grid-template-columns: 1fr;
+  }
+  .galeria-contenedor {
+    justify-content: center;
+  }
+}
+
