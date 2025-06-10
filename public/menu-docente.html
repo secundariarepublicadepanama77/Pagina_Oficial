@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menú Docente</title>
-  <link rel="stylesheet" href="menu.css">
+  <link rel="stylesheet" href="menu.css" />
 </head>
 <body>
   <header class="menu-encabezado">
-    <img src="img/logo.png" alt="Logo" class="logo">
+    <img src="img/logo.png" alt="Logo" class="logo" />
     <h1>Panel Docente</h1>
   </header>
 
@@ -18,28 +18,37 @@
     <a href="#">📁 Materiales</a>
     <a class="disabled">📅 Horarios</a>
     <a class="disabled">📝 Próximamente</a>
-    <a class="disabled"> 👥 Próximamente</a>
+    <a class="disabled">👥 Próximamente</a>
     <a class="disabled">🔒 Próximamente</a>
     <a class="disabled">🔒 Próximamente</a>
     <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
   </nav>
 
   <main class="contenido-menu">
-    <p>Bienvenido al panel docente. Aquí podrás gestionar tus clases y actividades escolares.</p>
+    <p id="saludo"></p>
   </main>
 
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
+
   <script>
+    // Validar sesión y tipo de usuario
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+
+    if (!nombre || tipo !== "maestro") {
+      alert("Acceso denegado. Redirigiendo al login.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("saludo").innerText = "👋 Bienvenido, " + nombre + ".";
+    }
+
     function cerrarSesion() {
-      // Aquí puedes limpiar variables si usas localStorage o sessionStorage
-      // localStorage.clear(); // si usas almacenamiento local
-      // sessionStorage.clear(); // si usas sesión
-  
-      // Redireccionar al login
+      localStorage.clear();
       window.location.href = "login.html";
     }
   </script>
 </body>
 </html>
+

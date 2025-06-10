@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Menú Alumno</title>
-  <link rel="stylesheet" href="menu.css">
+  <link rel="stylesheet" href="menu.css" />
 </head>
 <body>
-
   <!-- Encabezado -->
   <header class="menu-encabezado">
-    <img src="img/logo.png" alt="Logo" class="logo">
+    <img src="img/logo.png" alt="Logo" class="logo" />
     <h1>Panel del Alumno</h1>
   </header>
 
@@ -24,29 +23,37 @@
     <a class="disabled">🔒 Próximamente</a>
     <a class="disabled">🔒 Próximamente</a>
     <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
-
   </nav>
 
   <!-- Contenido principal -->
   <main class="contenido-menu">
-    <p>Bienvenido al panel del alumno. Aquí puedes consultar tus actividades escolares.</p>
+    <p id="saludo"></p>
+    <section id="reportes-conducta">
+      <!-- Aquí puedes mostrar los reportes del alumno más adelante -->
+    </section>
   </main>
 
   <!-- Pie de página -->
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
+
   <script>
+    // Verifica si hay sesión activa
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+
+    if (!nombre || tipo !== "alumno") {
+      alert("Sesión no válida. Redirigiendo al login.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
+    }
+
     function cerrarSesion() {
-      // Aquí puedes limpiar variables si usas localStorage o sessionStorage
-      // localStorage.clear(); // si usas almacenamiento local
-      // sessionStorage.clear(); // si usas sesión
-  
-      // Redireccionar al login
+      localStorage.clear();
       window.location.href = "login.html";
     }
   </script>
-  
 </body>
 </html>
-

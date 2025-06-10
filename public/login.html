@@ -44,16 +44,21 @@
         const mensaje = document.getElementById("mensaje");
   
         if (respuesta.ok) {
+          localStorage.setItem("usuarioID", resultado.id);
+localStorage.setItem("nombreUsuario", resultado.nombre);
+localStorage.setItem("tipoUsuario", resultado.tipo);
 
-          if (resultado.tipo === "admin" || resultado.tipo === "administración") {
-  window.location.href = "menu-admin.html";
-} else if (resultado.tipo === "docente") {
-            window.location.href = "menu-docente.html";
-          } else if (resultado.tipo === "alumno") {
-            window.location.href = "menu-alumno.html";
-          } else {
-            mensaje.innerText = "❌ Tipo de usuario no reconocido: " + resultado.tipo;
-          }
+
+          if (resultado.tipo === "administrativo") {
+                window.location.href = "menu-admin.html";
+} else if (resultado.tipo === "maestro") {
+  window.location.href = "menu-docente.html";
+} else if (resultado.tipo === "alumno") {
+  window.location.href = "menu-alumno.html";
+} else {
+  mensaje.innerText = "❌ Tipo de usuario no reconocido: " + resultado.tipo;
+}
+
         } else {
           mensaje.innerText = "❌ " + resultado.error;
         }

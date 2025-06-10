@@ -92,7 +92,7 @@ app.post("/api/login", async (req, res) => {
 
   const { data, error } = await supabase
     .from("usuarios")
-    .select("*")
+    .select("id, nombre, tipo, usuario, contrasena") // limitar campos por seguridad
     .eq("usuario", usuario)
     .eq("contrasena", contrasena)
     .limit(1);
@@ -102,11 +102,21 @@ app.post("/api/login", async (req, res) => {
     return res.status(500).json({ error: "Error del servidor" });
   }
 
-  console.log("🧪 Resultado de Supabase:", data);
-
   if (!data || data.length === 0) {
     return res.status(401).json({ error: "Credenciales inválidas" });
   }
+
+  const usuarioEncontrado = data[0];
+
+  console.log("✅ Login exitoso:", usuarioEncontrado);
+
+  res.status(200).json({
+    mensaje: "Login exitoso",
+    id: usuarioEncontrado.id,
+    tipo: usuarioEncontrado.tipo,
+    nombre: usuarioEncontrado.nombre
+  });
+});
 
   const usuarioLogeado = data[0];
   res.json({
@@ -114,8 +124,6 @@ app.post("/api/login", async (req, res) => {
     tipo: usuarioLogeado.tipo,
     nombre: usuarioLogeado.nombre
   });
-});
-
 // Obtener todos los usuarios
 app.get("/api/usuarios", async (req, res) => {
   try {
