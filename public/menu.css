@@ -321,3 +321,17 @@
 #tabla-usuarios button:hover {
   opacity: 0.8;
 }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .fila-arriba,
+  .fila-abajo {
+    grid-template-columns: 1fr;
+  }
+  .galeria-contenedor {
+    justify-content: center;
+  }
+}
+
+
+
