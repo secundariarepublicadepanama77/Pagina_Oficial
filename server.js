@@ -150,6 +150,8 @@ app.post("/api/matriculas", async (req, res) => {
     grado, grupo, ciclo_escolar, tipo, foto
   } = req.body;
 
+  console.log("📥 Datos recibidos:", req.body);  // 👈 AGREGA ESTA LÍNEA
+
   const { data, error } = await supabase
     .from("matriculas")
     .insert([
