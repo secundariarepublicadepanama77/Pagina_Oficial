@@ -268,7 +268,7 @@ app.delete("/api/matriculas/:matricula", async (req, res) => {
 });
 
 // 🕒 Registrar entrada o salida
-aapp.post("/api/registrar", async (req, res) => {
+app.post("/api/registrar", async (req, res) => {
   const { matricula } = req.body;
   const hoy = new Date().toISOString().slice(0, 10);
   const horaActual = new Date().toLocaleTimeString("es-MX");
