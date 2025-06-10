@@ -157,3 +157,13 @@ input[type="text"] {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+/* Responsive */
+@media (max-width: 992px) {
+  .fila-arriba,
+  .fila-abajo {
+    grid-template-columns: 1fr;
+  }
+  .galeria-contenedor {
+    justify-content: center;
+  }
+}
