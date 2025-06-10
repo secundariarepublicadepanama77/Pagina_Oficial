@@ -144,7 +144,7 @@ app.delete("/api/usuarios/:id", (req, res) => {
     });
   }); 
 // 📝 Registrar nuevo usuario en la tabla matriculas
-aapp.post("/api/matriculas", async (req, res) => {
+app.post("/api/matriculas", async (req, res) => {
   const {
     matricula, nombres, apellido_paterno, apellido_materno,
     grado, grupo, ciclo_escolar, tipo, foto
