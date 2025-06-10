@@ -273,26 +273,26 @@ app.post("/api/registrar", async (req, res) => {
   const hoy = new Date().toISOString().slice(0, 10);
   const horaActual = new Date().toLocaleTimeString("es-MX");
 
-  // Buscar datos del usuario en Supabase
+  // ✅ Buscar datos del usuario en Supabase
   const { data: usuario, error: errorUsuario } = await supabase
     .from("matriculas")
     .select("*")
-    .eq("matricula", matricula)
+    .eq("matricula", matricula.trim())
     .maybeSingle();
-    
-    console.log("📌 Matricula buscada:", matricula);
-    console.log("👀 Resultado de Supabase:", usuario);
-    console.log("❌ Error Supabase:", errorUsuario?.message);
 
-  if (errorUsuario || !usuario) {
+  console.log("📌 Matricula buscada:", matricula);
+  console.log("👀 Resultado de Supabase:", usuario);
+  console.log("❌ Error Supabase:", errorUsuario?.message);
+
+  if (!usuario || errorUsuario) {
     return res.json({ tipo: "fallido" });
   }
 
-  // Verificar si ya hay entrada registrada hoy
+  // ✅ Verificar si ya hay entrada registrada hoy
   const { data: registrosHoy, error: errorConsulta } = await supabase
     .from("tabla_registro")
     .select("*")
-    .eq("matricula", matricula)
+    .eq("matricula", usuario.matricula)
     .eq("fecha", hoy)
     .maybeSingle();
 
@@ -302,7 +302,7 @@ app.post("/api/registrar", async (req, res) => {
   }
 
   if (!registrosHoy) {
-    // Registrar entrada
+    // 🟢 Registrar entrada
     const { error: errorInsertar } = await supabase
       .from("tabla_registro")
       .insert([{
@@ -333,7 +333,7 @@ app.post("/api/registrar", async (req, res) => {
     });
 
   } else if (!registrosHoy.hora_salida) {
-    // Registrar salida
+    // 🟠 Registrar salida
     const { error: errorSalida } = await supabase
       .from("tabla_registro")
       .update({ hora_salida: horaActual })
@@ -353,7 +353,7 @@ app.post("/api/registrar", async (req, res) => {
     });
 
   } else {
-    // Ya está registrada entrada y salida
+    // 🔴 Ya tiene entrada y salida
     return res.json({
       nombre: `${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`,
       tipo: usuario.tipo,
@@ -363,6 +363,7 @@ app.post("/api/registrar", async (req, res) => {
     });
   }
 });
+
 
 app.get("/registros", (req, res) => {
   const query = "SELECT * FROM tabla_registro ORDER BY id DESC";
