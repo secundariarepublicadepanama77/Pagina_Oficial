@@ -42,12 +42,10 @@
           alert("❌ " + (data.mensaje || "Credenciales inválidas"));
           return;
         }
-  
-        if (data.tipo !== "admin") {
-          alert("❌ Solo los administradores pueden acceder aquí");
-          return;
-        }
-  
+        if (data.tipo !== "administrativo") {
+  alert("❌ Solo los administradores pueden acceder aquí");
+  return;
+}  
         localStorage.setItem("sesionIniciada", "true");
         window.location.href = "admon.html";
       })
