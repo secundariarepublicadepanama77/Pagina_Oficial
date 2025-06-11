@@ -117,26 +117,36 @@
         foto: document.getElementById("foto").value
       };
   
-      const respuesta = await fetch("/api/usuarios", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(datos)
-      });
-  
-      const resultado = await respuesta.json();
       const mensaje = document.getElementById("mensaje");
+  
+      let respuesta;
+      let resultado;
+  
+      try {
+        respuesta = await fetch("/api/usuarios", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(datos)
+        });
+  
+        resultado = await respuesta.json();
+      } catch (err) {
+        mensaje.innerText = "❌ Error inesperado del servidor (respuesta no válida)";
+        mensaje.style.color = "red";
+        return;
+      }
   
       if (respuesta.ok) {
         mensaje.innerText = "✅ Usuario agregado correctamente.";
         mensaje.style.color = "green";
         document.getElementById("form-agregar-usuario").reset();
       } else {
-        mensaje.innerText = "❌ Error: " + resultado.error;
+        mensaje.innerText = "❌ Error: " + (resultado.error || "desconocido");
         mensaje.style.color = "red";
       }
     });
-  </script>  
+  </script> 
 </body>
 </html>
