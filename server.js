@@ -108,7 +108,7 @@ app.get("/api/usuarios", async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("usuarios")
-      .select("id, nombre, usuario, tipo, apelllido_paterno, apellido_materno, grado, grupo")
+      .select("*")
       .order("id", { ascending: false });
 
     if (error) throw error;
@@ -121,20 +121,22 @@ app.get("/api/usuarios", async (req, res) => {
 });
 
 // Eliminar usuario por ID
-app.delete("/api/usuarios/:id", (req, res) => {
-    const id = req.params.id;
-    const stmt = `DELETE FROM usuarios WHERE id = ?`;
-  
-    db.run(stmt, [id], function (err) {
-      if (err) return res.status(500).json({ error: "Error al eliminar usuario" });
-  
-      if (this.changes === 0) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
-      }
-  
-      res.json({ mensaje: "Usuario eliminado correctamente" });
-    });
-  });
+app.delete("/api/usuarios/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const { error } = await supabase
+    .from("usuarios")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("❌ Error al eliminar usuario:", error.message);
+    return res.status(500).json({ error: "Error al eliminar usuario" });
+  }
+
+  res.json({ mensaje: "✅ Usuario eliminado correctamente" });
+});
+
   // 🔐 LOGIN SOLO ADMINISTRATIVOS
   app.post("/api/login-admin", (req, res) => {
     const { usuario, contrasena } = req.body;
