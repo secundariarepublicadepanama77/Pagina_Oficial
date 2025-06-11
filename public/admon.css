@@ -113,17 +113,18 @@
     border: none;
     cursor: pointer;
   }
-  
-  .menu a:hover,
   .menu button:hover {
     background-color: #ccdfff;
   }
   
   /* Contenedor principal */
   .contenedor {
-    padding: 2rem;
-    max-width: 95%;
+    width: 100%;
+    max-width: 1200px;
     margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    
   }
   
   /* Filtro */
