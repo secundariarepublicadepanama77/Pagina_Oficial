@@ -6,14 +6,20 @@
   <title>Usuarios Registrados</title>
   <link rel="stylesheet" href="menu.css">
   <style>
+    .tabla-contenedor {
+      width: 100%;
+      overflow-x: auto;
+    }
     .tabla-contenedor table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 14px;
     }
     .tabla-contenedor th, .tabla-contenedor td {
       border: 1px solid #ccc;
       padding: 0.6rem;
       text-align: left;
+      white-space: nowrap;
     }
     .tabla-contenedor tr:nth-child(even) {
       background-color: #f9f9f9;
@@ -128,11 +134,11 @@
         const fila = document.createElement("tr");
         fila.innerHTML = `
           <td>${usuario.id}</td>
-          <td>${usuario.nombre}</td>
+          <td>${usuario.nombre || ''}</td>
           <td>${usuario.apellido_paterno || ''}</td>
           <td>${usuario.apellido_materno || ''}</td>
-          <td>${usuario.usuario}</td>
-          <td>${usuario.tipo}</td>
+          <td>${usuario.usuario || ''}</td>
+          <td>${usuario.tipo || ''}</td>
           <td>${usuario.grado || '-'}</td>
           <td>${usuario.grupo || '-'}</td>
           <td>${usuario.ciclo_escolar || '-'}</td>
