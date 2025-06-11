@@ -108,7 +108,7 @@ app.get("/api/usuarios", async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("usuarios")
-      .select("id, nombre, usuario, tipo")
+      .select("id, nombre, usuario, tipo, apelllido_paterno, apellido_materno, grado, grupo")
       .order("id", { ascending: false });
 
     if (error) throw error;
