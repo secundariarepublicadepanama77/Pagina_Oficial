@@ -98,8 +98,11 @@ main.contenido {
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
 }
-
 .seccion p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
   text-align: justify;
   line-height: 1.6;
   font-size: 1rem;
@@ -259,5 +262,14 @@ iframe {
   }
   .galeria-contenedor {
     justify-content: center;
+  }
+}
+@media (max-width: 768px){
+  .menu{
+    flex-direction: column;
+    align-items: center;
+  }
+  .tarjeta{
+    width: 90%;
   }
 }
