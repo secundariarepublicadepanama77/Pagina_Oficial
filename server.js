@@ -66,7 +66,8 @@ app.post("/api/usuarios", async (req, res) => {
     return res.status(500).json({ error: "Error en el servidor" });
   }
 
-  res.status(201).json({ mensaje: "✅ Usuario agregado correctamente", id: data[0].id });
+  res.status(201).json({ mensaje: "✅ Usuario agregado correctamente" });
+
 });
 
 // 🔐 LOGIN DE USUARIOS
