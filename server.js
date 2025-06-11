@@ -412,39 +412,50 @@ app.get("/registros", async (req, res) => {
 
   res.json(data);
 });
-app.post("/actualizar-horarios", (req, res) => {
+// ✅ Actualizar horarios en tabla_registro usando Supabase
+app.post("/actualizar-horarios", async (req, res) => {
   const { id, entrada, salida } = req.body;
 
-  const query = `
-    UPDATE tabla_registro
-    SET hora_entrada = ?, hora_salida = ?
-    WHERE id = ?
-  `;
+  try {
+    const { error } = await supabase
+      .from("tabla_registro")
+      .update({ hora_entrada: entrada, hora_salida: salida })
+      .eq("id", id);
 
-  db.run(query, [entrada, salida, id], function (err) {
-    if (err) {
-      console.error("❌ Error al actualizar horarios:", err.message);
+    if (error) {
+      console.error("❌ Error al actualizar horarios:", error.message);
       return res.status(500).json({ success: false, mensaje: "Error al actualizar horarios" });
     }
 
     res.json({ success: true, mensaje: "Horarios actualizados correctamente" });
-  });
+  } catch (err) {
+    console.error("❌ Error inesperado:", err.message);
+    res.status(500).json({ success: false, mensaje: "Error inesperado en el servidor" });
+  }
 });
+
+// ✅ Eliminar registro de tabla_registro usando Supabase
 app.delete("/eliminar-registro/:id", async (req, res) => {
   const { id } = req.params;
-  db.run("DELETE FROM tabla_registro WHERE id = ?", [id], function(err) {
-    if (err) {
-      console.error("❌ Error al eliminar registro:", err.message);
+
+  try {
+    const { error } = await supabase
+      .from("tabla_registro")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("❌ Error al eliminar registro:", error.message);
       return res.status(500).json({ success: false, mensaje: "Error al eliminar el registro." });
     }
 
-    if (this.changes === 0) {
-      return res.status(404).json({ success: false, mensaje: "Registro no encontrado." });
-    }
-
     res.json({ success: true, mensaje: "Registro eliminado correctamente." });
-  });
+  } catch (err) {
+    console.error("❌ Error inesperado:", err.message);
+    res.status(500).json({ success: false, mensaje: "Error inesperado en el servidor" });
+  }
 });
+
 // 📥 Guardar nuevo reporte
 app.post("/api/reportes", (req, res) => {
   const { matricula, nombre_completo, grado, grupo, quien_reporta, clase, hora, descripcion } = req.body;
