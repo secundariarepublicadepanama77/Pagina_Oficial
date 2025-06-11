@@ -3,8 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Usuarios registrados</title>
+  <title>Usuarios Registrados</title>
   <link rel="stylesheet" href="menu.css">
+  <style>
+    .tabla-contenedor table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tabla-contenedor th, .tabla-contenedor td {
+      border: 1px solid #ccc;
+      padding: 0.6rem;
+      text-align: left;
+    }
+    .tabla-contenedor tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-contenido {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 400px;
+      position: relative;
+    }
+    .modal-contenido button.cerrar {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <header class="menu-encabezado">
@@ -21,7 +62,7 @@
     <a class="disabled">🔒 Próximamente</a>
     <a class="disabled">🔒 Próximamente</a>
   </nav>
-  
+
   <main class="contenido-menu">
     <div class="tabla-contenedor">
       <h2>Lista de usuarios registrados</h2>
@@ -30,41 +71,44 @@
           <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
             <th>Usuario</th>
             <th>Tipo</th>
+            <th>Grado</th>
+            <th>Grupo</th>
+            <th>Ciclo</th>
+            <th>Telegram</th>
+            <th>Foto</th>
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
-        <!-- Usuarios cargados por JavaScript -->
-      </tbody>
-    </table>
-    <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
-    <!-- Modal de edición -->
-<div id="modal-editar" class="modal" style="display: none;">
-    <div class="modal-contenido">
-      <h3>Editar Usuario</h3>
-      <form id="form-editar-usuario">
-        <input type="hidden" id="edit-id">
-        
-        <label for="edit-nombre">Nombre:</label>
-        <input type="text" id="edit-nombre" required>
-        
-        <label for="edit-usuario">Usuario:</label>
-        <input type="text" id="edit-usuario" required>
-        
-        <label for="edit-tipo">Tipo:</label>
-        <select id="edit-tipo" required>
-          <option value="admin">Administrativo</option>
-          <option value="docente">Docente</option>
-          <option value="alumno">Alumno</option>
-        </select>
-        
-        <button type="submit">Guardar cambios</button>
-        <button type="button" onclick="cerrarModal()">Cancelar</button>
-      </form>
+        <tbody></tbody>
+      </table>
+      <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
     </div>
-  </div>  
+
+    <div id="modal-editar" class="modal" style="display: none;">
+      <div class="modal-contenido">
+        <button class="cerrar" onclick="cerrarModal()">&times;</button>
+        <h3>Editar Usuario</h3>
+        <form id="form-editar-usuario">
+          <input type="hidden" id="edit-id">
+          <label for="edit-nombre">Nombre:</label>
+          <input type="text" id="edit-nombre" required>
+          <label for="edit-usuario">Usuario:</label>
+          <input type="text" id="edit-usuario" required>
+          <label for="edit-tipo">Tipo:</label>
+          <select id="edit-tipo" required>
+            <option value="administrativo">Administrativo</option>
+            <option value="maestro">Maestro</option>
+            <option value="alumno">Alumno</option>
+          </select>
+          <button type="submit">Guardar cambios</button>
+          <button type="button" onclick="cerrarModal()">Cancelar</button>
+        </form>
+      </div>
+    </div>
   </main>
 
   <footer class="pie">
@@ -72,22 +116,31 @@
   </footer>
 
   <script>
+    let usuariosGlobal = [];
+
     async function cargarUsuarios() {
       const respuesta = await fetch("/api/usuarios");
       const datos = await respuesta.json();
+      usuariosGlobal = datos;
       const cuerpo = document.querySelector("#tabla-usuarios tbody");
       cuerpo.innerHTML = "";
-
       datos.forEach(usuario => {
         const fila = document.createElement("tr");
         fila.innerHTML = `
           <td>${usuario.id}</td>
           <td>${usuario.nombre}</td>
+          <td>${usuario.apellido_paterno || ''}</td>
+          <td>${usuario.apellido_materno || ''}</td>
           <td>${usuario.usuario}</td>
           <td>${usuario.tipo}</td>
+          <td>${usuario.grado || '-'}</td>
+          <td>${usuario.grupo || '-'}</td>
+          <td>${usuario.ciclo_escolar || '-'}</td>
+          <td>${usuario.telegram_user || '-'}</td>
+          <td>${usuario.foto ? `<img src="${usuario.foto}" alt="Foto" width="40">` : '-'}</td>
           <td>
-            <button onclick="eliminarUsuario(${usuario.id})">🗑️ Eliminar</button>
-            <button onclick="modificarUsuario(${usuario.id})">✏️ Editar</button>
+            <button title="Eliminar usuario" onclick="eliminarUsuario(${usuario.id})">🗑️</button>
+            <button title="Editar usuario" onclick="modificarUsuario(${usuario.id})">✏️</button>
           </td>
         `;
         cuerpo.appendChild(fila);
@@ -110,55 +163,48 @@
     }
 
     function modificarUsuario(id) {
-      alert("⚠️ Función de edición en desarrollo para el usuario ID: " + id);
-      // Aquí podrías abrir un modal o redirigir a otra página para editar
+      const usuario = usuariosGlobal.find(u => u.id === id);
+      if (!usuario) return alert("Usuario no encontrado");
+
+      document.getElementById("edit-id").value = usuario.id;
+      document.getElementById("edit-nombre").value = usuario.nombre;
+      document.getElementById("edit-usuario").value = usuario.usuario;
+      document.getElementById("edit-tipo").value = usuario.tipo;
+
+      document.getElementById("modal-editar").style.display = "flex";
     }
 
+    function cerrarModal() {
+      document.getElementById("modal-editar").style.display = "none";
+    }
+
+    document.getElementById("form-editar-usuario").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const id = document.getElementById("edit-id").value;
+      const datos = {
+        nombre: document.getElementById("edit-nombre").value,
+        usuario: document.getElementById("edit-usuario").value,
+        tipo: document.getElementById("edit-tipo").value
+      };
+
+      const respuesta = await fetch(`/api/usuarios/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      });
+
+      const resultado = await respuesta.json();
+
+      if (respuesta.ok) {
+        alert("✅ Usuario actualizado");
+        cerrarModal();
+        cargarUsuarios();
+      } else {
+        alert("❌ Error: " + resultado.error);
+      }
+    });
+
     window.onload = cargarUsuarios;
-    let usuariosGlobal = [];
-
-function modificarUsuario(id) {
-  const usuario = usuariosGlobal.find(u => u.id === id);
-  if (!usuario) return alert("Usuario no encontrado");
-
-  document.getElementById("edit-id").value = usuario.id;
-  document.getElementById("edit-nombre").value = usuario.nombre;
-  document.getElementById("edit-usuario").value = usuario.usuario;
-  document.getElementById("edit-tipo").value = usuario.tipo;
-
-  document.getElementById("modal-editar").style.display = "flex";
-}
-
-function cerrarModal() {
-  document.getElementById("modal-editar").style.display = "none";
-}
-
-document.getElementById("form-editar-usuario").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const id = document.getElementById("edit-id").value;
-  const datos = {
-    nombre: document.getElementById("edit-nombre").value,
-    usuario: document.getElementById("edit-usuario").value,
-    tipo: document.getElementById("edit-tipo").value
-  };
-
-  const respuesta = await fetch(`/api/usuarios/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(datos)
-  });
-
-  const resultado = await respuesta.json();
-
-  if (respuesta.ok) {
-    alert("✅ Usuario actualizado");
-    cerrarModal();
-    cargarUsuarios();
-  } else {
-    alert("❌ Error: " + resultado.error);
-  }
-});
-
   </script>
 </body>
 </html>
