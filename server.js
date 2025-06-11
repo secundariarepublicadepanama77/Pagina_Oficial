@@ -20,8 +20,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static("public"));// Servir frontend desde /public
 
-// 🟢 AGREGAR USUARIO COMPLETO
-app.post("/api/usuarios", (req, res) => {
+// ✅ NUEVA VERSIÓN USANDO SUPABASE
+app.post("/api/usuarios", async (req, res) => {
   const {
     nombre,
     apellido_paterno,
@@ -36,53 +36,38 @@ app.post("/api/usuarios", (req, res) => {
     foto
   } = req.body;
 
-  // Validación básica de campos obligatorios
   if (!nombre || !apellido_paterno || !usuario || !contrasena || !tipo) {
     return res.status(400).json({ error: "Faltan campos obligatorios" });
   }
 
-  const stmt = `
-    INSERT INTO usuarios (
-      nombre,
-      apellido_paterno,
-      apellido_materno,
-      usuario,
-      contrasena,
-      tipo,
-      grado,
-      grupo,
-      ciclo_escolar,
-      telegram_user,
-      foto
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  const valores = [
-    nombre,
-    apellido_paterno,
-    apellido_materno || null,
-    usuario,
-    contrasena,
-    tipo,
-    grado || null,
-    grupo || null,
-    ciclo_escolar || null,
-    telegram_user || null,
-    foto || null
-  ];
-
-  db.run(stmt, valores, function (err) {
-    if (err) {
-      if (err.message.includes("UNIQUE")) {
-        return res.status(400).json({ error: "El usuario ya existe" });
+  const { data, error } = await supabase
+    .from("usuarios")
+    .insert([
+      {
+        nombre,
+        apellido_paterno,
+        apellido_materno,
+        usuario,
+        contrasena,
+        tipo,
+        grado,
+        grupo,
+        ciclo_escolar,
+        telegram_user,
+        foto
       }
-      return res.status(500).json({ error: "Error en el servidor" });
+    ]);
+
+  if (error) {
+    console.error("❌ Error Supabase:", error.message);
+    if (error.message.includes("duplicate key")) {
+      return res.status(400).json({ error: "El usuario ya existe" });
     }
+    return res.status(500).json({ error: "Error en el servidor" });
+  }
 
-    res.status(201).json({ mensaje: "✅ Usuario agregado correctamente", id: this.lastID });
-  });
+  res.status(201).json({ mensaje: "✅ Usuario agregado correctamente", id: data[0].id });
 });
-
 
 // 🔐 LOGIN DE USUARIOS
 app.post("/api/login", async (req, res) => {
