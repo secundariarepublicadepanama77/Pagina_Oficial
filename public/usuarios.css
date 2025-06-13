@@ -1,0 +1,134 @@
+
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #002b7f;
+  }
+  
+  /* Barra superior */
+  .top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+  
+  .top-bar input[type="text"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  /* Botón regresar */
+  .btn-regresar {
+    background-color: #d32f2f;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .btn-regresar:hover {
+    background-color: #b71c1c;
+  }
+  
+  /* Tabla */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  thead {
+    background-color: #002b7f;
+    color: white;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  tr:hover {
+    background-color: #f2f2f2;
+  }
+  
+  td button {
+    padding: 5px 10px;
+    margin: 2px;
+    border: none;
+    border-radius: 6px;
+    background-color: #002b7f;
+    color: white;
+    cursor: pointer;
+  }
+  
+  td button:hover {
+    background-color: #001f5c;
+  }
+  
+  /* Modal edición */
+  #modal-editar {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+    z-index: 1000;
+    max-width: 400px;
+    width: 90%;
+  }
+  
+  #modal-editar input,
+  #modal-editar select {
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  #modal-editar button {
+    padding: 8px 10px;
+    margin-top: 10px;
+    margin-right: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .top-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .btn-regresar {
+      width: 100%;
+      text-align: center;
+    }
+  }
