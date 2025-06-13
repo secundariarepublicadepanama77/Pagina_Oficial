@@ -1,102 +1,114 @@
+/* Reset general */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
 /* Fondo dividido */
-body, html {
-    height: 100%;
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
+.fondo-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, #0033a0 50%, #d52b1e 50%);
+  padding: 1rem;
+}
+
+/* Tarjeta de login */
+.formulario-contenedor {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.logo-login {
+  width: 80px;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: #002b7f;
+  font-size: 1.4rem;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Botones */
+.botones {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.btn-volver,
+.btn-ingresar {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Botón volver */
+.btn-volver {
+  background-color: #e6e6e6;
+  color: #0033a0;
+}
+
+.btn-volver:hover {
+  background-color: #cccccc;
+}
+
+/* Botón ingresar */
+.btn-ingresar {
+  background-color: #002b7f;
+  color: white;
+}
+
+.btn-ingresar:hover {
+  background-color: #001b5f;
+}
+
+/* Mensaje de error */
+#mensaje {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+/* RESPONSIVE para móviles */
+@media (max-width: 600px) {
   .fondo-login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    background: linear-gradient(to right, #0052a5 50%, #d52b1e 50%);
+    flex-direction: column;
+    background: linear-gradient(to bottom, #0033a0 50%, #d52b1e 50%);
   }
-  
-  /* Contenedor del formulario */
+
   .formulario-contenedor {
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.1);
-    padding: 2rem;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
+    padding: 1.5rem;
   }
-  
-  /* Logo */
-  .logo-login {
-    width: 120px;
-    height: auto;
-    margin-bottom: 1rem;
-  }
-  
-  /* Campos */
-  form input[type="text"],
-  form input[type="password"] {
-    width: 100%;
-    padding: 0.75rem;
-    margin: 0.5rem 0;
-    border: 2px solid #0052a5;
-    border-radius: 8px;
-    font-size: 1rem;
-    outline: none;
-  }
-  
-  /* Botones */
-  .botones {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-    gap: 0.5rem;
-  }
-  
+
   .btn-volver,
   .btn-ingresar {
-    flex: 1;
-    padding: 0.7rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    font-weight: bold;
+    font-size: 0.95rem;
   }
-  
-  .btn-volver {
-    background-color: white;
-    border: 2px solid #0052a5;
-    color: #0052a5;
-  }
-  
-  .btn-volver:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .btn-ingresar {
-    background-color: #d52b1e;
-    color: white;
-    border: none;
-  }
-  
-  .btn-ingresar:hover {
-    background-color: #b0221a;
-  }
-  
-  /* Responsive */
-  @media (max-width: 480px) {
-    .formulario-contenedor {
-      padding: 1.5rem 1rem;
-    }
-  
-    .botones {
-      flex-direction: column;
-    }
-  
-    .btn-volver,
-    .btn-ingresar {
-      width: 100%;
-    }
-  }
-  
+}
