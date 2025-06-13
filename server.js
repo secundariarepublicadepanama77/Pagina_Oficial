@@ -481,24 +481,6 @@ app.post("/api/reportes", (req, res) => {
     res.json({ success: true, mensaje: "Reporte guardado correctamente" });
   });
 });
-
-// 📤 Obtener todos los reportes de un alumno por matrícula
-app.get("/api/reportes/:matricula", (req, res) => {
-  const matricula = req.params.matricula;
-
-  const query = `
-    SELECT * FROM reportes_conducta WHERE matricula = ? ORDER BY fecha DESC, id DESC
-  `;
-
-  db.all(query, [matricula], (err, rows) => {
-    if (err) {
-      console.error("❌ Error al obtener reportes:", err.message);
-      return res.status(500).json({ success: false, mensaje: "Error al obtener reportes" });
-    }
-
-    res.json(rows);
-  });
-});
 // ✅ Módulo de Bitácora para registrar acciones del sistema
 const registrarEvento = async (accion, descripcion, usuario) => {
   const fechaHora = new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" });
@@ -540,6 +522,25 @@ registrarEvento("descargar_historial", `Descargado historial por ${usuario}`, us
 
 // 📣 Notificación enviada
 registrarEvento("notificacion", `Notificación enviada por ${usuario}`, usuario);
+
+// 📤 Obtener todos los reportes de un alumno por matrícula
+app.get("/api/reportes/:matricula", (req, res) => {
+  const matricula = req.params.matricula;
+
+  const query = `
+    SELECT * FROM reportes_conducta WHERE matricula = ? ORDER BY fecha DESC, id DESC
+  `;
+
+  db.all(query, [matricula], (err, rows) => {
+    if (err) {
+      console.error("❌ Error al obtener reportes:", err.message);
+      return res.status(500).json({ success: false, mensaje: "Error al obtener reportes" });
+    }
+
+    res.json(rows);
+  });
+});
+
 // 🚀 Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
