@@ -297,10 +297,14 @@ app.delete("/api/matriculas/:matricula", async (req, res) => {
 app.post("/api/registrar", async (req, res) => {
   const { matricula } = req.body;
   const zonaHoraria = "America/Mexico_City";
-
   // Fecha y hora actual
   const ahora = new Date();
-  const fechaHoy = ahora.toISOString().split("T")[0];
+  const fechaHoy = new Date().toLocaleDateString('es-MX', {
+    timeZone: 'America/Mexico_City',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).split('/').reverse().join('-'); // Convierte a yyyy-mm-dd
   let horaActual = ahora.toLocaleTimeString("es-MX", { timeZone: zonaHoraria });
 
   console.log("📌 Matricula buscada:", matricula);
