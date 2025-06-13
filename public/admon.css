@@ -6,11 +6,80 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-body {
-  background-color: #f0f2f5;
+/* Fondo dividido para el login */
+.background-split {
+  display: flex;
+  height: 100vh;
+  background: linear-gradient(to right, #0033a0 50%, #d52b1e 50%);
+  justify-content: center;
+  align-items: center;
 }
 
-/* Panel Superior */
+/* Tarjeta del login */
+.login-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-card img {
+  width: 90px;
+  margin-bottom: 1rem;
+}
+
+.login-card h1 {
+  margin-bottom: 1.5rem;
+  color: #002b7f;
+  font-size: 1.4rem;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.volver {
+  background-color: #f0f0f0;
+  color: #002b7f;
+}
+
+.volver:hover {
+  background-color: #ddd;
+}
+
+.ingresar {
+  background-color: #002b7f;
+  color: white;
+}
+
+.ingresar:hover {
+  background-color: #001f5c;
+}
+
+/* Panel Administrativo */
 .barra-superior {
   background: linear-gradient(to right, #0033a0, #d52b1e);
   color: white;
@@ -22,10 +91,10 @@ body {
 }
 
 .barra-superior h1 {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Menú de navegación */
 .menu {
   display: flex;
   flex-wrap: wrap;
@@ -44,31 +113,21 @@ body {
   border: none;
   cursor: pointer;
 }
-
-.menu button:hover,
-.menu a:hover {
+.menu button:hover {
   background-color: #ccdfff;
-}
-
-.menu a.disabled {
-  background-color: #f0f0f0;
-  color: #999;
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 /* Contenedor principal */
 .contenedor {
   width: 100%;
   max-width: 1200px;
-  margin: 2rem auto;
+  margin: auto;
   padding: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  
 }
 
-/* Campo de filtro */
+/* Filtro */
 #filtro {
   width: 100%;
   padding: 0.7rem;
@@ -77,63 +136,46 @@ body {
   border: 1px solid #ccc;
 }
 
-/* Tabla */
+/* Tabla de registros */
 table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-thead {
+th, td {
+  padding: 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
   background-color: #002b7f;
   color: white;
-  font-weight: bold;
 }
 
-thead th {
-  padding: 12px;
-  text-align: center;
-}
-
-tbody td {
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
-
-tbody tr:hover {
+tr:hover {
   background-color: #f9f9f9;
 }
 
 td button {
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem 0.7rem;
   border: none;
   border-radius: 6px;
   background-color: #002b7f;
   color: white;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 td button:hover {
   background-color: #001f5c;
 }
 
-/* Modal */
+/* Modal de edición */
 #modal-editar-hora {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
-  z-index: 9999;
   width: 90%;
   max-width: 400px;
 }
@@ -141,27 +183,9 @@ td button:hover {
 #modal-editar-hora input {
   width: 100%;
   padding: 0.6rem;
-  margin: 0.5rem 0;
-  border-radius: 8px;
+  margin: 0.3rem 0;
   border: 1px solid #ccc;
-}
-
-#modal-editar-hora button {
-  margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-weight: bold;
   border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
-
-#modal-editar-hora button:first-child {
-  background-color: #0033a0;
-  color: white;
-}
-
-#modal-editar-hora button:last-child {
-  background-color: #ccc;
 }
 
 /* Responsive */
@@ -177,15 +201,100 @@ td button:hover {
     text-align: center;
   }
 
-  .contenedor {
-    padding: 1rem;
+  .login-card {
+    padding: 1.5rem;
   }
+}
+/* Estilo general de la tabla */
+table {
+width: 100%;
+border-collapse: collapse;
+font-family: 'Segoe UI', sans-serif;
+background-color: white;
+border-radius: 10px;
+overflow: hidden;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
 
-  table {
-    font-size: 0.85rem;
-  }
+thead {
+background-color: #002b7f; /* azul institucional */
+color: white;
+font-weight: bold;
+}
 
-  td, th {
-    padding: 0.6rem;
-  }
+thead th {
+padding: 12px;
+text-align: center;
+}
+
+tbody td {
+padding: 10px;
+text-align: center;
+border-bottom: 1px solid #eee;
+font-size: 14px;
+}
+
+tbody tr:hover {
+background-color: #f2f2f2;
+}
+
+/* Filtros arriba de la tabla */
+.filtros {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin: 15px 0;
+align-items: center;
+justify-content: flex-start;
+}
+
+.filtros input,
+.filtros select,
+.filtros button {
+padding: 8px 10px;
+border-radius: 5px;
+border: 1px solid #ccc;
+font-family: 'Segoe UI', sans-serif;
+font-size: 14px;
+}
+
+.filtros button {
+background-color: #002b7f;
+color: white;
+border: none;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+.filtros button:hover {
+background-color: #0041c2;
+}
+
+/* Botón de limpiar */
+.filtros .limpiar {
+background-color: #f4a300;
+}
+
+.filtros .limpiar:hover {
+background-color: #e68a00;
+}
+
+/* Total de resultados */
+.total-registros {
+margin-top: 10px;
+font-weight: bold;
+font-size: 14px;
+color: #333;
+text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+.fila-arriba,
+.fila-abajo {
+  grid-template-columns: 1fr;
+}
+.galeria-contenedor {
+  justify-content: center;
+}
 }
