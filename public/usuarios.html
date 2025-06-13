@@ -93,44 +93,28 @@
       </table>
       <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
     </div>
+
     <div id="modal-editar" class="modal" style="display: none;">
       <div class="modal-contenido">
         <button class="cerrar" onclick="cerrarModal()">&times;</button>
         <h3>Editar Usuario</h3>
         <form id="form-editar-usuario">
           <input type="hidden" id="edit-id">
-    
-          <label for="edit-nombre">Nombre completo:</label>
+          <label for="edit-nombre">Nombre:</label>
           <input type="text" id="edit-nombre" required>
-    
-          <label for="edit-grado">Grado:</label>
-          <input type="text" id="edit-grado" required>
-    
-          <label for="edit-grupo">Grupo:</label>
-          <input type="text" id="edit-grupo" required>
-    
-          <label for="edit-telegram">Usuario de Telegram:</label>
-          <input type="text" id="edit-telegram" required>
-    
-          <label for="edit-ciclo">Ciclo escolar:</label>
-          <input type="text" id="edit-ciclo" required>
-    
-          <label for="edit-usuario">Usuario de acceso:</label>
+          <label for="edit-usuario">Usuario:</label>
           <input type="text" id="edit-usuario" required>
-    
-          <label for="edit-tipo">Tipo de usuario:</label>
+          <label for="edit-tipo">Tipo:</label>
           <select id="edit-tipo" required>
             <option value="administrativo">Administrativo</option>
             <option value="maestro">Maestro</option>
             <option value="alumno">Alumno</option>
           </select>
-    
           <button type="submit">Guardar cambios</button>
           <button type="button" onclick="cerrarModal()">Cancelar</button>
         </form>
       </div>
     </div>
-    
   </main>
 
   <footer class="pie">
