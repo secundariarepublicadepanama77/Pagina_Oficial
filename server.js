@@ -481,48 +481,6 @@ app.post("/api/reportes", (req, res) => {
     res.json({ success: true, mensaje: "Reporte guardado correctamente" });
   });
 });
-// ✅ Módulo de Bitácora para registrar acciones del sistema
-const registrarEvento = async (accion, descripcion, usuario) => {
-  const fechaHora = new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" });
-  const { error } = await supabase.from("bitacora_eventos").insert([
-    { accion, descripcion, usuario, fecha_hora: fechaHora }
-  ]);
-  if (error) console.error("❌ Error al registrar evento en bitácora:", error.message);
-};
-
-// 🛠️ Inserta esta función en cada uno de tus endpoints donde quieras registrar eventos
-
-// Ejemplos de uso en tus rutas:
-// 🔐 Login exitoso
-registrarEvento("login", "Inició sesión correctamente", usuarioEncontrado.usuario);
-
-// ➕ Usuario creado
-registrarEvento("crear_usuario", `Usuario ${nombre} creado`, nombreAdmin);
-
-// 📝 Usuario editado
-registrarEvento("editar_usuario", `Usuario ${usuario} editado`, admin);
-
-// 🗑️ Usuario eliminado
-registrarEvento("eliminar_usuario", `Usuario con id ${id} eliminado`, admin);
-
-// 📝 Reporte enviado
-registrarEvento("reporte_enviado", `Reporte enviado sobre ${nombreAlumno}`, docente);
-
-// ⏰ Hora modificada
-registrarEvento("editar_hora", `Modificada hora de entrada/salida de ${nombre}`, admin);
-
-// 📋 Asistencia registrada
-registrarEvento("registro_asistencia", `Asistencia registrada para ${nombre}`, usuario);
-
-// 🆕 Matrícula agregada
-registrarEvento("agregar_matricula", `Matricula ${matricula} agregada`, admin);
-
-// 📥 Historial descargado
-registrarEvento("descargar_historial", `Descargado historial por ${usuario}`, usuario);
-
-// 📣 Notificación enviada
-registrarEvento("notificacion", `Notificación enviada por ${usuario}`, usuario);
-
 // 📤 Obtener todos los reportes de un alumno por matrícula
 app.get("/api/reportes/:matricula", (req, res) => {
   const matricula = req.params.matricula;
