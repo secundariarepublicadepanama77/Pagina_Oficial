@@ -494,7 +494,7 @@ const registrarEvento = async (accion, descripcion, usuario) => {
 
 // Ejemplos de uso en tus rutas:
 // 🔐 Login exitoso
-registrarEvento("login", `Inició sesión correctamente`, usuario);
+registrarEvento("login", "Inició sesión correctamente", usuarioEncontrado.usuario);
 
 // ➕ Usuario creado
 registrarEvento("crear_usuario", `Usuario ${nombre} creado`, nombreAdmin);
