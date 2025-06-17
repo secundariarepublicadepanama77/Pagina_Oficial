@@ -293,4 +293,31 @@ iframe {
     align-items: center !important;
   }
 }
+.galeria-instalaciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.tarjeta-img {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+  text-align: center;
+  padding: 1rem;
+}
+
+.tarjeta-img img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.tarjeta-img h3 {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #002b7f;
+}
 
