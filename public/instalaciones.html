@@ -44,47 +44,47 @@
         <button class="btn-categoria" data-categoria="biblioteca">Biblioteca</button>
         <button class="btn-categoria" data-categoria="laboratorio">Laboratorio</button>
       </div>
-
-<!-- Carrusel -->
-<div class="carrusel-principal">
-  <button class="btn-prev">⬅️</button>
-
-  <div class="carrusel-imagenes" id="carrusel-imagenes">
-    <!-- Imágenes aquí -->
-  </div>
-
-  <button class="btn-next">➡️</button>
-</div>
-
+    
+      <!-- Carrusel -->
+      <div class="carrusel-principal">
+        <button class="btn-prev">⬅️</button>
+    
+        <div class="carrusel-imagenes" id="carrusel-imagenes">
+          <!-- Imágenes generadas dinámicamente -->
+        </div>
+    
+        <button class="btn-next">➡️</button>
+      </div>
+    </section>    
+  </main>
 
   <!-- Pie de página -->
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
+
   <script>
     const imagenes = {
       patios: [
         "img/patios1.jpg",
         "img/patios2.jpg",
         "img/patios3.jpg",
-        "img/patios4.jpg"
+        "img/patios4.jpg",
+        "img/patios5.jpg",
+        "img/patios6.jpg",
+        "img/patios7.jpg",
+        "img/patios8.jpg"
       ],
       talleres: [
         "img/taller1.jpg",
         "img/taller2.jpg",
         "img/taller3.jpg",
-        "img/taller4.jpg"
+        "img/taller4.jpg",
+        "img/taller5.jpg",
+        "img/taller6.jpg",
+        "img/taller7.jpg",
+        "img/taller8.jpg"
       ],
-      salones: [
-        "img/salon1.jpg",
-        "img/salon2.jpg"
-      ],
-      biblioteca: [
-        "img/biblio1.jpg"
-      ],
-      laboratorio: [
-        "img/lab1.jpg"
-      ]
     };
   
     let categoriaActual = "patios";
@@ -93,22 +93,15 @@
     const carrusel = document.getElementById("carrusel-imagenes");
     const btns = document.querySelectorAll(".btn-categoria");
   
-    function mostrarImagen() {
-      const imagenActual = imagenes[categoriaActual][posicion];
+    function mostrarCarrusel() {
       carrusel.innerHTML = "";
-      const img = document.createElement("img");
-      img.src = imagenActual;
-      carrusel.appendChild(img);
-    }
-  
-    function siguiente() {
-      posicion = (posicion + 1) % imagenes[categoriaActual].length;
-      mostrarImagen();
-    }
-  
-    function anterior() {
-      posicion = (posicion - 1 + imagenes[categoriaActual].length) % imagenes[categoriaActual].length;
-      mostrarImagen();
+      imagenes[categoriaActual].forEach((src) => {
+        const img = document.createElement("img");
+        img.src = src;
+        carrusel.appendChild(img);
+      });
+      carrusel.scrollLeft = 0;
+      posicion = 0;
     }
   
     btns.forEach(btn => {
@@ -116,19 +109,25 @@
         btns.forEach(b => b.classList.remove("activa"));
         btn.classList.add("activa");
         categoriaActual = btn.getAttribute("data-categoria");
-        posicion = 0;
-        mostrarImagen();
+        mostrarCarrusel();
       });
     });
   
-    document.querySelector(".btn-prev").addEventListener("click", anterior);
-    document.querySelector(".btn-next").addEventListener("click", siguiente);
+    document.querySelector(".btn-prev").addEventListener("click", () => {
+      carrusel.scrollBy({ left: -carrusel.offsetWidth / 3, behavior: "smooth" });
+    });
+  
+    document.querySelector(".btn-next").addEventListener("click", () => {
+      carrusel.scrollBy({ left: carrusel.offsetWidth / 3, behavior: "smooth" });
+    });
   
     setInterval(() => {
-      siguiente();
-    }, 8000); // cambia cada 8 segundos
+      carrusel.scrollBy({ left: carrusel.offsetWidth / 3, behavior: "smooth" });
+    }, 10000); // cada 10 segundos
   
-    mostrarImagen();
+    mostrarCarrusel();
   </script>
+  
+
 </body>
 </html>
