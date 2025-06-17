@@ -9,20 +9,19 @@
 <body>
   <div class="contenedor">
     <h2>📋 Reporte de Conducta Individual</h2>
-
     <form id="form-reporte">
       <label>Nombre del alumno:</label>
       <input type="text" id="nombre_alumno" readonly><br>
-
-      <label>Matrícula:</label>
-      <input type="text" id="matricula" readonly><br>
-
+    
+      <label>Matrícula del alumno:</label>
+      <input type="text" id="matricula_alumno" readonly><br>
+    
       <label>Grado:</label>
       <input type="text" id="grado" readonly>
-
+    
       <label>Grupo:</label>
       <input type="text" id="grupo" readonly><br>
-
+    
       <label>Clase:</label>
       <select id="clase" required>
         <option value="">Selecciona</option>
@@ -41,7 +40,7 @@
         <option>Taller</option>
         <option>Otro</option>
       </select><br>
-
+    
       <label>Hora:</label>
       <select id="hora" required>
         <option value="">Selecciona</option>
@@ -49,140 +48,45 @@
         <option>5a</option><option>6a</option><option>7a</option><option>8a</option>
         <option>9a</option><option>1er descanso</option><option>2o descanso</option>
       </select><br>
-
+    
       <label>Descripción de la conducta:</label><br>
-      <textarea id="descripcion" rows="5" required></textarea><br>
-
+      <textarea id="contenido" rows="5" required></textarea><br>
+    
       <input type="submit" value="Enviar Reporte">
     </form>
-
     <div id="mensaje"></div>
-  </div>
-
-  <script>
-    // Suponiendo que guardas los datos del alumno en localStorage al iniciar sesión
-    const alumno = JSON.parse(localStorage.getItem("alumnoSeleccionado") || "{}");
-    const profesor = localStorage.getItem("nombreUsuario") || "Anónimo";
-
-    document.getElementById("nombre_alumno").value = alumno.nombre || "";
-    document.getElementById("matricula").value = alumno.matricula || "";
-    document.getElementById("grado").value = alumno.grado || "";
-    document.getElementById("grupo").value = alumno.grupo || "";
-
-    document.getElementById("form-reporte").addEventListener("submit", async e => {
-      e.preventDefault();
-
-      const data = {
-        matricula: document.getElementById("matricula").value,
-        nombre_alumno: document.getElementById("nombre_alumno").value,
-        grado: document.getElementById("grado").value,
-        grupo: document.getElementById("grupo").value,
-        clase: document.getElementById("clase").value,
-        hora: document.getElementById("hora").value,
-        descripcion: document.getElementById("descripcion").value,
-        quien_reporta: profesor
-      };
-
-      const res = await fetch("http://localhost:3000/api/reportes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+    <script>
+      const alumno = JSON.parse(localStorage.getItem("alumnoSeleccionado") || "{}");
+      const docente = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
+    
+      document.getElementById("nombre_alumno").value = alumno.nombre || "";
+      document.getElementById("matricula_alumno").value = alumno.usuario || "";
+      document.getElementById("grado").value = alumno.grado || "";
+      document.getElementById("grupo").value = alumno.grupo || "";
+    
+      document.getElementById("form-reporte").addEventListener("submit", async e => {
+        e.preventDefault();
+    
+        const data = {
+          matricula_alumno: document.getElementById("matricula_alumno").value,
+          matricula_docente: docente.usuario, // asegúrate que esté en localStorage
+          fecha: new Date().toLocaleDateString("es-MX"),
+          clase: document.getElementById("clase").value,
+          hora: document.getElementById("hora").value,
+          contenido: document.getElementById("contenido").value
+        };
+    
+        const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+    
+        const result = await res.json();
+        document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
+        document.getElementById("form-reporte").reset();
       });
-
-      const result = await res.json();
-      document.getElementById("mensaje").textContent = result.mensaje;
-      document.getElementById("form-reporte").reset();
-    });
-  </script>
-</body>
-</html>
-
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro de Usuario</title>
-  <link rel="stylesheet" href="registro.css" />
-</head>
-<body>
-  <div class="contenedor">
-    <h2>👤 Registro de Usuario</h2>
-
-    <form id="form-registro">
-      <label>Matrícula (Usuario):</label>
-      <input type="text" id="usuario" required><br>
-
-      <label>Contraseña:</label>
-      <input type="password" id="contrasena" required><br>
-
-      <label>Nombre:</label>
-      <input type="text" id="nombre" required><br>
-
-      <label>Apellido paterno:</label>
-      <input type="text" id="apellido_paterno" required><br>
-
-      <label>Apellido materno:</label>
-      <input type="text" id="apellido_materno" required><br>
-
-      <label>Tipo:</label>
-      <select id="tipo" required>
-        <option value="">Selecciona</option>
-        <option value="Alumno">Alumno</option>
-        <option value="Docente">Docente</option>
-        <option value="Administrativo">Administrativo</option>
-      </select><br>
-
-      <label>Grado:</label>
-      <input type="text" id="grado"><br>
-
-      <label>Grupo:</label>
-      <input type="text" id="grupo"><br>
-
-      <label>Ciclo escolar:</label>
-      <input type="text" id="ciclo_escolar"><br>
-
-      <label>Telegram (opcional):</label>
-      <input type="text" id="telegram"><br>
-
-      <label>Foto (URL):</label>
-      <input type="text" id="foto"><br>
-
-      <input type="submit" value="Registrar usuario">
-    </form>
-
-    <div id="mensaje"></div>
-  </div>
-
-  <script>
-    document.getElementById("form-registro").addEventListener("submit", async e => {
-      e.preventDefault();
-
-      const datos = {
-        usuario: document.getElementById("usuario").value,
-        contrasena: document.getElementById("contrasena").value,
-        nombre: document.getElementById("nombre").value,
-        apellido_paterno: document.getElementById("apellido_paterno").value,
-        apellido_materno: document.getElementById("apellido_materno").value,
-        tipo: document.getElementById("tipo").value,
-        grado: document.getElementById("grado").value,
-        grupo: document.getElementById("grupo").value,
-        ciclo_escolar: document.getElementById("ciclo_escolar").value,
-        telegram: document.getElementById("telegram").value,
-        foto: document.getElementById("foto").value
-      };
-
-      const res = await fetch("http://localhost:3000/api/usuarios", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      });
-
-      const result = await res.json();
-      document.getElementById("mensaje").textContent = result.mensaje || "Usuario registrado con éxito";
-      document.getElementById("form-registro").reset();
-    });
-  </script>
+    </script>
+    
 </body>
 </html>

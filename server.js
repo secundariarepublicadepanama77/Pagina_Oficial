@@ -461,26 +461,20 @@ app.delete("/eliminar-registro/:id", async (req, res) => {
 });
 
 // 📥 Guardar nuevo reporte
-app.post("/api/reportes", (req, res) => {
-  const { matricula, nombre_completo, grado, grupo, quien_reporta, clase, hora, descripcion } = req.body;
+app.post("/api/reportes", async (req, res) => {
+  const { matricula_alumno, matricula_docente, fecha, clase, hora, contenido } = req.body;
 
-  if (!matricula || !quien_reporta || !descripcion) {
-    return res.status(400).json({ success: false, mensaje: "Faltan campos obligatorios" });
+  const { data, error } = await supabase
+    .from("reportes_conducta")
+    .insert([{ matricula_alumno, matricula_docente, fecha, clase, hora, contenido }]);
+
+  if (error) {
+    return res.status(500).json({ mensaje: "Error al guardar el reporte", error });
   }
 
-  const query = `
-    INSERT INTO reportes_conducta (matricula, nombre_completo, grado, grupo, quien_reporta, clase, hora, descripcion)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  db.run(query, [matricula, nombre_completo, grado, grupo, quien_reporta, clase, hora, descripcion], function(err) {
-    if (err) {
-      console.error("❌ Error al guardar el reporte:", err.message);
-      return res.status(500).json({ success: false, mensaje: "Error al guardar el reporte" });
-    }
-    res.json({ success: true, mensaje: "Reporte guardado correctamente" });
-  });
+  res.json({ mensaje: "Reporte guardado correctamente", data });
 });
+
 // 📤 Obtener todos los reportes de un alumno por matrícula
 app.get("/api/reportes/:matricula", (req, res) => {
   const matricula = req.params.matricula;
