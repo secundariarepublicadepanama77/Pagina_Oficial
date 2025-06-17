@@ -450,3 +450,99 @@ iframe {
 .btn-next {
   right: 10px;
 }
+.galeria-contenedor {
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.galeria-contenedor h2 {
+  font-size: 2rem;
+  color: #002b7f;
+  margin-bottom: 0.5rem;
+}
+
+.galeria-contenedor p {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+.categorias {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-categoria {
+  background-color: #e6e6e6;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #002b7f;
+  transition: background-color 0.3s ease;
+}
+
+.btn-categoria.activa,
+.btn-categoria:hover {
+  background-color: #002b7f;
+  color: white;
+}
+
+.carrusel-principal {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.carrusel-imagenes {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  scroll-behavior: smooth;
+  padding: 1rem;
+  scroll-snap-type: x mandatory;
+  max-width: 100%;
+}
+
+.carrusel-imagenes img {
+  flex: 0 0 auto;
+  height: 280px;
+  width: 420px;
+  object-fit: cover;
+  border-radius: 12px;
+  scroll-snap-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.btn-prev,
+.btn-next {
+  background-color: #002b7f;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-prev:hover,
+.btn-next:hover {
+  background-color: #0040b0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .carrusel-imagenes img {
+    height: 200px;
+    width: 300px;
+  }
+}
