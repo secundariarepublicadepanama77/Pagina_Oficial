@@ -320,4 +320,75 @@ iframe {
   font-size: 1.1rem;
   color: #002b7f;
 }
+.galeria-contenedor {
+  padding: 2rem;
+  text-align: center;
+}
+
+.categorias {
+  margin-bottom: 1rem;
+}
+
+.categorias button {
+  background-color: #e6e6e6;
+  border: none;
+  margin: 0 5px;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.categorias button:hover,
+.categorias button.activa {
+  background-color: #002b7f;
+  color: white;
+}
+
+.carrusel-principal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.carrusel-imagenes {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.carrusel-imagenes img {
+  height: 200px;
+  border-radius: 12px;
+  flex: 0 0 30%;
+  object-fit: cover;
+}
+
+.btn-prev,
+.btn-next {
+  background-color: #002b7f;
+  color: white;
+  font-size: 1.5rem;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+}
+
+.btn-prev {
+  left: 0;
+}
+
+.btn-next {
+  right: 0;
+}
 
