@@ -62,29 +62,30 @@
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
-
   <script>
     const imagenes = {
       patios: [
         "img/patios1.jpg",
         "img/patios2.jpg",
         "img/patios3.jpg",
-        "img/patios4.jpg",
-        "img/patios5.jpg",
-        "img/patios6.jpg",
-        "img/patios7.jpg",
-        "img/patios8.jpg"
+        "img/patios4.jpg"
       ],
       talleres: [
         "img/taller1.jpg",
         "img/taller2.jpg",
         "img/taller3.jpg",
-        "img/taller4.jpg",
-        "img/taller5.jpg",
-        "img/taller6.jpg",
-        "img/taller7.jpg",
-        "img/taller8.jpg"
+        "img/taller4.jpg"
       ],
+      salones: [
+        "img/salon1.jpg",
+        "img/salon2.jpg"
+      ],
+      biblioteca: [
+        "img/biblio1.jpg"
+      ],
+      laboratorio: [
+        "img/lab1.jpg"
+      ]
     };
   
     let categoriaActual = "patios";
@@ -93,15 +94,22 @@
     const carrusel = document.getElementById("carrusel-imagenes");
     const btns = document.querySelectorAll(".btn-categoria");
   
-    function mostrarCarrusel() {
+    function mostrarImagen() {
+      const imagenActual = imagenes[categoriaActual][posicion];
       carrusel.innerHTML = "";
-      imagenes[categoriaActual].forEach((src) => {
-        const img = document.createElement("img");
-        img.src = src;
-        carrusel.appendChild(img);
-      });
-      carrusel.scrollLeft = 0;
-      posicion = 0;
+      const img = document.createElement("img");
+      img.src = imagenActual;
+      carrusel.appendChild(img);
+    }
+  
+    function siguiente() {
+      posicion = (posicion + 1) % imagenes[categoriaActual].length;
+      mostrarImagen();
+    }
+  
+    function anterior() {
+      posicion = (posicion - 1 + imagenes[categoriaActual].length) % imagenes[categoriaActual].length;
+      mostrarImagen();
     }
   
     btns.forEach(btn => {
@@ -109,25 +117,19 @@
         btns.forEach(b => b.classList.remove("activa"));
         btn.classList.add("activa");
         categoriaActual = btn.getAttribute("data-categoria");
-        mostrarCarrusel();
+        posicion = 0;
+        mostrarImagen();
       });
     });
   
-    document.querySelector(".btn-prev").addEventListener("click", () => {
-      carrusel.scrollBy({ left: -carrusel.offsetWidth / 3, behavior: "smooth" });
-    });
-  
-    document.querySelector(".btn-next").addEventListener("click", () => {
-      carrusel.scrollBy({ left: carrusel.offsetWidth / 3, behavior: "smooth" });
-    });
+    document.querySelector(".btn-prev").addEventListener("click", anterior);
+    document.querySelector(".btn-next").addEventListener("click", siguiente);
   
     setInterval(() => {
-      carrusel.scrollBy({ left: carrusel.offsetWidth / 3, behavior: "smooth" });
-    }, 10000); // cada 10 segundos
+      siguiente();
+    }, 8000); // cambia cada 8 segundos
   
-    mostrarCarrusel();
+    mostrarImagen();
   </script>
-  
-
 </body>
 </html>

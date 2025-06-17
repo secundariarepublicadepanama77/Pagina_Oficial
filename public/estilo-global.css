@@ -366,55 +366,55 @@ iframe {
 
 .carrusel-principal {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  max-width: 90%;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 .carrusel-imagenes {
   display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  scroll-behavior: smooth;
-  padding: 1rem;
-  scroll-snap-type: x mandatory;
-  max-width: 100%;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
 }
-
 .carrusel-imagenes img {
-  flex: 0 0 auto;
-  height: 280px;
-  width: 420px;
+  width: 100%;
+  height: 250px;
   object-fit: cover;
   border-radius: 12px;
-  scroll-snap-align: center;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  flex-shrink: 0;
 }
 
 .btn-prev,
 .btn-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   background-color: #002b7f;
-  border: none;
   color: white;
+  border: none;
   font-size: 1.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-radius: 50%;
+  z-index: 1;
 }
 
 .btn-prev:hover,
 .btn-next:hover {
-  background-color: #0040b0;
+  background-color: #003f9e;
 }
 
-/* Responsive */
+.btn-prev {
+  left: 10px;
+}
+
+.btn-next {
+  right: 10px;
+}
+
 @media (max-width: 768px) {
   .carrusel-imagenes img {
-    height: 200px;
-    width: 300px;
+    height: 180px;
   }
 }
-
-
