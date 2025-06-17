@@ -32,7 +32,7 @@ app.post("/api/usuarios", async (req, res) => {
     grado,
     grupo,
     ciclo_escolar,
-    telegram_user,
+    telegram,
     foto
   } = req.body;
 
@@ -53,7 +53,7 @@ app.post("/api/usuarios", async (req, res) => {
         grado,
         grupo,
         ciclo_escolar,
-        telegram_user,
+        telegram,
         foto
       }
     ]);

@@ -10,16 +10,26 @@
   <div class="contenedor">
     <h1>Registrar Usuario</h1>
     <form id="form-registro">
-      <input type="text" id="matricula" placeholder="Matrícula" required />
-      <input type="text" id="nombres" placeholder="Nombres" required />
+      <input type="text" id="usuario" placeholder="Matrícula" required />
+      <input type="password" id="contrasena" placeholder="Contraseña" required />
+      <input type="text" id="nombre" placeholder="Nombre(s)" required />
       <input type="text" id="apellido_paterno" placeholder="Apellido paterno" required />
       <input type="text" id="apellido_materno" placeholder="Apellido materno" required />
+
+      <select id="tipo" required>
+        <option value="">Selecciona tipo</option>
+        <option value="Alumno">Alumno</option>
+        <option value="Docente">Docente</option>
+        <option value="Administrativo">Administrativo</option>
+      </select>
+
       <select id="grado">
         <option value=""> Grado </option>
         <option value="Primero">Primero</option>
         <option value="Segundo">Segundo</option>
         <option value="Tercero">Tercero</option>
       </select>  
+
       <select id="grupo">
         <option value=""> Grupo </option>
         <option value="A">A</option>
@@ -28,7 +38,8 @@
         <option value="D">D</option>
         <option value="E">E</option>
       </select>    
-      <select id="ciclo" required>
+
+      <select id="ciclo_escolar">
         <option value="">Ciclo escolar</option>
         <option value="2024-2025">2024-2025</option>
         <option value="2025-2026">2025-2026</option>
@@ -37,18 +48,16 @@
         <option value="2028-2029">2028-2029</option>
         <option value="2029-2030">2029-2030</option>
       </select> 
-      <select id="tipo" required>
-        <option value="">Selecciona tipo</option>
-        <option value="Alumno">Alumno</option>
-        <option value="Maestro">Maestro</option>
-        <option value="Administrativo">Administrativo</option>
-      </select>
+
+      <input type="text" id="telegram" placeholder="Usuario de Telegram (opcional)" />
       <input type="text" id="foto" placeholder="URL de foto (opcional)" />
+
       <div id="preview" style="display:none; text-align:center; margin-bottom:15px;">
         <p>Vista previa:</p>
         <img id="foto-preview" src="" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
         <p id="foto-error" style="color:red;"></p>
       </div>      
+
       <div class="botones">
         <button type="submit">Registrar</button>
         <a href="admon.html" class="btn-volver">Volver</a>
@@ -57,69 +66,67 @@
   </div>
 
   <script>
-    // 🔹 Validación y envío del formulario
-    document.getElementById("form-registro").addEventListener("submit", async (e) => {
+    const form = document.getElementById("form-registro");
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-  
+
       const datos = {
-        matricula: document.getElementById("matricula").value.trim(),
-        nombres: document.getElementById("nombres").value.trim(),
+        usuario: document.getElementById("usuario").value.trim(),
+        contrasena: document.getElementById("contrasena").value.trim(),
+        nombre: document.getElementById("nombre").value.trim(),
         apellido_paterno: document.getElementById("apellido_paterno").value.trim(),
         apellido_materno: document.getElementById("apellido_materno").value.trim(),
+        tipo: document.getElementById("tipo").value.trim(),
         grado: document.getElementById("grado").value.trim(),
         grupo: document.getElementById("grupo").value.trim(),
-        ciclo_escolar: document.getElementById("ciclo").value.trim(),
-        tipo: document.getElementById("tipo").value.trim(),
+        ciclo_escolar: document.getElementById("ciclo_escolar").value.trim(),
+        telegram: document.getElementById("telegram").value.trim(),
         foto: document.getElementById("foto").value.trim()
       };
-  
-      const res = await fetch('https://pagina-oficial-amhj.onrender.com/api/matriculas', {
+
+      const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/usuarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
       });
-  
+
       const result = await res.json();
-      alert(result.mensaje);
+      alert(result.mensaje || "Usuario registrado");
       if (result.success) {
-        document.getElementById("form-registro").reset();
+        form.reset();
         document.getElementById("preview").style.display = "none";
       }
     });
-  
-    // 🔹 Vista previa y validación de imagen
+
+    // Vista previa de imagen
     const inputFoto = document.getElementById("foto");
-  const previewDiv = document.getElementById("preview");
-  const previewImg = document.getElementById("foto-preview");
-  const errorMsg = document.getElementById("foto-error");
+    const previewDiv = document.getElementById("preview");
+    const previewImg = document.getElementById("foto-preview");
+    const errorMsg = document.getElementById("foto-error");
 
-  function mostrarError() {
-    errorMsg.textContent = "⚠️ Esta imagen no se pudo cargar. Verifica el enlace.";
-    previewImg.style.display = "none";
-  }
-
-  inputFoto.addEventListener("input", () => {
-    const url = inputFoto.value.trim();
-
-    if (!url) {
-      previewDiv.style.display = "none";
-      previewImg.src = "";
-      errorMsg.textContent = "";
-      return;
+    function mostrarError() {
+      errorMsg.textContent = "⚠️ Imagen no válida.";
+      previewImg.style.display = "none";
     }
 
-    previewImg.onload = () => {
-      previewImg.style.display = "block";
-      errorMsg.textContent = "";
-    };
+    inputFoto.addEventListener("input", () => {
+      const url = inputFoto.value.trim();
+      if (!url) {
+        previewDiv.style.display = "none";
+        previewImg.src = "";
+        errorMsg.textContent = "";
+        return;
+      }
 
-    previewImg.onerror = mostrarError;
-
-    previewImg.src = url;
-    previewDiv.style.display = "block";
-  });
+      previewImg.onload = () => {
+        previewImg.style.display = "block";
+        errorMsg.textContent = "";
+      };
+      previewImg.onerror = mostrarError;
+      previewImg.src = url;
+      previewDiv.style.display = "block";
+    });
   </script>
-  
 </body>
 </html>
-
