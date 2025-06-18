@@ -69,7 +69,7 @@
     <div id="mensaje"></div>
     <script>
       const docente = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
-    
+      console.log("DOCENTE:", docente);
       document.getElementById("matricula_alumno").addEventListener("input", async () => {
         const matricula = document.getElementById("matricula_alumno").value.trim();
     
