@@ -52,21 +52,35 @@
   </footer>
 
   <script>
-    // Verifica si hay sesión activa
-    const nombre = localStorage.getItem("nombreUsuario");
-    const tipo = localStorage.getItem("tipoUsuario");
-
-    if (!nombre || tipo !== "alumno") {
-      alert("Sesión no válida. Redirigiendo al login.");
-      window.location.href = "login.html";
-    } else {
-      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
-    }
-
-    function cerrarSesion() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    }
+    const alumno = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
+    const matricula = alumno.usuario;
+  
+    fetch(`https://pagina-oficial-amhj.onrender.com/api/reportes/alumno/${matricula}`)
+      .then(res => res.json())
+      .then(data => {
+        const tabla = document.getElementById("tabla-reportes");
+  
+        if (!data || data.length === 0) {
+          tabla.innerHTML = `<tr><td colspan="4">No hay reportes</td></tr>`;
+          return;
+        }
+  
+        data.forEach(reporte => {
+          const fila = `
+            <tr>
+              <td>${reporte.fecha}</td>
+              <td>${reporte.clase}</td>
+              <td>${reporte.hora}</td>
+              <td>${reporte.contenido}</td>
+            </tr>
+          `;
+          tabla.innerHTML += fila;
+        });
+      })
+      .catch(err => {
+        console.error("Error al cargar reportes:", err);
+      });
   </script>
+  
 </body>
 </html>
