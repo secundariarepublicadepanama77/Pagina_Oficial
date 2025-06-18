@@ -105,5 +105,27 @@
   <footer style="background-color: #d52b1e; color: white; text-align: center; padding: 1rem; font-size: 0.9rem;">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
+  <script>
+    // 🔒 Bloqueo de clic derecho
+    document.addEventListener("contextmenu", e => e.preventDefault());
+  
+    // 🔒 Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
+    document.addEventListener("keydown", e => {
+      const bloqueadas = [
+        "F12",
+        "u", // Ctrl+U
+        "i", // Ctrl+Shift+I
+        "c"  // Ctrl+Shift+C
+      ];
+      if (
+        bloqueadas.includes(e.key.toLowerCase()) && 
+        (e.ctrlKey || e.metaKey || e.shiftKey)
+      ) {
+        e.preventDefault();
+        console.log("🚫 Acción bloqueada");
+      }
+    });
+  </script>
+  
 </body>
 </html>
