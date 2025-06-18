@@ -113,7 +113,7 @@
           hora: document.getElementById("hora").value,
           contenido: document.getElementById("contenido").value
         };
-    
+    console.log("📤 Enviando:", data);
         const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
