@@ -106,7 +106,7 @@
     
         const data = {
           matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
-          matricula_docente: docente.usuario || "ROCJ9407192D7",
+          matricula_docente: document.getElementById("matricula_docente").value,
           fecha: new Date().toLocaleDateString("es-MX"),
           clase: document.getElementById("clase").value,
           hora: document.getElementById("hora").value,
