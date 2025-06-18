@@ -438,7 +438,7 @@ app.post("/actualizar-horarios", async (req, res) => {
   }
 });
 
-// ✅ Eliminar registro de tabla_registro usando Supabase
+// Historial.html- Elimina registro de tabla_registro
 app.delete("/eliminar-registro/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -460,7 +460,7 @@ app.delete("/eliminar-registro/:id", async (req, res) => {
   }
 });
 
-// 📥 Guardar nuevo reporte
+// reporte.html-Guardar nuevo reporte
 app.post("/api/reportes", async (req, res) => {
   console.log("📨 Reporte recibido:", req.body);
 
@@ -484,7 +484,7 @@ app.post("/api/reportes", async (req, res) => {
 
   res.json({ mensaje: "✅ Reporte guardado correctamente", data });
 });
-//En reporte te dara el nombre al poner tu matricula
+//reportes.html-En reporte te dara el nombre al poner tu matricula
 app.get("/api/usuarios/:matricula", async (req, res) => {
   const matricula = req.params.matricula;
 
@@ -500,15 +500,14 @@ app.get("/api/usuarios/:matricula", async (req, res) => {
 
   res.json(data);
 });
-// 📋 Obtener reportes de un alumno, con filtros opcionales
+// mis_reportes.html-Ob. reportes de un alumno, con filtros. 
 app.get("/api/reportes/alumno/:matricula", async (req, res) => {
   const { matricula } = req.params;
   const { clase, fecha } = req.query;
 
   try {
-    // ✅ CAMBIA ESTA LÍNEA:
     let { data: reportes, error } = await supabase
-      .from("reportes_conducta") // ❗ Asegúrate que sea "reportes_conducta", no "reporte_conducta"
+      .from("reportes_conducta") 
       .select("*")
       .eq("matricula_alumno", matricula);
 
@@ -545,7 +544,7 @@ app.get("/api/reportes/alumno/:matricula", async (req, res) => {
     res.status(500).json({ error: "Error al obtener reportes del alumno" });
   }
 });
-// 🚀 Iniciar el servidor
+// Inicia el servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
 });

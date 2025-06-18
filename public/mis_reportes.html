@@ -103,14 +103,20 @@
 
           datosFiltrados.forEach(reporte => {
             let tipo = "Leve";
-            let color = "🟢";
-            const texto = reporte.contenido.toLowerCase();
-            if (texto.includes("grit") || texto.includes("agres")) {
-              tipo = "Grave"; color = "🔴";
-            } else if (texto.includes("molest") || texto.includes("interrump")) {
-              tipo = "Moderado"; color = "🟠";
-            }
+let color = "🟢";
+const texto = reporte.contenido.toLowerCase();
 
+// Palabras clave
+const graves = ["golpe", "amenaza", "insulto", "inquieto", "golpeo", "robo", "escupio", "varios reportes", "navaja", "pistola", "droga", "sustancia", "bapeador"];
+const moderados = ["habló", "contesto", "no obedeció", "celular", "constantemente", "inquieto", "grito", "grita", "parado", "uniforme"];
+
+if (graves.some(palabra => texto.includes(palabra))) {
+  tipo = "Grave";
+  color = "🔴";
+} else if (moderados.some(palabra => texto.includes(palabra))) {
+  tipo = "Moderado";
+  color = "🟠";
+}
             const fila = `
               <tr>
                 <td>${reporte.fecha}</td>
