@@ -506,15 +506,14 @@ app.get("/api/reportes/alumno/:matricula", async (req, res) => {
   const { clase, fecha } = req.query;
 
   try {
-    // 1. Filtrar reportes del alumno
+    // ✅ CAMBIA ESTA LÍNEA:
     let { data: reportes, error } = await supabase
-      .from("reporte_conducta")
+      .from("reportes_conducta") // ❗ Asegúrate que sea "reportes_conducta", no "reporte_conducta"
       .select("*")
       .eq("matricula_alumno", matricula);
 
     if (error) throw error;
 
-    // 2. Filtrar por clase y fecha si se pidieron
     if (clase) {
       reportes = reportes.filter(r =>
         r.clase.toLowerCase() === clase.toLowerCase()
@@ -524,7 +523,6 @@ app.get("/api/reportes/alumno/:matricula", async (req, res) => {
       reportes = reportes.filter(r => r.fecha === fecha);
     }
 
-    // 3. Obtener los nombres de los docentes relacionados
     const matriculasDocentes = [...new Set(reportes.map(r => r.matricula_docente))];
     const { data: docentes, error: errorDocentes } = await supabase
       .from("usuarios")
@@ -533,7 +531,6 @@ app.get("/api/reportes/alumno/:matricula", async (req, res) => {
 
     if (errorDocentes) throw errorDocentes;
 
-    // 4. Asociar nombre del docente a cada reporte
     const nombreDocenteMap = {};
     docentes.forEach(d => nombreDocenteMap[d.usuario] = d.nombre);
 
@@ -548,7 +545,6 @@ app.get("/api/reportes/alumno/:matricula", async (req, res) => {
     res.status(500).json({ error: "Error al obtener reportes del alumno" });
   }
 });
-
 // 🚀 Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
