@@ -47,6 +47,11 @@
           localStorage.setItem("usuarioID", resultado.id);
 localStorage.setItem("nombreUsuario", resultado.nombre);
 localStorage.setItem("tipoUsuario", resultado.tipo);
+localStorage.setItem("usuarioActual", JSON.stringify({
+  usuario: datos.usuario,
+  tipo: resultado.tipo,
+  nombre: resultado.nombre
+}));
 
 
           if (resultado.tipo === "administrativo") {
