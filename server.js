@@ -462,20 +462,29 @@ app.delete("/eliminar-registro/:id", async (req, res) => {
 
 // 📥 Guardar nuevo reporte
 app.post("/api/reportes", async (req, res) => {
-  console.log("📨 Reporte recibido:", req.body); // <--- AGREGA ESTO
+  console.log("📨 Reporte recibido:", req.body);
+
   const { matricula_alumno, matricula_docente, fecha, clase, hora, contenido } = req.body;
 
   const { data, error } = await supabase
     .from("reportes_conducta")
-    .insert([{ matricula_alumno, matricula_docente, fecha, clase, hora, contenido }]);
+    .insert([{ 
+      matricula_alumno, 
+      matricula_docente, 
+      fecha, 
+      clase, 
+      hora, 
+      contenido 
+    }]);
 
   if (error) {
+    console.error("❌ Supabase error:", error.message);
     return res.status(500).json({ mensaje: "Error al guardar el reporte", error });
   }
 
-  res.json({ mensaje: "Reporte guardado correctamente", data });
+  res.json({ mensaje: "✅ Reporte guardado correctamente", data });
 });
-//En reporte te dara el nombre al poner tu contraseña
+//En reporte te dara el nombre al poner tu matricula
 app.get("/api/usuarios/:matricula", async (req, res) => {
   const matricula = req.params.matricula;
 

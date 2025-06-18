@@ -111,7 +111,7 @@
           const data = {
             matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
             matricula_docente: document.getElementById("matricula_docente").value.trim(),
-            fecha: new Date().toLocaleDateString("es-MX"),
+            fecha: new Date().toISOString().split("T")[0],
             clase: document.getElementById("clase").value,
             hora: document.getElementById("hora").value,
             contenido: document.getElementById("contenido").value
