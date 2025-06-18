@@ -70,53 +70,56 @@
     </form>
     <div id="mensaje"></div>
     <script>
-      const docente = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
+      document.addEventListener("DOMContentLoaded", () => {
+        const docente = JSON.parse(localStorage.getItem("usuarioActual") || {});
     
-      // Validación segura
-      if (!docente || !docente.usuario) {
-        alert("⚠️ Por favor inicia sesión como docente.");
-        window.location.href = "login.html";
-      }
-    
-      document.getElementById("matricula_docente").value = docente.usuario || "";
-      console.log("👤 Docente detectado:", docente);
-    
-      document.getElementById("matricula_alumno").addEventListener("input", async () => {
-        const matricula = document.getElementById("matricula_alumno").value.trim();
-        if (matricula.length < 4) return;
-    
-        try {
-          const res = await fetch(`https://pagina-oficial-amhj.onrender.com/api/usuarios/${matricula}`);
-          const data = await res.json();
-    
-          if (data.error) {
-            document.getElementById("nombre_alumno").value = "";
-            document.getElementById("grado").value = "";
-            document.getElementById("grupo").value = "";
-            return;
-          }
-    
-          document.getElementById("nombre_alumno").value = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
-          document.getElementById("grado").value = data.grado;
-          document.getElementById("grupo").value = data.grupo;
-        } catch (err) {
-          console.error("❌ Error al obtener alumno:", err);
+        if (!docente.usuario) {
+          alert("❌ No se ha detectado el usuario docente. Por favor inicia sesión.");
+          return;
         }
-      });
     
-      document.getElementById("form-reporte").addEventListener("submit", async e => {
-        e.preventDefault();
+        console.log("✅ Docente detectado:", docente);
+        document.getElementById("matricula_docente").value = docente.usuario;
     
-        const data = {
-          matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
-          matricula_docente: document.getElementById("matricula_docente").value.trim(),
-          fecha: new Date().toLocaleDateString("es-MX"),
-          clase: document.getElementById("clase").value,
-          hora: document.getElementById("hora").value,
-          contenido: document.getElementById("contenido").value
-        };
+        // 👇 Aquí empieza el resto del código del listener del input y submit
+        document.getElementById("matricula_alumno").addEventListener("input", async () => {
+          const matricula = document.getElementById("matricula_alumno").value.trim();
     
-        try {
+          if (matricula.length < 4) return;
+    
+          try {
+            const res = await fetch(`https://pagina-oficial-amhj.onrender.com/api/usuarios/${matricula}`);
+            const data = await res.json();
+    
+            if (data.error) {
+              document.getElementById("nombre_alumno").value = "";
+              document.getElementById("grado").value = "";
+              document.getElementById("grupo").value = "";
+              return;
+            }
+    
+            document.getElementById("nombre_alumno").value = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+            document.getElementById("grado").value = data.grado;
+            document.getElementById("grupo").value = data.grupo;
+          } catch (err) {
+            console.error("❌ Error al obtener alumno:", err);
+          }
+        });
+    
+        document.getElementById("form-reporte").addEventListener("submit", async e => {
+          e.preventDefault();
+    
+          const data = {
+            matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
+            matricula_docente: document.getElementById("matricula_docente").value.trim(),
+            fecha: new Date().toLocaleDateString("es-MX"),
+            clase: document.getElementById("clase").value,
+            hora: document.getElementById("hora").value,
+            contenido: document.getElementById("contenido").value
+          };
+    
+          console.log("📨 Datos enviados al servidor:", data);
+    
           const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -127,9 +130,7 @@
           document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
           document.getElementById("form-reporte").reset();
           document.getElementById("nombre_alumno").value = "";
-        } catch (err) {
-          document.getElementById("mensaje").textContent = "❌ Error al guardar el reporte.";
-        }
+        });
       });
     </script>     
 </body>
