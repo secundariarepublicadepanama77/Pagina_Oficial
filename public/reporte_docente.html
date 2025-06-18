@@ -15,6 +15,8 @@
     
       <label>Matrícula del alumno:</label>
       <input type="text" id="matricula_alumno" placeholder="Matrícula del alumno" required><br>
+        <!-- Campo oculto para la matrícula del docente -->
+<input type="hidden" id="matricula_docente">
     
       <label>Grado:</label>
       <select id="grado" required>
@@ -69,6 +71,7 @@
     <div id="mensaje"></div>
     <script>
       const docente = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
+      document.getElementById("matricula_docente").value = docente.usuario || "";
       console.log("DOCENTE:", docente);
       document.getElementById("matricula_alumno").addEventListener("input", async () => {
         const matricula = document.getElementById("matricula_alumno").value.trim();
@@ -95,21 +98,22 @@
       });
     
       document.getElementById("form-reporte").addEventListener("submit", async e => {
+        
+          e.preventDefault(); // 👈 Esto va primero
+        
         if (!docente.usuario) {
   alert("Error: no se ha detectado el usuario docente. Por favor inicia sesión.");
   return;
 }
-        e.preventDefault();
-    
         const data = {
           matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
-          matricula_docente: docente.usuario || "ROCJ9407192D7",
+          matricula_docente: document.getElementById("matricula_docente").value,
           fecha: new Date().toLocaleDateString("es-MX"),
           clase: document.getElementById("clase").value,
           hora: document.getElementById("hora").value,
           contenido: document.getElementById("contenido").value
         };
-    
+    console.log("📤 Enviando:", data);
         const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
