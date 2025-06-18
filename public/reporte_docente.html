@@ -71,11 +71,18 @@
     <div id="mensaje"></div>
     <script>
       const docente = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
+    
+      // Validación segura
+      if (!docente || !docente.usuario) {
+        alert("⚠️ Por favor inicia sesión como docente.");
+        window.location.href = "login.html";
+      }
+    
       document.getElementById("matricula_docente").value = docente.usuario || "";
-      console.log("DOCENTE:", docente);
+      console.log("👤 Docente detectado:", docente);
+    
       document.getElementById("matricula_alumno").addEventListener("input", async () => {
         const matricula = document.getElementById("matricula_alumno").value.trim();
-    
         if (matricula.length < 4) return;
     
         try {
@@ -98,33 +105,32 @@
       });
     
       document.getElementById("form-reporte").addEventListener("submit", async e => {
-        
-          e.preventDefault(); // 👈 Esto va primero
-        
-        if (!docente.usuario) {
-  alert("Error: no se ha detectado el usuario docente. Por favor inicia sesión.");
-  return;
-}
+        e.preventDefault();
+    
         const data = {
           matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
-          matricula_docente: document.getElementById("matricula_docente").value,
+          matricula_docente: document.getElementById("matricula_docente").value.trim(),
           fecha: new Date().toLocaleDateString("es-MX"),
           clase: document.getElementById("clase").value,
           hora: document.getElementById("hora").value,
           contenido: document.getElementById("contenido").value
         };
-    console.log("📤 Enviando:", data);
-        const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
     
-        const result = await res.json();
-        document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
-        document.getElementById("form-reporte").reset();
-        document.getElementById("nombre_alumno").value = "";
+        try {
+          const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          });
+    
+          const result = await res.json();
+          document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
+          document.getElementById("form-reporte").reset();
+          document.getElementById("nombre_alumno").value = "";
+        } catch (err) {
+          document.getElementById("mensaje").textContent = "❌ Error al guardar el reporte.";
+        }
       });
-    </script>    
+    </script>     
 </body>
 </html>
