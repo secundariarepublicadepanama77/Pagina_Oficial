@@ -11,10 +11,10 @@
     <h2>📋 Reporte de Conducta Individual</h2>
     <form id="form-reporte">
       <label>Nombre del alumno:</label>
-      <input type="text" id="nombre_alumno" readonly><br>
+      <input type="text" id="nombre_alumno" placeholder="Nombre del alumno" readonly><br>
     
       <label>Matrícula del alumno:</label>
-      <input type="text" id="matricula_alumno" readonly><br>
+      <input type="text" id="matricula_alumno" placeholder="Matrícula del alumno" required><br>
     
       <label>Grado:</label>
       <select id="grado" required>
@@ -66,20 +66,38 @@
     </form>
     <div id="mensaje"></div>
     <script>
-      const alumno = JSON.parse(localStorage.getItem("alumnoSeleccionado") || "{}");
       const docente = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
     
-      document.getElementById("nombre_alumno").value = alumno.nombre || "";
-      document.getElementById("matricula_alumno").value = alumno.usuario || "";
-      document.getElementById("grado").value = alumno.grado || "";
-      document.getElementById("grupo").value = alumno.grupo || "";
+      document.getElementById("matricula_alumno").addEventListener("input", async () => {
+        const matricula = document.getElementById("matricula_alumno").value.trim();
+    
+        if (matricula.length < 4) return;
+    
+        try {
+          const res = await fetch(`https://pagina-oficial-amhj.onrender.com/api/usuarios/${matricula}`);
+          const data = await res.json();
+    
+          if (data.error) {
+            document.getElementById("nombre_alumno").value = "";
+            document.getElementById("grado").value = "";
+            document.getElementById("grupo").value = "";
+            return;
+          }
+    
+          document.getElementById("nombre_alumno").value = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+          document.getElementById("grado").value = data.grado;
+          document.getElementById("grupo").value = data.grupo;
+        } catch (err) {
+          console.error("❌ Error al obtener alumno:", err);
+        }
+      });
     
       document.getElementById("form-reporte").addEventListener("submit", async e => {
         e.preventDefault();
     
         const data = {
-          matricula_alumno: document.getElementById("matricula_alumno").value,
-          matricula_docente: docente.usuario, // asegúrate que esté en localStorage
+          matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
+          matricula_docente: docente.usuario,
           fecha: new Date().toLocaleDateString("es-MX"),
           clase: document.getElementById("clase").value,
           hora: document.getElementById("hora").value,
@@ -95,8 +113,8 @@
         const result = await res.json();
         document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
         document.getElementById("form-reporte").reset();
+        document.getElementById("nombre_alumno").value = "";
       });
-    </script>
-    
+    </script>    
 </body>
 </html>

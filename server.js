@@ -474,23 +474,21 @@ app.post("/api/reportes", async (req, res) => {
 
   res.json({ mensaje: "Reporte guardado correctamente", data });
 });
-
-// 📤 Obtener todos los reportes de un alumno por matrícula
-app.get("/api/reportes/:matricula", (req, res) => {
+//En reporte te dara el nombre al poner tu contraseña
+app.get("/api/usuarios/:matricula", async (req, res) => {
   const matricula = req.params.matricula;
 
-  const query = `
-    SELECT * FROM reportes_conducta WHERE matricula = ? ORDER BY fecha DESC, id DESC
-  `;
+  const { data, error } = await supabase
+    .from("usuarios")
+    .select("nombre, apellido_paterno, apellido_materno, grado, grupo")
+    .eq("usuario", matricula)
+    .single();
 
-  db.all(query, [matricula], (err, rows) => {
-    if (err) {
-      console.error("❌ Error al obtener reportes:", err.message);
-      return res.status(500).json({ success: false, mensaje: "Error al obtener reportes" });
-    }
+  if (error || !data) {
+    return res.status(404).json({ error: "Alumno no encontrado" });
+  }
 
-    res.json(rows);
-  });
+  res.json(data);
 });
 
 // 🚀 Iniciar el servidor
