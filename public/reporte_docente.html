@@ -95,11 +95,15 @@
       });
     
       document.getElementById("form-reporte").addEventListener("submit", async e => {
+        if (!docente.usuario) {
+  alert("Error: no se ha detectado el usuario docente. Por favor inicia sesión.");
+  return;
+}
         e.preventDefault();
     
         const data = {
           matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
-          matricula_docente: docente.usuario,
+          matricula_docente: docente.usuario || "ROCJ9407192D7",
           fecha: new Date().toLocaleDateString("es-MX"),
           clase: document.getElementById("clase").value,
           hora: document.getElementById("hora").value,
