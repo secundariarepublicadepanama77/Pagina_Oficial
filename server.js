@@ -503,32 +503,52 @@ app.get("/api/usuarios/:matricula", async (req, res) => {
 // 📋 Obtener reportes de un alumno, con filtros opcionales
 app.get("/api/reportes/alumno/:matricula", async (req, res) => {
   const { matricula } = req.params;
-  const { fecha, clase } = req.query; // filtros opcionales
+  const { clase, fecha } = req.query;
 
   try {
-    let query = supabase
-      .from("reportes_conducta")
+    // 1. Filtrar reportes del alumno
+    let { data: reportes, error } = await supabase
+      .from("reporte_conducta")
       .select("*")
       .eq("matricula_alumno", matricula);
 
-    if (fecha) query = query.eq("fecha", fecha);
-    if (clase) query = query.ilike("clase", `%${clase}%`);
+    if (error) throw error;
 
-    query = query.order("fecha", { ascending: false });
-
-    const { data, error } = await query;
-
-    if (error) {
-      console.error("❌ Error al obtener reportes:", error.message);
-      return res.status(500).json({ error: "Error al obtener reportes" });
+    // 2. Filtrar por clase y fecha si se pidieron
+    if (clase) {
+      reportes = reportes.filter(r =>
+        r.clase.toLowerCase() === clase.toLowerCase()
+      );
+    }
+    if (fecha) {
+      reportes = reportes.filter(r => r.fecha === fecha);
     }
 
-    res.json(data);
+    // 3. Obtener los nombres de los docentes relacionados
+    const matriculasDocentes = [...new Set(reportes.map(r => r.matricula_docente))];
+    const { data: docentes, error: errorDocentes } = await supabase
+      .from("usuarios")
+      .select("usuario, nombre")
+      .in("usuario", matriculasDocentes);
+
+    if (errorDocentes) throw errorDocentes;
+
+    // 4. Asociar nombre del docente a cada reporte
+    const nombreDocenteMap = {};
+    docentes.forEach(d => nombreDocenteMap[d.usuario] = d.nombre);
+
+    const reportesConNombre = reportes.map(r => ({
+      ...r,
+      nombre_docente: nombreDocenteMap[r.matricula_docente] || "Desconocido"
+    }));
+
+    res.json(reportesConNombre);
   } catch (err) {
-    console.error("❌ Error inesperado:", err.message);
-    res.status(500).json({ error: "Error inesperado en el servidor" });
+    console.error("❌ Error en GET /api/reportes/alumno/:matricula", err);
+    res.status(500).json({ error: "Error al obtener reportes del alumno" });
   }
 });
+
 // 🚀 Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
