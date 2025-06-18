@@ -462,6 +462,7 @@ app.delete("/eliminar-registro/:id", async (req, res) => {
 
 // 📥 Guardar nuevo reporte
 app.post("/api/reportes", async (req, res) => {
+  console.log("📨 Reporte recibido:", req.body); // <--- AGREGA ESTO
   const { matricula_alumno, matricula_docente, fecha, clase, hora, contenido } = req.body;
 
   const { data, error } = await supabase
