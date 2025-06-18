@@ -81,7 +81,6 @@
         console.log("✅ Docente detectado:", docente);
         document.getElementById("matricula_docente").value = docente.usuario;
     
-        // 👇 Aquí empieza el resto del código del listener del input y submit
         document.getElementById("matricula_alumno").addEventListener("input", async () => {
           const matricula = document.getElementById("matricula_alumno").value.trim();
     
@@ -120,18 +119,23 @@
     
           console.log("📨 Datos enviados al servidor:", data);
     
-          const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-          });
+          try {
+            const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data)
+            });
     
-          const result = await res.json();
-          document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
-          document.getElementById("form-reporte").reset();
-          document.getElementById("nombre_alumno").value = "";
+            const result = await res.json();
+            document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
+            document.getElementById("form-reporte").reset();
+            document.getElementById("nombre_alumno").value = "";
+          } catch (err) {
+            console.error("❌ Error al enviar reporte:", err);
+            document.getElementById("mensaje").textContent = "Error al enviar reporte.";
+          }
         });
       });
-    </script>     
+    </script>       
 </body>
 </html>
