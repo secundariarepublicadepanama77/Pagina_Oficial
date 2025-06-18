@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Menú Alumno</title>
+  <title>Mis Reportes</title>
   <link rel="stylesheet" href="menu.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <!-- Encabezado -->
@@ -17,7 +19,7 @@
   <nav class="barra-botones">
     <a href="menu-alumno.html">🏠 Inicio</a>
     <a href="#">📅 Horario</a>
-    <a href="mis_reportes.html">📝 Reportes</a>
+    <a href="mis_reportes.html" class="activo">📝 Reportes</a>
     <a class="disabled">🎓 Calificaciones</a>
     <a class="disabled">💬 Mensajes</a>
     <a class="disabled">🔒 Próximamente</a>
@@ -27,22 +29,39 @@
 
   <!-- Contenido principal -->
   <main class="contenido-menu">
-    <p id="saludo"></p>
+    <section class="filtros-reportes">
+      <h2>📋 Mis Reportes de Conducta</h2>
+      <label>📅 Fecha:
+        <input type="date" id="filtroFecha">
+      </label>
+      <label>📘 Clase:
+        <input type="text" id="filtroClase" placeholder="Ej. Historia">
+      </label>
+      <label>🔍 Palabra clave:
+        <input type="text" id="filtroPalabra" placeholder="Ej. celular">
+      </label>
+      <button onclick="cargarReportes()">Buscar</button>
+      <button onclick="descargarExcel()">⬇️ Excel</button>
+      <button onclick="descargarPDF()">⬇️ PDF</button>
+    </section>
+
     <section id="reportes-conducta">
-        <h2>📋 Mis Reportes de Conducta</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Clase</th>
-              <th>Hora</th>
-              <th>Descripción</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-reportes">
-            <!-- Aquí se insertarán los reportes -->
-          </tbody>
-        </table>
+      <table id="tabla-completa">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Clase</th>
+            <th>Hora</th>
+            <th>Descripción</th>
+            <th>Docente</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-reportes">
+          <!-- Se insertan dinámicamente -->
+        </tbody>
+      </table>
+      <div id="mensaje" style="color: red; margin-top: 1rem;"></div>
     </section>
   </main>
 
@@ -54,33 +73,94 @@
   <script>
     const alumno = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
     const matricula = alumno.usuario;
-  
-    fetch(`https://pagina-oficial-amhj.onrender.com/api/reportes/alumno/${matricula}`)
-      .then(res => res.json())
-      .then(data => {
-        const tabla = document.getElementById("tabla-reportes");
-  
-        if (!data || data.length === 0) {
-          tabla.innerHTML = `<tr><td colspan="4">No hay reportes</td></tr>`;
-          return;
-        }
-  
-        data.forEach(reporte => {
-          const fila = `
-            <tr>
-              <td>${reporte.fecha}</td>
-              <td>${reporte.clase}</td>
-              <td>${reporte.hora}</td>
-              <td>${reporte.contenido}</td>
-            </tr>
-          `;
-          tabla.innerHTML += fila;
+    let datosFiltrados = [];
+
+    function cargarReportes() {
+      const fecha = document.getElementById("filtroFecha").value;
+      const clase = document.getElementById("filtroClase").value;
+      const palabra = document.getElementById("filtroPalabra").value.toLowerCase();
+
+      let url = `https://pagina-oficial-amhj.onrender.com/api/reportes/alumno/${matricula}`;
+      const params = [];
+      if (fecha) params.push(`fecha=${fecha}`);
+      if (clase) params.push(`clase=${encodeURIComponent(clase)}`);
+      if (params.length > 0) url += "?" + params.join("&");
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const tabla = document.getElementById("tabla-reportes");
+          tabla.innerHTML = "";
+
+          datosFiltrados = palabra
+            ? data.filter(r => r.contenido.toLowerCase().includes(palabra))
+            : data;
+
+          if (!datosFiltrados || datosFiltrados.length === 0) {
+            tabla.innerHTML = `<tr><td colspan="6">No hay reportes</td></tr>`;
+            return;
+          }
+
+          datosFiltrados.forEach(reporte => {
+            let tipo = "Leve";
+            let color = "🟢";
+            const texto = reporte.contenido.toLowerCase();
+            if (texto.includes("grit") || texto.includes("agres")) {
+              tipo = "Grave"; color = "🔴";
+            } else if (texto.includes("molest") || texto.includes("interrump")) {
+              tipo = "Moderado"; color = "🟠";
+            }
+
+            const fila = `
+              <tr>
+                <td>${reporte.fecha}</td>
+                <td>${reporte.clase}</td>
+                <td>${reporte.hora}</td>
+                <td>${reporte.contenido}</td>
+                <td>${reporte.nombre_docente || "—"}</td>
+                <td>${color} ${tipo}</td>
+              </tr>
+            `;
+            tabla.innerHTML += fila;
+          });
+        })
+        .catch(err => {
+          document.getElementById("mensaje").innerText = "❌ Error al cargar reportes";
+          console.error(err);
         });
-      })
-      .catch(err => {
-        console.error("Error al cargar reportes:", err);
+    }
+
+    function descargarExcel() {
+      const ws = XLSX.utils.table_to_sheet(document.getElementById("tabla-completa"));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Reportes");
+      XLSX.writeFile(wb, "reportes_conducta.xlsx");
+    }
+
+    async function descargarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("Reporte de Conducta", 20, 20);
+
+      let y = 30;
+      datosFiltrados.forEach(r => {
+        doc.text(`📅 ${r.fecha} | ${r.clase} | ${r.hora}`, 20, y);
+        y += 7;
+        doc.text(`👤 Docente: ${r.nombre_docente || "—"}`, 20, y);
+        y += 7;
+        doc.text(`📝 ${r.contenido}`, 20, y);
+        y += 10;
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
       });
+
+      doc.save("reportes_conducta.pdf");
+    }
+
+    window.onload = cargarReportes;
   </script>
-  
 </body>
 </html>

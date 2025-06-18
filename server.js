@@ -500,7 +500,35 @@ app.get("/api/usuarios/:matricula", async (req, res) => {
 
   res.json(data);
 });
+// 📋 Obtener reportes de un alumno, con filtros opcionales
+app.get("/api/reportes/alumno/:matricula", async (req, res) => {
+  const { matricula } = req.params;
+  const { fecha, clase } = req.query; // filtros opcionales
 
+  try {
+    let query = supabase
+      .from("reportes_conducta")
+      .select("*")
+      .eq("matricula_alumno", matricula);
+
+    if (fecha) query = query.eq("fecha", fecha);
+    if (clase) query = query.ilike("clase", `%${clase}%`);
+
+    query = query.order("fecha", { ascending: false });
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("❌ Error al obtener reportes:", error.message);
+      return res.status(500).json({ error: "Error al obtener reportes" });
+    }
+
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Error inesperado:", err.message);
+    res.status(500).json({ error: "Error inesperado en el servidor" });
+  }
+});
 // 🚀 Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
