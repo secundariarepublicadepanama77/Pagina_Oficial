@@ -1,6 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <style>
+    #tabla-completa {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background-color: #fff;
+    }
+  
+    #tabla-completa th, #tabla-completa td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 14px;
+    }
+  
+    #tabla-completa th {
+      background-color: #002b7f;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+  
+    #tabla-completa tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  
+    #tabla-completa tr:hover {
+      background-color: #f1f1f1;
+    }
+  
+    .filtros-reportes input,
+    .filtros-reportes button {
+      margin-right: 0.5rem;
+      padding: 6px;
+      font-size: 14px;
+    }
+  
+    .filtros-reportes button {
+      background-color: #002b7f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  
+    .filtros-reportes button:hover {
+      background-color: #0045ad;
+    }
+  </style>  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mis Reportes</title>
