@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- Encabezado con logo y título -->
+  <!-- Encabezado-->
   <header>
     <div class="franja bandera"></div>
     <div class="header-contenido">
@@ -16,7 +16,7 @@
       <h2>Escuela Secundaria N. 77 “República de Panamá”</h2>
     </div>
 
-    <!-- Menú con botón hamburguesa -->
+    <!-- MH -->
     <nav>
       <button class="menu-toggle" aria-label="Abrir menú">☰</button>
       <ul class="nav-bar">
@@ -30,10 +30,10 @@
     </nav>
   </header>
 
-  <!-- Contenido principal -->
+  <!-- CP-->
   <main class="contenido-principal">
 
-    <!-- Fila 1: Bienvenida + Mapa -->
+    <!-- Fila 1: B+Mapa -->
     <section class="fila fila-arriba">
       <div class="tarjeta bienvenida">
         <h2>🏠 Bienvenidos a la Escuela Secundaria N.º 77 “República de Panamá”</h2>
@@ -46,7 +46,7 @@
       </div>
     </section>
 
-    <!-- Fila 2: Galería -->
+    <!-- Fila 2: G -->
     <section class="fila fila-galeria">
       <div class="tarjeta galeria">
         <h3>📷 Galería destacada</h3>
@@ -67,7 +67,7 @@
       </div>
     </section>
 
-    <!-- Fila 3: Navegación + Plataforma -->
+    <!-- Fila 3: N + Pforma -->
     <section class="fila fila-abajo">
       <div class="tarjeta navegacion">
         <h3>🗺️ Navegación rápida</h3>
@@ -88,7 +88,7 @@
   
   
    
-  <!-- Pie de página -->
+  <!-- PP -->
   <footer style="background-color: #0D1B4C; color: white; padding: 40px 20px; margin-top: 40px;">
     <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start; gap: 40px;">
       
@@ -124,7 +124,7 @@
     </p>
   </footer>  
 
-  <!-- Script del menú hamburguesa -->
+  <!-- Script menú H -->
   <script>
     const toggleBtn = document.querySelector(".menu-toggle");
     const navBar = document.querySelector(".nav-bar");
@@ -134,10 +134,10 @@
     });
   </script>
 <script>
-  // 🔒 Bloqueo de clic derecho
+  // Bloqueo de clic derecho
   document.addEventListener("contextmenu", e => e.preventDefault());
 
-  // 🔒 Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
+  // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
   document.addEventListener("keydown", e => {
     const bloqueadas = [
       "F12",
