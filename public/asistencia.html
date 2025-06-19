@@ -84,7 +84,7 @@ document.getElementById("form-asistencia").addEventListener("submit", async (e) 
     alert("❌ Error al conectar con el servidor.");
     console.error(error);
   } finally {
-    enviando = false; // 🔓 Permite un nuevo intento
+    enviando = false; // Permite un nuevo intento
     document.getElementById("estado").textContent = "";
   }
 });
@@ -93,10 +93,10 @@ document.getElementById("matricula").addEventListener("input", function () {
   clearTimeout(temporizadorQR);
   temporizadorQR = setTimeout(() => {
     const valor = this.value.trim();
-    if (valor.length >= 4) {
+    if (valor.length >= 15) {
       document.getElementById("form-asistencia").requestSubmit();
     }
-  }, 500);
+  }, 100);
 });
   </script>
   <script>
