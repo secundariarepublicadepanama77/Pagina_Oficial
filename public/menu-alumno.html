@@ -1,59 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Menú Alumno</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { font-family: Arial, sans-serif; background: #f2f2f2; padding: 20px; }
-    .datos-generales { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h3 { color: #004080; }
-    p { margin: 10px 0; }
-    span { font-weight: bold; color: #202020; }
-  </style>
+  <link rel="stylesheet" href="menu.css" />
 </head>
 <body>
+  <!-- Encabezado -->
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo" />
+    <h1>Panel del Alumno</h1>
+  </header>
+  <!-- Barra de botones del alumno -->
+  <nav class="barra-botones">
+    <a href="menu-alumno.html">🏠 Inicio</a>
+    <a href="#">📅 Horario</a>
+    <a href="mis_reportes.html">📝 Reportes</a>
+    <a class="disabled">🎓 Calificaciones</a>
+    <a class="disabled">💬 Mensajes</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+  </nav>
+  <!-- Contenido principal -->
+  <main class="contenido-menu">
+    <p id="saludo"></p>
 
-  <section class="datos-generales">
-    <h3>👤 Tus Datos Generales</h3>
-    <p>Matrícula: <span id="dato-matricula">—</span></p>
-    <p>Nombre: <span id="dato-nombre">—</span></p>
-    <p>Grupo: <span id="dato-grupo">—</span></p>
-    <p>Turno: Matutino</p>
-    <p>Ciclo escolar: 2024–2025</p>
-  </section>
+    <!-- Resumen general -->
+    <section class="panel-resumen">
+      <h2>📊 Tu Historial en la Escuela</h2>
+      <div class="tarjetas-resumen">
+        <div class="estadistica asistencias">✅ Asistencias: <span id="dato-asistencias">—</span></div>
+        <div class="estadistica faltas">❌ Faltas: <span id="dato-faltas">—</span></div>
+        <div class="estadistica leves">🟢 Reportes Leves: <span id="dato-leves">—</span></div>
+        <div class="estadistica moderados">🟠 Reportes Moderados: <span id="dato-moderados">—</span></div>
+        <div class="estadistica graves">🔴 Reportes Graves: <span id="dato-graves">—</span></div>      
+      </div>
+    </section>
 
+    <!-- Datos generales -->
+    <section class="datos-generales">
+      <h3>👤 Tus Datos Generales</h3>
+      <p>Matrícula: <span id="dato-matricula">—</span></p>
+      <p>Nombre: <span id="dato-nombre">—</span></p>
+      <p>Grupo: <span id="dato-grupo">—</span></p>
+      <p>Turno: Matutino</p>
+      <p>Ciclo escolar: 2024–2025</p>
+    </section>    
+
+    <!-- Mensaje dinámico -->
+    <section class="panel-mensaje" id="mensajeComportamiento"></section>
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+    if (!nombre || tipo !== "alumno") {
+      alert("Sesión no válida. Redirigiendo al login.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
+    }
+    function cerrarSesion() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+  <script>
+    // Bloqueo básico
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      const bloqueadas = ["F12", "u", "i", "c"];
+      if (bloqueadas.includes(e.key.toLowerCase()) && (e.ctrlKey || e.metaKey || e.shiftKey)) {
+        e.preventDefault();
+        console.log("🚫 Acción bloqueada");
+      }
+    });
+  </script>
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-    // Configura Supabase
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    
+    // Conexión Supabase
     const supabase = createClient(
       "https://mhnzjhelbupyifdlpngv.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
     );
-
-    // Recupera la matrícula del localStorage
+    
+    // Obtener matrícula del alumno
     const matricula = localStorage.getItem("matriculaUsuario");
-
+    
     if (matricula) {
       const { data, error } = await supabase
         .from("usuarios")
         .select("nombre, apellido_paterno, apellido_materno, grado, grupo")
         .eq("usuario", matricula)
         .single();
-
+    
       if (error || !data) {
-        console.error("❌ Error al obtener datos:", error?.message);
+        console.error("❌ Error al obtener datos:", error);
       } else {
-        // Muestra los datos
         document.getElementById("dato-matricula").textContent = matricula;
-        document.getElementById("dato-nombre").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
-        document.getElementById("dato-grupo").textContent = `Grado ${data.grado} - Grupo ${data.grupo}`;
+        document.getElementById("dato-nombre").textContent =
+          data.nombre + " " + data.apellido_paterno + " " + data.apellido_materno;
+        document.getElementById("dato-grupo").textContent =
+          "Grado " + data.grado + " - Grupo " + data.grupo;
       }
     } else {
-      console.warn("⚠️ No se encontró matrícula en localStorage");
+      console.warn("No hay matrícula guardada en localStorage");
     }
-  </script>
-
+    </script>    
 </body>
 </html>
+
