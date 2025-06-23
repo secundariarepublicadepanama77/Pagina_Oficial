@@ -317,3 +317,55 @@ footer.pie {
     text-align: center;
   }
 }
+/* Panel resumen general */
+.panel-resumen h2,
+.panel-datos h2,
+.panel-mensaje {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tarjetas-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tarjeta-resumen {
+  background-color: #f2f2f2;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-size: 1.2rem;
+  text-align: center;
+  min-width: 160px;
+}
+
+/* Datos generales */
+.panel-datos ul {
+  list-style: none;
+  padding: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.panel-datos li {
+  background: #fff;
+  padding: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.1rem;
+}
+
+/* Mensaje dinámico */
+.panel-mensaje {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #e8f5e9;
+  border-left: 6px solid #4caf50;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+}
