@@ -538,15 +538,6 @@ iframe {
 .btn-next:hover {
   background-color: #0040b0;
 }
-.tarjeta.plataforma {
-  margin: 2rem auto;
-  text-align: center;
-  max-width: 600px;
-  padding: 1.5rem;
-  background-color: #f2f2f2;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
 /* Responsive */
 @media (max-width: 768px) {
   .carrusel-imagenes img {
