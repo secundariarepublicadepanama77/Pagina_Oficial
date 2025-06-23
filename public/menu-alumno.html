@@ -26,12 +26,39 @@
   </nav>
 
   <!-- Contenido principal -->
-  <main class="contenido-menu">
-    <p id="saludo"></p>
-    <section id="reportes-conducta">
-      <!-- Aquí puedes mostrar los reportes del alumno más adelante -->
-    </section>
-  </main>
+<!-- Se mantiene tu DOCTYPE y encabezado como está -->
+<main class="contenido-menu">
+  <p id="saludo"></p>
+
+  <!-- Resumen general -->
+  <section class="panel-resumen">
+    <h2>📊 Tu Historial en la Escuela</h2>
+    <div class="tarjetas-resumen">
+      <div class="tarjeta-resumen">✅ Asistencias: <span id="totalAsistencias">—</span></div>
+      <div class="tarjeta-resumen">❌ Faltas: <span id="totalFaltas">—</span></div>
+      <div class="tarjeta-resumen">🟢 Reportes Leves: <span id="leves">—</span></div>
+      <div class="tarjeta-resumen">🟠 Reportes Moderados: <span id="moderados">—</span></div>
+      <div class="tarjeta-resumen">🔴 Reportes Graves: <span id="graves">—</span></div>
+    </div>
+  </section>
+
+  <!-- Datos generales -->
+  <section class="panel-datos">
+    <h2>👤 Tus Datos Generales</h2>
+    <ul>
+      <li><strong>Matrícula:</strong> <span id="matriculaAlumno">—</span></li>
+      <li><strong>Nombre:</strong> <span id="nombreAlumno">—</span></li>
+      <li><strong>Grupo:</strong> <span id="grupoAlumno">—</span></li>
+      <li><strong>Turno:</strong> Matutino</li>
+      <li><strong>Ciclo escolar:</strong> 2024–2025</li>
+    </ul>
+  </section>
+
+  <!-- Mensaje dinámico -->
+  <section class="panel-mensaje" id="mensajeComportamiento">
+    <!-- Se llena dinámicamente con JS -->
+  </section>
+</main>
 
   <!-- Pie de página -->
   <footer class="pie">
