@@ -317,55 +317,114 @@ footer.pie {
     text-align: center;
   }
 }
-/* Panel resumen general */
-.panel-resumen h2,
-.panel-datos h2,
-.panel-mensaje {
-  text-align: center;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+/* ===== Estilos generales ===== */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f6f8;
+  color: #333;
 }
 
-.tarjetas-resumen {
+/* ===== Encabezado ===== */
+.menu-encabezado {
+  background-color: #004080;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.menu-encabezado .logo {
+  height: 50px;
+}
+
+/* ===== Navegación ===== */
+.barra-botones {
+  background-color: #0059b3;
+  padding: 0.5rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 0.5rem;
+}
+.barra-botones a {
+  color: white;
+  text-decoration: none;
+  background-color: #0073e6;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+.barra-botones a.activo {
+  background-color: #004080;
+  font-weight: bold;
+}
+.barra-botones a.disabled {
+  background-color: #cccccc;
+  pointer-events: none;
+  color: #666666;
+}
+
+/* ===== Contenido principal ===== */
+.contenido-menu {
+  padding: 2rem;
+}
+
+#saludo {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== Resumen de estadísticas ===== */
+.tarjetas-resumen {
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 2rem;
 }
-
-.tarjeta-resumen {
-  background-color: #f2f2f2;
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  font-size: 1.2rem;
-  text-align: center;
-  min-width: 160px;
-}
-
-/* Datos generales */
-.panel-datos ul {
-  list-style: none;
-  padding: 0;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.panel-datos li {
-  background: #fff;
-  padding: 0.8rem;
-  border-bottom: 1px solid #ddd;
-  font-size: 1.1rem;
-}
-
-/* Mensaje dinámico */
-.panel-mensaje {
-  max-width: 500px;
-  margin: 2rem auto;
-  background: #e8f5e9;
-  border-left: 6px solid #4caf50;
+.tarjeta {
+  background-color: white;
   padding: 1rem;
-  font-size: 1.1rem;
-  border-radius: 8px;
+  border-left: 5px solid #0073e6;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1 1 220px;
+}
+.tarjeta h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: #004080;
+}
+.tarjeta p {
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+/* Colores personalizados según tipo */
+.tarjeta.grave { border-left-color: #d93025; }
+.tarjeta.moderado { border-left-color: #f9ab00; }
+.tarjeta.leve { border-left-color: #34a853; }
+.tarjeta.asistencias { border-left-color: #1a73e8; }
+.tarjeta.faltas { border-left-color: #ea4335; }
+
+/* ===== Pie de página ===== */
+.pie {
+  background-color: #004080;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  margin-top: 3rem;
+}
+
+/* ===== Responsivo ===== */
+@media screen and (max-width: 600px) {
+  .barra-botones {
+    flex-direction: column;
+    align-items: center;
+  }
+  .tarjetas-resumen {
+    flex-direction: column;
+  }
 }
