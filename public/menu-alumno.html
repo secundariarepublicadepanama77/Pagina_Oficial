@@ -26,47 +26,37 @@
   </nav>
 
   <!-- Contenido principal -->
-<!-- Se mantiene tu DOCTYPE y encabezado como está -->
-<main class="contenido-menu">
-  <p id="saludo"></p>
+  <main class="contenido-menu">
+    <p id="saludo"></p>
 
-  <!-- Resumen general -->
-  <section class="panel-resumen">
-    <h2>📊 Tu Historial en la Escuela</h2>
-    <div class="tarjetas-resumen">
-      <div class="tarjeta-resumen">✅ Asistencias: <span id="totalAsistencias">—</span></div>
-      <div class="tarjeta-resumen">❌ Faltas: <span id="totalFaltas">—</span></div>
-      <div class="tarjeta-resumen">🟢 Reportes Leves: <span id="leves">—</span></div>
-      <div class="tarjeta-resumen">🟠 Reportes Moderados: <span id="moderados">—</span></div>
-      <div class="tarjeta-resumen">🔴 Reportes Graves: <span id="graves">—</span></div>
-    </div>
-  </section>
+    <section class="tarjeta-resumen">
+      <h2>📊 Resumen General</h2>
+      <ul>
+        <li><strong>Días asistidos:</strong> <span id="asistencias">—</span></li>
+        <li><strong>Reportes leves:</strong> <span id="leves">—</span></li>
+        <li><strong>Reportes moderados:</strong> <span id="moderados">—</span></li>
+        <li><strong>Reportes graves:</strong> <span id="graves">—</span></li>
+        <li><strong>Faltas:</strong> <span id="faltas">—</span></li>
+      </ul>
+    </section>
 
-  <!-- Datos generales -->
-  <section class="panel-datos">
-    <h2>👤 Tus Datos Generales</h2>
-    <ul>
-      <li><strong>Matrícula:</strong> <span id="matriculaAlumno">—</span></li>
-      <li><strong>Nombre:</strong> <span id="nombreAlumno">—</span></li>
-      <li><strong>Grupo:</strong> <span id="grupoAlumno">—</span></li>
-      <li><strong>Turno:</strong> Matutino</li>
-      <li><strong>Ciclo escolar:</strong> 2024–2025</li>
-    </ul>
-  </section>
-
-  <!-- Mensaje dinámico -->
-  <section class="panel-mensaje" id="mensajeComportamiento">
-    <!-- Se llena dinámicamente con JS -->
-  </section>
-</main>
+    <section class="tarjeta-datos">
+      <h2>🧾 Datos Generales</h2>
+      <ul>
+        <li><strong>Nombre:</strong> <span id="nombreAlumno">—</span></li>
+        <li><strong>Matrícula:</strong> <span id="matriculaAlumno">—</span></li>
+        <li><strong>Grupo:</strong> <span id="grupoAlumno">—</span></li>
+      </ul>
+    </section>
+  </main>
 
   <!-- Pie de página -->
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
+  <!-- Script de bienvenida y validación -->
   <script>
-    // Verifica si hay sesión activa
     const nombre = localStorage.getItem("nombreUsuario");
     const tipo = localStorage.getItem("tipoUsuario");
 
@@ -82,26 +72,48 @@
       window.location.href = "login.html";
     }
   </script>
+
+  <!-- Script para cargar resumen -->
+  <script type="module">
+    const usuario = {
+      usuario: localStorage.getItem("matriculaUsuario"),
+      nombre: localStorage.getItem("nombreUsuario"),
+      grupo: localStorage.getItem("grupoUsuario")
+    };
+
+    document.getElementById("nombreAlumno").innerText = usuario.nombre || "—";
+    document.getElementById("matriculaAlumno").innerText = usuario.usuario || "—";
+    document.getElementById("grupoAlumno").innerText = usuario.grupo || "—";
+
+    async function cargarResumen() {
+      try {
+        const res = await fetch(`https://pagina-oficial-amhj.onrender.com/api/resumen/${usuario.usuario}`);
+        const data = await res.json();
+
+        document.getElementById("asistencias").innerText = data.asistencias || 0;
+        document.getElementById("leves").innerText = data.reportes_leves || 0;
+        document.getElementById("moderados").innerText = data.reportes_moderados || 0;
+        document.getElementById("graves").innerText = data.reportes_graves || 0;
+        document.getElementById("faltas").innerText = data.faltas || 0;
+      } catch (error) {
+        console.error("Error al cargar el resumen:", error);
+      }
+    }
+
+    cargarResumen();
+  </script>
+
+  <!-- Seguridad: bloqueo inspección -->
   <script>
-    // Bloqueo de clic derecho
     document.addEventListener("contextmenu", e => e.preventDefault());
-  
-    // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
+
     document.addEventListener("keydown", e => {
-      const bloqueadas = [
-        "F12",
-        "u", // Ctrl+U
-        "i", // Ctrl+Shift+I
-        "c"  // Ctrl+Shift+C
-      ];
-      if (
-        bloqueadas.includes(e.key.toLowerCase()) && 
-        (e.ctrlKey || e.metaKey || e.shiftKey)
-      ) {
+      const bloqueadas = ["F12", "u", "i", "c"];
+      if (bloqueadas.includes(e.key.toLowerCase()) && (e.ctrlKey || e.metaKey || e.shiftKey)) {
         e.preventDefault();
         console.log("🚫 Acción bloqueada");
       }
     });
-  </script>  
+  </script>
 </body>
 </html>
