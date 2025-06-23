@@ -33,26 +33,21 @@
   <section class="panel-resumen">
     <h2>📊 Tu Historial en la Escuela</h2>
     <div class="tarjetas-resumen">
-      <div class="tarjeta-resumen">✅ Asistencias: <span id="totalAsistencias">—</span></div>
-      <div class="tarjeta-resumen">❌ Faltas: <span id="totalFaltas">—</span></div>
-      <div class="tarjeta-resumen">🟢 Reportes Leves: <span id="leves">—</span></div>
-      <div class="tarjeta-resumen">🟠 Reportes Moderados: <span id="moderados">—</span></div>
-      <div class="tarjeta-resumen">🔴 Reportes Graves: <span id="graves">—</span></div>
+      <div class="tarjeta asistencias">✅ Asistencias: <span id="dato-asistencias">—</span></div>
+      <div class="tarjeta faltas">❌ Faltas: <span id="dato-faltas">—</span></div>
+      <div class="tarjeta leve">🟢 Reportes Leves: <span id="dato-leves">—</span></div>
+      <div class="tarjeta moderado">🟠 Reportes Moderados: <span id="dato-moderados">—</span></div>
+      <div class="tarjeta grave">🔴 Reportes Graves: <span id="dato-graves">—</span></div>
     </div>
-  </section>
-
-  <!-- Datos generales -->
-  <section class="panel-datos">
-    <h2>👤 Tus Datos Generales</h2>
-    <ul>
-      <li><strong>Matrícula:</strong> <span id="matriculaAlumno">—</span></li>
-      <li><strong>Nombre:</strong> <span id="nombreAlumno">—</span></li>
-      <li><strong>Grupo:</strong> <span id="grupoAlumno">—</span></li>
-      <li><strong>Turno:</strong> Matutino</li>
-      <li><strong>Ciclo escolar:</strong> 2024–2025</li>
-    </ul>
-  </section>
-
+    
+    <section class="datos-generales">
+      <h3>👤 Tus Datos Generales</h3>
+      <p>Matrícula: <span id="dato-matricula">—</span></p>
+      <p>Nombre: <span id="dato-nombre">—</span></p>
+      <p>Grupo: <span id="dato-grupo">—</span></p>
+      <p>Turno: Matutino</p>
+      <p>Ciclo escolar: 2024–2025</p>
+    </section>    
   <!-- Mensaje dinámico -->
   <section class="panel-mensaje" id="mensajeComportamiento">
     <!-- Se llenaria con JS -->
@@ -81,7 +76,68 @@
       window.location.href = "login.html";
     }
   </script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   
+    const supabaseUrl = 'https://TU_PROYECTO.supabase.co';
+    const supabaseKey = 'TU_API_KEY_PUBLICA';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+  
+    const matricula = localStorage.getItem('matriculaUsuario');
+  
+    async function cargarPanelAlumno() {
+      // 1. DATOS GENERALES
+      const { data: datos, error: errorDatos } = await supabase
+        .from('tabla_usuarios')
+        .select('*')
+        .eq('matricula', matricula)
+        .single();
+  
+      if (datos) {
+        document.getElementById('dato-matricula').innerText = datos.matricula;
+        document.getElementById('dato-nombre').innerText = `${datos.nombres} ${datos.primer_apellido} ${datos.segundo_apellido}`;
+        document.getElementById('dato-grupo').innerText = `${datos.grado}° ${datos.grupo}`;
+      }
+  
+      // 2. ASISTENCIAS
+      const { data: asistencias } = await supabase
+        .from('tabla_registro')
+        .select('*')
+        .eq('matricula', matricula)
+        .eq('tipo_registro', 'entrada');
+  
+      document.getElementById('dato-asistencias').innerText = asistencias?.length || 0;
+  
+      // 3. FALTAS (ejemplo: días del ciclo menos asistencias)
+      // Solo un ejemplo simple. Requiere lógica más compleja según calendario oficial.
+      const faltasEstimadas = 200 - (asistencias?.length || 0); // suponiendo 200 días
+      document.getElementById('dato-faltas').innerText = faltasEstimadas;
+  
+      // 4. REPORTES DE CONDUCTA
+      const { data: reportes } = await supabase
+        .from('reportes_conducta')
+        .select('*')
+        .eq('matricula', matricula);
+  
+      let leves = 0, moderados = 0, graves = 0;
+  
+      const palabrasGraves = ["golpe", "amenaza", "insulto", "robo", "escupio", "navaja", "pistola", "droga", "sustancia", "bapeador"];
+      const palabrasModeradas = ["habló", "contestó", "no obedeció", "celular", "constantemente", "inquieto", "grito", "parado", "uniforme"];
+  
+      for (const rep of reportes) {
+        const desc = rep.descripcion.toLowerCase();
+        if (palabrasGraves.some(p => desc.includes(p))) graves++;
+        else if (palabrasModeradas.some(p => desc.includes(p))) moderados++;
+        else leves++;
+      }
+  
+      document.getElementById('dato-leves').innerText = leves;
+      document.getElementById('dato-moderados').innerText = moderados;
+      document.getElementById('dato-graves').innerText = graves;
+    }
+  
+    cargarPanelAlumno();
+  </script>  
   <script>
     // Bloqueo de clic derecho
     document.addEventListener("contextmenu", e => e.preventDefault());
