@@ -48,7 +48,7 @@
       <li><strong>Nombre:</strong> <span id="nombreAlumno">—</span></li>
       <li><strong>Grupo:</strong> <span id="grupoAlumno">—</span></li>
       <li><strong>Turno:</strong> Matutino</li>
-      <li><strong>Ciclo escolar:</strong> 2024–2025</li>
+      <li><strong>Ciclo escolar:</strong> <span id="cicloAlumno">—</span></li>
     </ul>
   </section>
 
@@ -112,6 +112,7 @@
         document.getElementById("matriculaAlumno").textContent = data.usuario || "—";
         document.getElementById("nombreAlumno").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
         document.getElementById("grupoAlumno").textContent = `${data.grado}° ${data.grupo}`;
+        document.getElementById("cicloAlumno").textContent = data.ciclo_escolar || "—";
       }
     } else {
       console.warn("⚠️ No hay matrícula almacenada");
