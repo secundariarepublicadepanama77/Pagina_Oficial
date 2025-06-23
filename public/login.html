@@ -47,7 +47,8 @@
           localStorage.setItem("usuarioID", resultado.id);
 localStorage.setItem("nombreUsuario", resultado.nombre);
 localStorage.setItem("tipoUsuario", resultado.tipo);
-localStorage.setItem("matriculaUsuario", usuarioIngresado);
+localStorage.setItem("matriculaUsuario", datos.usuario); // ✅ Usa el valor correcto del formulario
+
 localStorage.setItem("usuarioActual", JSON.stringify({
   usuario: datos.usuario,
   tipo: resultado.tipo,

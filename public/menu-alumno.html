@@ -73,72 +73,6 @@
       window.location.href = "login.html";
     }
   </script>
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-    const supabaseUrl = 'https://mhnzjhelbupyifdlpngv.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY';
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    const matricula = localStorage.getItem('matriculaUsuario');
-    async function cargarPanelAlumno() {
-// DATOS GENERALES
-const { data: datos } = await supabase
-  .from('usuarios')
-  .select('*')
-  .eq('usuario', matricula) // ← usa el campo correcto: 'usuario'
-  .single();
-
-if (datos) {
-  document.getElementById('dato-matricula').innerText = datos.usuario; // ← es tu matrícula real
-  document.getElementById('dato-nombre').innerText = `${datos.nombre} ${datos.apellido_paterno} ${datos.apellido_materno}`;
-  document.getElementById('dato-grupo').innerText = `${datos.grado || '—'}° ${datos.grupo || '—'}`;
-}
-      // ASISTENCIAS
-      const { data: asistencias } = await supabase
-        .from('tabla_registro')
-        .select('*')
-        .eq('matricula', matricula)
-        .eq('tipo_registro', 'entrada');
-
-      const totalAsistencias = asistencias?.length || 0;
-      document.getElementById('dato-asistencias').innerText = totalAsistencias;
-      // FALTAS (estimación sobre 200 días)
-      const faltasEstimadas = 200 - totalAsistencias;
-      document.getElementById('dato-faltas').innerText = faltasEstimadas;
-      // REPORTES
-      const { data: reportes } = await supabase
-        .from('reportes_conducta')
-        .select('*')
-        .eq('matricula', matricula);
-
-      let leves = 0, moderados = 0, graves = 0;
-
-      const palabrasGraves = ["golpe", "amenaza", "insulto", "robo", "escupio", "navaja", "pistola", "droga", "sustancia", "bapeador"];
-      const palabrasModeradas = ["habló", "contestó", "no obedeció", "celular", "constantemente", "inquieto", "grito", "parado", "uniforme"];
-
-      for (const rep of reportes || []) {
-        const desc = rep.descripcion?.toLowerCase() || '';
-        if (palabrasGraves.some(p => desc.includes(p))) graves++;
-        else if (palabrasModeradas.some(p => desc.includes(p))) moderados++;
-        else leves++;
-      }
-
-      document.getElementById('dato-leves').innerText = leves;
-      document.getElementById('dato-moderados').innerText = moderados;
-      document.getElementById('dato-graves').innerText = graves;
-
-      // Mensaje si tiene reportes graves
-      const mensaje = document.getElementById("mensajeComportamiento");
-      if (graves > 0) {
-        mensaje.innerHTML = `⚠️ Tu comportamiento presenta <strong>${graves}</strong> reporte(s) grave(s). Acércate a la coordinación.`;
-      } else if (moderados > 0) {
-        mensaje.innerHTML = `ℹ️ Tienes <strong>${moderados}</strong> reporte(s) moderado(s). Mejora tu conducta.`;
-      } else {
-        mensaje.innerHTML = `✅ ¡Excelente comportamiento! Sigue así.`;
-      }
-    }
-    cargarPanelAlumno();
-  </script>
   <script>
     // Bloqueo básico
     document.addEventListener("contextmenu", e => e.preventDefault());
@@ -150,6 +84,38 @@ if (datos) {
       }
     });
   </script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    
+    // Conexión Supabase
+    const supabase = createClient(
+      "https://mhnzjhelbupyifdlpngv.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
+    );
+    
+    // Obtener matrícula del alumno
+    const matricula = localStorage.getItem("matriculaUsuario");
+    
+    if (matricula) {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("nombre, apellido_paterno, apellido_materno, grado, grupo")
+        .eq("usuario", matricula)
+        .single();
+    
+      if (error || !data) {
+        console.error("❌ Error al obtener datos:", error);
+      } else {
+        document.getElementById("dato-matricula").textContent = matricula;
+        document.getElementById("dato-nombre").textContent =
+          data.nombre + " " + data.apellido_paterno + " " + data.apellido_materno;
+        document.getElementById("dato-grupo").textContent =
+          "Grado " + data.grado + " - Grupo " + data.grupo;
+      }
+    } else {
+      console.warn("No hay matrícula guardada en localStorage");
+    }
+    </script>    
 </body>
 </html>
 
