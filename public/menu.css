@@ -369,18 +369,5 @@ footer.pie {
   font-size: 1.1rem;
   border-radius: 8px;
 }
-.estadistica {
-  display: inline-block;
-  min-width: 160px;
-  padding: 10px 16px;
-  margin: 10px;
-  border-radius: 8px;
-  background-color: #f8f8f8;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
+
 
