@@ -79,22 +79,20 @@
     const supabaseUrl = 'https://mhnzjhelbupyifdlpngv.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY';
     const supabase = createClient(supabaseUrl, supabaseKey);
-
     const matricula = localStorage.getItem('matriculaUsuario');
-
     async function cargarPanelAlumno() {
-      // DATOS GENERALES
-      const { data: datos } = await supabase
-        .from('usuarios')
-        .select('*')
-        .eq('usuario', matricula)
-        .single();
+// DATOS GENERALES
+const { data: datos } = await supabase
+  .from('usuarios')
+  .select('*')
+  .eq('usuario', matricula) // ← usa el campo correcto: 'usuario'
+  .single();
 
-      if (datos) {
-        document.getElementById('dato-matricula').innerText = datos.matricula;
-        document.getElementById('dato-nombre').innerText = `${datos.nombres} ${datos.primer_apellido} ${datos.segundo_apellido}`;
-        document.getElementById('dato-grupo').innerText = `${datos.grado}° ${datos.grupo}`;
-      }
+if (datos) {
+  document.getElementById('dato-matricula').innerText = datos.usuario; // ← es tu matrícula real
+  document.getElementById('dato-nombre').innerText = `${datos.nombre} ${datos.apellido_paterno} ${datos.apellido_materno}`;
+  document.getElementById('dato-grupo').innerText = `${datos.grado || '—'}° ${datos.grupo || '—'}`;
+}
       // ASISTENCIAS
       const { data: asistencias } = await supabase
         .from('tabla_registro')
