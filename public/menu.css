@@ -371,7 +371,7 @@ footer.pie {
 }
 .estadistica {
   display: inline-block;
-  min-width: 160px; /* Asegura que todos midan al menos lo mismo */
+  min-width: 160px;
   padding: 10px 16px;
   margin: 10px;
   border-radius: 8px;
@@ -383,3 +383,4 @@ footer.pie {
   transition: all 0.3s ease;
   white-space: nowrap;
 }
+
