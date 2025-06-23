@@ -44,6 +44,7 @@
   <section class="panel-datos">
     <h2>👤 Tus Datos Generales</h2>
     <ul>
+      <li><strong>Foto:</strong><br><img id="fotoAlumno" src="" alt="Foto del alumno" width="120" style="margin-top: 8px; border-radius: 10px;" /></li>
       <li><strong>Matrícula:</strong> <span id="matriculaAlumno">—</span></li>
       <li><strong>Nombre:</strong> <span id="nombreAlumno">—</span></li>
       <li><strong>Grupo:</strong> <span id="grupoAlumno">—</span></li>
@@ -113,6 +114,8 @@
         document.getElementById("nombreAlumno").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
         document.getElementById("grupoAlumno").textContent = `${data.grado}° ${data.grupo}`;
         document.getElementById("cicloAlumno").textContent = data.ciclo_escolar || "—";
+        document.getElementById("fotoAlumno").src = data.foto || "img/default.jpg";
+
       }
     } else {
       console.warn("⚠️ No hay matrícula almacenada");
