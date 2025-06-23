@@ -88,6 +88,35 @@
       }
     });
   </script>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  
+    const supabase = createClient(
+      "https://mhnzjhelbupyifdlpngv.supabase.co", // Tu URL de Supabase
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
+    );
+  
+    const matricula = localStorage.getItem("matriculaUsuario");
+  
+    if (matricula) {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("usuario", matricula)
+        .single();
+  
+      if (error || !data) {
+        console.error("❌ Error al obtener datos:", error?.message || "No encontrado");
+      } else {
+        console.log("✅ Datos del alumno:", data);
+        document.getElementById("matriculaAlumno").textContent = data.usuario || "—";
+        document.getElementById("nombreAlumno").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+        document.getElementById("grupoAlumno").textContent = `${data.grado}° ${data.grupo}`;
+      }
+    } else {
+      console.warn("⚠️ No hay matrícula almacenada");
+    }
+  </script>  
 </body>
 </html>
 
