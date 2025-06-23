@@ -85,9 +85,9 @@
     async function cargarPanelAlumno() {
       // DATOS GENERALES
       const { data: datos } = await supabase
-        .from('tabla_usuarios')
+        .from('usuarios')
         .select('*')
-        .eq('matricula', matricula)
+        .eq('usuario', matricula)
         .single();
 
       if (datos) {
