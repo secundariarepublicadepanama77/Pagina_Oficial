@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pase de Lista</title>
+  <link rel="stylesheet" href="menu.css" />
+</head>
+<body>
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo" />
+    <h1>Panel Docente</h1>
+  </header>
+
+  <nav class="barra-botones">
+    <a href="menu-docente.html">🏠 Inicio</a>
+    <a href="reporte_docente.html">📅 Reportes</a>
+    <a href="materiales.html">📁 Materiales</a>
+    <a href="asistencias.html">📋 Grupos</a>
+    <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+  </nav>
+
+  <main class="contenido-menu">
+    <h2 id="titulo-grupo">🧍‍♂️ Pase de lista</h2>
+    <table id="tabla-alumnos">
+      <thead>
+        <tr>
+          <th>Matrícula</th>
+          <th>Nombre</th>
+          <th>Grado</th>
+          <th>Grupo</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabaseUrl = "https://xxxxxxxx.supabase.co";
+    const supabaseKey = "eyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const grupo = localStorage.getItem("grupoSeleccionado");
+    document.getElementById("titulo-grupo").innerText += ` - Grupo ${grupo}`;
+
+    async function cargarAlumnos() {
+      const { data, error } = await supabase
+        .from("tabla_usuarios")
+        .select("*")
+        .eq("grupo", grupo)
+        .eq("tipo", "alumno");
+
+      if (error) {
+        console.error("Error al obtener alumnos:", error.message);
+        return;
+      }
+
+      const tbody = document.querySelector("#tabla-alumnos tbody");
+      tbody.innerHTML = "";
+
+      data.forEach(alumno => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${alumno.matricula}</td>
+          <td>${alumno.nombres} ${alumno.primer_apellido} ${alumno.segundo_apellido}</td>
+          <td>${alumno.grado}</td>
+          <td>${alumno.grupo}</td>
+          <td><button onclick="registrar('${alumno.matricula}', 'entrada')">✅</button></td>
+          <td><button onclick="registrar('${alumno.matricula}', 'salida')">🚪</button></td>
+        `;
+        tbody.appendChild(fila);
+      });
+    }
+
+    window.registrar = async function(matricula, tipo) {
+      const fecha = new Date().toISOString().split("T")[0];
+      const hora = new Date().toLocaleTimeString();
+
+      const { error } = await supabase.from("tabla_registro").insert([
+        {
+          matricula,
+          tipo,
+          fecha,
+          hora,
+        },
+      ]);
+
+      if (error) {
+        alert("Error al registrar asistencia.");
+        console.error(error);
+      } else {
+        alert(`${tipo.toUpperCase()} registrada`);
+      }
+    };
+
+    cargarAlumnos();
+  </script>
+
+  <script>
+    function cerrarSesion() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <script>
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      const bloqueadas = ["F12", "u", "i", "c"];
+      if (
+        bloqueadas.includes(e.key.toLowerCase()) &&
+        (e.ctrlKey || e.metaKey || e.shiftKey)
+      ) {
+        e.preventDefault();
+        console.log("🚫 Acción bloqueada");
+      }
+    });
+  </script>
+
+  <style>
+    h2 {
+      text-align: center;
+      margin: 20px;
+      color: #0A4C68;
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto 30px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    th {
+      background-color: #0A4C68;
+      color: white;
+    }
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+  </style>
+</body>
+</html>
