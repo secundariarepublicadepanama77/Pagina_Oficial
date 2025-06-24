@@ -25,11 +25,10 @@
   </nav>
 
   <main class="contenido-menu">
-    <h2>📋 Selecciona un Grupo para Pase de Lista</h2>
-
+    <h2>PASE DE LISTA - GRADO: <span id="gradoText"></span> GRUPO: <span id="grupoText"></span></h2>
     <section>
       <h3>Primeros Años</h3>
-      <button class="grupo-btn" onclick="redirigir('1A')">1A</button>
+      <button onclick="window.location.href='pase_lista.html?grado=1&grupo=A'">1A</button>
       <button class="grupo-btn" onclick="redirigir('1B')">1B</button>
       <button class="grupo-btn" onclick="redirigir('1C')">1C</button>
       <button class="grupo-btn" onclick="redirigir('1D')">1D</button>
@@ -98,7 +97,24 @@
       }
     });
   </script>
+<script>
+    // FUNCIÓN PARA LEER PARÁMETROS DE LA URL (por ejemplo: ?grado=1&grupo=A)
+    function obtenerParametro(nombre) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(nombre);
+    }
+  
+    // OBTENEMOS GRADO Y GRUPO DE LA URL
+    const gradoSeleccionado = obtenerParametro('grado');
+    const grupoSeleccionado = obtenerParametro('grupo');
 
+    document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("gradoText").textContent = gradoSeleccionado;
+  document.getElementById("grupoText").textContent = grupoSeleccionado;
+});
+
+  </script>
+  
   <style>
     h2, h3 {
       text-align: center;
