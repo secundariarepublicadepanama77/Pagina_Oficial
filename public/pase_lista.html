@@ -33,8 +33,10 @@
 
   <button onclick="cargarAlumnos()">Cargar alumnos</button>
 
-  <p><strong>Fecha:</strong> <span id="fecha"></span></p>
-
+  <p><strong>Fecha:</strong> 
+    <input type="date" id="fecha" />
+  </p>
+  
   <table id="tabla-asistencia">
     <thead>
       <tr>
@@ -53,6 +55,8 @@
   <script>
     const supabase = supabase.createClient('https://TU-PROYECTO.supabase.co', 'TU-CLAVE-ANON');
     const fechaHoy = new Date().toISOString().split('T')[0];
+    document.getElementById("fecha").value = fechaHoy;
+
     document.getElementById("fecha").textContent = fechaHoy;
 
     async function cargarAlumnos() {
@@ -93,41 +97,42 @@
     }
 
     async function guardarAsistencia() {
-      const grado = document.getElementById("grado").value;
-      const grupo = document.getElementById("grupo").value;
-      const checkboxes = document.querySelectorAll('.asistio');
-      const observaciones = document.querySelectorAll('.observacion');
+  const grado = document.getElementById("grado").value;
+  const grupo = document.getElementById("grupo").value;
+  const fechaSeleccionada = document.getElementById("fecha").value;
+  const checkboxes = document.querySelectorAll('.asistio');
+  const observaciones = document.querySelectorAll('.observacion');
 
-      for (let i = 0; i < checkboxes.length; i++) {
-        const matricula = checkboxes[i].dataset.matricula;
-        const asistencia = checkboxes[i].checked;
-        const observacion = observaciones[i].value;
+  for (let i = 0; i < checkboxes.length; i++) {
+    const matricula = checkboxes[i].dataset.matricula;
+    const asistencia = checkboxes[i].checked;
+    const observacion = observaciones[i].value;
 
-        const usuario = await supabase
-          .from('usuarios')
-          .select('*')
-          .eq('matricula', matricula)
-          .single();
+    const usuario = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('matricula', matricula)
+      .single();
 
-        if (usuario.error) continue;
+    if (usuario.error) continue;
 
-        await supabase
-          .from('asistencias_esperadas')
-          .insert([{
-            matricula: usuario.data.matricula,
-            nombres: usuario.data.nombre,
-            apellido_paterno: usuario.data.apellido_paterno,
-            apellido_materno: usuario.data.apellido_materno,
-            grado: usuario.data.grado,
-            grupo: usuario.data.grupo,
-            fecha: fechaHoy,
-            asistencia: asistencia,
-            observaciones: observacion
-          }]);
-      }
+    await supabase
+      .from('asistencias_esperadas')
+      .insert([{
+        matricula: usuario.data.matricula,
+        nombres: usuario.data.nombre,
+        apellido_paterno: usuario.data.apellido_paterno,
+        apellido_materno: usuario.data.apellido_materno,
+        grado: usuario.data.grado,
+        grupo: usuario.data.grupo,
+        fecha: fechaSeleccionada,
+        asistencia: asistencia,
+        observaciones: observacion
+      }]);
+  }
 
-      alert("✅ Pase de lista guardado correctamente.");
-    }
+  alert("✅ Pase de lista guardado correctamente.");
+}
   </script>
 </body>
 </html>
