@@ -162,6 +162,18 @@
           .single();
 
         if (error || !usuario) continue;
+        console.log({
+  matricula: alumno.matricula,
+  nombres: alumno.nombres,
+  apellido_paterno: alumno.apellido_paterno,
+  apellido_materno: alumno.apellido_materno,
+  grado: alumno.grado,
+  grupo: alumno.grupo,
+  fecha: fechaSeleccionada,
+  asistencia: asistencia,
+  observaciones: observacion,
+  materia: materiaSeleccionada
+});
 
         const resultado = await supabase
   .from('asistencias_esperadas')
