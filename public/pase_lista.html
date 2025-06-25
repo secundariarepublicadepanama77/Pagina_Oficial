@@ -121,12 +121,12 @@
       data.forEach((alumno, index) => {
         const fila = document.createElement("tr");
         fila.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${alumno.usuario || ''}</td>
-          <td>${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
-          <td><input type="checkbox" data-matricula="${alumno.usuario}" class="asistio"></td>
-          <td><textarea class="observacion" data-matricula="${alumno.usuario}"></textarea></td>
-        `;
+  <td data-label="#">${index + 1}</td>
+  <td data-label="Matrícula">${alumno.usuario || ''}</td>
+  <td data-label="Nombre completo">${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
+  <td data-label="Asistió"><input type="checkbox" data-matricula="${alumno.usuario}" class="asistio"></td>
+  <td data-label="Observaciones"><textarea class="observacion" data-matricula="${alumno.usuario}"></textarea></td>
+`;
         cuerpo.appendChild(fila);
       });
     }
