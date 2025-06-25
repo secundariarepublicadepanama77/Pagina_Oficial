@@ -1,115 +1,73 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f5f8fa;
-    color: #333;
+main.contenido-menu {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
   }
-
-  header.menu-encabezado {
-    background-color: #0A4C68;
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
+  
+  h2, h3 {
+    text-align: center;
+    color: #0A4C68;
+    margin-top: 10px;
   }
-
-  .menu-encabezado .logo {
-    height: 50px;
-    margin-right: 15px;
-  }
-
-  .menu-encabezado h1 {
-    font-size: 22px;
-    margin: 0;
-  }
-
-  nav.barra-botones {
+  
+  section {
+    margin: 20px auto;
     display: flex;
     flex-wrap: wrap;
-    background-color: #e3f2fd;
-    padding: 10px;
     justify-content: center;
     gap: 10px;
   }
-
-  nav.barra-botones a {
-    text-decoration: none;
+  
+  section h3 {
+    width: 100%;
+    font-size: 1.2em;
     color: #0A4C68;
-    font-weight: bold;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    background-color: #fff;
-    border: 1px solid #0A4C68;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
   }
-
-  nav.barra-botones a:hover {
-    background-color: #0A4C68;
-    color: white;
-  }
-
-  nav.barra-botones a.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-  }
-
-  main.contenido-menu {
-    padding: 20px;
-    text-align: center;
-  }
-
-  h2, h3 {
-    color: #0A4C68;
-    margin-bottom: 15px;
-  }
-
-  section {
-    margin: 15px 0;
-  }
-
+  
   section button {
-    margin: 5px;
-    padding: 12px 20px;
+    padding: 12px 18px;
     font-size: 16px;
+    border: none;
     background-color: #0A4C68;
     color: white;
-    border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-
+  
   section button:hover {
     background-color: #08394F;
   }
-
+  
   footer.pie {
-    background-color: #0A4C68;
-    color: white;
     text-align: center;
-    padding: 10px;
     font-size: 14px;
+    padding: 15px;
+    background-color: #d32f2f;
+    color: white;
+    margin-top: 20px;
+    border-radius: 0 0 10px 10px;
   }
-
-  /* Adaptación a celulares */
-  @media screen and (max-width: 768px) {
-    nav.barra-botones {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    header.menu-encabezado {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .menu-encabezado .logo {
-      margin: 10px 0;
-    }
-
+  
+  /* Responsive */
+  @media (max-width: 600px) {
     section button {
       width: 80%;
-      max-width: 250px;
+      font-size: 18px;
+    }
+  
+    h2 {
+      font-size: 1.2em;
+    }
+  
+    .contenido-menu {
+      padding: 10px;
     }
   }
+  
