@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Pase de Lista</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
@@ -32,7 +32,7 @@
     <option value="Taller">Taller</option>
   </select>
 
-  <p><strong>Fecha:</strong> 
+  <p><strong>Fecha:</strong>
     <input type="date" id="fecha" />
   </p>
 
@@ -65,9 +65,14 @@
     const gradoParam = obtenerParametro("grado");
     const grupoParam = obtenerParametro("grupo");
 
-    // Establecer fecha actual por defecto
-    const fechaHoy = new Date().toISOString().split('T')[0];
-    document.getElementById("fecha").value = fechaHoy;
+    // Fecha local por defecto (corrige el desfase)
+    function obtenerFechaLocal() {
+      const hoy = new Date();
+      hoy.setMinutes(hoy.getMinutes() - hoy.getTimezoneOffset());
+      return hoy.toISOString().split('T')[0];
+    }
+
+    document.getElementById("fecha").value = obtenerFechaLocal();
 
     // Rellenar grado y grupo automáticamente
     document.addEventListener("DOMContentLoaded", () => {
@@ -106,7 +111,10 @@
         .select('*')
         .eq('grado', grado)
         .eq('grupo', grupo)
-        .eq('tipo', 'alumno');
+        .eq('tipo', 'alumno')
+        .order('apellido_paterno', { ascending: true })
+        .order('apellido_materno', { ascending: true })
+        .order('nombre', { ascending: true });
 
       if (error || !data.length) {
         alert("No se encontraron alumnos.");
@@ -120,7 +128,7 @@
         const fila = document.createElement("tr");
         fila.innerHTML = `
           <td>${index + 1}</td>
-          <td>${alumno.matricula}</td>
+          <td>${alumno.matricula || ''}</td>
           <td>${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
           <td><input type="checkbox" data-matricula="${alumno.matricula}" class="asistio"></td>
           <td><textarea class="observacion" data-matricula="${alumno.matricula}"></textarea></td>
@@ -147,23 +155,23 @@
         const asistencia = checkboxes[i].checked;
         const observacion = observaciones[i].value;
 
-        const usuario = await supabase
+        const { data: usuario, error } = await supabase
           .from('usuarios')
           .select('*')
           .eq('matricula', matricula)
           .single();
 
-        if (usuario.error) continue;
+        if (error || !usuario) continue;
 
         await supabase
           .from('asistencias_esperadas')
           .insert([{
-            matricula: usuario.data.matricula,
-            nombres: usuario.data.nombre,
-            apellido_paterno: usuario.data.apellido_paterno,
-            apellido_materno: usuario.data.apellido_materno,
-            grado: usuario.data.grado,
-            grupo: usuario.data.grupo,
+            matricula: usuario.matricula,
+            nombres: usuario.nombre,
+            apellido_paterno: usuario.apellido_paterno,
+            apellido_materno: usuario.apellido_materno,
+            grado: usuario.grado,
+            grupo: usuario.grupo,
             fecha: fechaSeleccionada,
             asistencia: asistencia,
             materia: materia,
