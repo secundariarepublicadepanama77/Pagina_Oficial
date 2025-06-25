@@ -77,8 +77,8 @@
     document.addEventListener("DOMContentLoaded", () => {
       const grado = obtenerParametro('grado');
       const grupo = obtenerParametro('grupo');
-      if (grado) document.getElementById("grado").value = grado;
-      if (grupo) document.getElementById("grupo").value = grupo;
+      if (grado) document.getElementById("grado").value = gradoSeleccionado;
+      if (grupo) document.getElementById("grupo").value = grupoSeleccionado;
 
       const fechaHoy = new Date().toISOString().split('T')[0];
       document.getElementById("fecha").value = fechaHoy;
