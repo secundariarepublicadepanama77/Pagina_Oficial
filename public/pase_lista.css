@@ -1,0 +1,80 @@
+/* pase_lista.css */
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f4f8;
+    margin: 20px;
+    padding: 0;
+    color: #333;
+  }
+  
+  h2 {
+    color: #004080;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  select, input[type="date"] {
+    padding: 5px;
+    margin: 5px 10px 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    background-color: #0074cc;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 15px 0;
+  }
+  
+  button:hover {
+    background-color: #005fa3;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 10px #ccc;
+  }
+  
+  th {
+    background-color: #004080;
+    color: white;
+    padding: 10px;
+  }
+  
+  td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  input[type="checkbox"] {
+    transform: scale(1.4);
+  }
+  
+  textarea {
+    width: 90%;
+    height: 40px;
+    border-radius: 5px;
+    padding: 5px;
+    resize: vertical;
+    border: 1px solid #ccc;
+  }
+  
