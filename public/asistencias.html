@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Asistencias por Grupo</title>
   <link rel="stylesheet" href="menu.css" />
+  <link rel="stylesheet" href="agrupo.css" />
 </head>
 <body>
+
   <header class="menu-encabezado">
     <img src="img/logo.png" alt="Logo" class="logo" />
     <h1>Panel Docente</h1>
@@ -25,7 +27,7 @@
   </nav>
 
   <main class="contenido-menu">
-    <h2>PASE DE LISTA - GRADO: <span id="gradoText"></span> GRUPO: <span id="grupoText"></span></h2>
+    <h2>PASE DE LISTA - GRADO: <span id="gradoText">—</span> GRUPO: <span id="grupoText">—</span></h2>
 
     <section>
       <h3>Primeros Años</h3>
@@ -63,7 +65,6 @@
     // Validar sesión
     const nombre = localStorage.getItem("nombreUsuario");
     const tipo = localStorage.getItem("tipoUsuario");
-
     if (!nombre || tipo !== "maestro") {
       alert("Acceso denegado. Redirigiendo al login.");
       window.location.href = "login.html";
@@ -82,59 +83,29 @@
       window.location.href = "login.html";
     }
 
-    // Obtener parámetros de la URL y mostrarlos
+    // Mostrar grado y grupo en el encabezado si existen en la URL
     function obtenerParametro(nombre) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(nombre);
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      const gradoSeleccionado = obtenerParametro('grado');
-      const grupoSeleccionado = obtenerParametro('grupo');
-      document.getElementById("gradoText").textContent = gradoSeleccionado || "—";
-      document.getElementById("grupoText").textContent = grupoSeleccionado || "—";
+      const grado = obtenerParametro('grado');
+      const grupo = obtenerParametro('grupo');
+      document.getElementById("gradoText").textContent = grado || "—";
+      document.getElementById("grupoText").textContent = grupo || "—";
     });
 
-    // Bloqueo de clic derecho y combinaciones
+    // Bloquear clic derecho y combinaciones de teclas
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", e => {
       const bloqueadas = ["F12", "u", "i", "c"];
-      if (
-        bloqueadas.includes(e.key.toLowerCase()) &&
-        (e.ctrlKey || e.metaKey || e.shiftKey)
-      ) {
+      if ((e.ctrlKey || e.metaKey || e.shiftKey) && bloqueadas.includes(e.key.toLowerCase())) {
         e.preventDefault();
         console.log("🚫 Acción bloqueada");
       }
     });
   </script>
 
-  <style>
-    h2, h3 {
-      text-align: center;
-      margin-top: 20px;
-      color: #0A4C68;
-    }
-
-    section {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .grupo-btn {
-      margin: 6px;
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #0A4C68;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .grupo-btn:hover {
-      background-color: #08394F;
-    }
-  </style>
 </body>
 </html>
