@@ -19,10 +19,11 @@ body {
     margin-right: 10px;
   }
   
-  select, input[type="date"] {
-    padding: 5px;
-    margin: 5px 10px 10px 0;
-    border-radius: 5px;
+  select,
+  input[type="date"] {
+    padding: 8px;
+    margin: 8px 10px 12px 0;
+    border-radius: 6px;
     border: 1px solid #ccc;
   }
   
@@ -34,7 +35,7 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
-    margin: 15px 0;
+    margin: 15px 5px;
   }
   
   button:hover {
@@ -76,5 +77,43 @@ body {
     padding: 5px;
     resize: vertical;
     border: 1px solid #ccc;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+  
+    thead {
+      display: none;
+    }
+  
+    tr {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #fff;
+    }
+  
+    td {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border: none;
+      border-bottom: 1px solid #eee;
+    }
+  
+    td:before {
+      content: attr(data-label);
+      font-weight: bold;
+      flex: 1;
+      padding-right: 10px;
+    }
+  
+    textarea {
+      width: 100%;
+    }
   }
   
