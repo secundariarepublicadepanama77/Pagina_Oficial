@@ -10,27 +10,16 @@
     th { background-color: lightgray; }
     input[type="checkbox"] { transform: scale(1.3); }
     textarea { width: 90%; height: 40px; }
-    select, input[type="date"] { margin: 5px; padding: 5px; }
   </style>
 </head>
 <body>
   <h2>PASE DE LISTA</h2>
 
   <label for="grado">Grado:</label>
-  <select id="grado">
-    <option value="">Selecciona</option>
-    <option value="1">1°</option>
-    <option value="2">2°</option>
-    <option value="3">3°</option>
-  </select>
+  <select id="grado"></select>
 
   <label for="grupo">Grupo:</label>
-  <select id="grupo">
-    <option value="">Selecciona</option>
-    <option value="A">A</option>
-    <option value="B">B</option>
-    <option value="C">C</option>
-  </select>
+  <select id="grupo"></select>
 
   <label for="materia">Materia:</label>
   <select id="materia">
@@ -43,8 +32,9 @@
     <option value="Taller">Taller</option>
   </select>
 
-  <label for="fecha"><strong>Fecha:</strong></label>
-  <input type="date" id="fecha" />
+  <p><strong>Fecha:</strong> 
+    <input type="date" id="fecha" />
+  </p>
 
   <button onclick="cargarAlumnos()">Cargar alumnos</button>
 
@@ -64,24 +54,41 @@
   <button onclick="guardarAsistencia()">Guardar pase de lista</button>
 
   <script>
-    const supabase = supabase.createClient(
-      'https://mhnzjhelbupyifdlpngv.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
-    );
+    const supabase = window.supabase.createClient('https://mhnzjhelbupyifdlpngv.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY');
 
+    // Obtener parámetros de la URL
     function obtenerParametro(nombre) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(nombre);
+      const params = new URLSearchParams(window.location.search);
+      return params.get(nombre);
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const grado = obtenerParametro('grado');
-      const grupo = obtenerParametro('grupo');
-      if (grado) document.getElementById("grado").value = gradoSeleccionado;
-      if (grupo) document.getElementById("grupo").value = grupoSeleccionado;
+    const gradoParam = obtenerParametro("grado");
+    const grupoParam = obtenerParametro("grupo");
 
-      const fechaHoy = new Date().toISOString().split('T')[0];
-      document.getElementById("fecha").value = fechaHoy;
+    // Establecer fecha actual por defecto
+    const fechaHoy = new Date().toISOString().split('T')[0];
+    document.getElementById("fecha").value = fechaHoy;
+
+    // Rellenar grado y grupo automáticamente
+    document.addEventListener("DOMContentLoaded", () => {
+      const gradoSelect = document.getElementById("grado");
+      const grupoSelect = document.getElementById("grupo");
+
+      gradoSelect.innerHTML = `
+        <option value="">Selecciona</option>
+        <option value="1" ${gradoParam === "1" ? "selected" : ""}>1°</option>
+        <option value="2" ${gradoParam === "2" ? "selected" : ""}>2°</option>
+        <option value="3" ${gradoParam === "3" ? "selected" : ""}>3°</option>
+      `;
+
+      grupoSelect.innerHTML = `
+        <option value="">Selecciona</option>
+        <option value="A" ${grupoParam === "A" ? "selected" : ""}>A</option>
+        <option value="B" ${grupoParam === "B" ? "selected" : ""}>B</option>
+        <option value="C" ${grupoParam === "C" ? "selected" : ""}>C</option>
+        <option value="D" ${grupoParam === "D" ? "selected" : ""}>D</option>
+        <option value="E" ${grupoParam === "E" ? "selected" : ""}>E</option>
+      `;
     });
 
     async function cargarAlumnos() {
@@ -89,12 +96,8 @@
       const grupo = document.getElementById("grupo").value;
       const materia = document.getElementById("materia").value;
 
-      if (!grado || !grupo) {
-        alert("Selecciona grado y grupo.");
-        return;
-      }
-      if (!materia) {
-        alert("Selecciona una materia.");
+      if (!grado || !grupo || !materia) {
+        alert("Selecciona grado, grupo y materia.");
         return;
       }
 
@@ -105,7 +108,7 @@
         .eq('grupo', grupo)
         .eq('tipo', 'alumno');
 
-      if (error || !data || data.length === 0) {
+      if (error || !data.length) {
         alert("No se encontraron alumnos.");
         return;
       }
@@ -136,11 +139,6 @@
 
       if (!materia) {
         alert("Selecciona una materia.");
-        return;
-      }
-
-      if (checkboxes.length === 0) {
-        alert("Primero carga la lista de alumnos.");
         return;
       }
 
