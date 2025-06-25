@@ -136,64 +136,57 @@
         cuerpo.appendChild(fila);
       });
     }
-
     async function guardarAsistencia() {
-      const grado = document.getElementById("grado").value;
-      const grupo = document.getElementById("grupo").value;
-      const materia = document.getElementById("materia").value;
-      const fechaSeleccionada = document.getElementById("fecha").value;
-      const checkboxes = document.querySelectorAll('.asistio');
-      const observaciones = document.querySelectorAll('.observacion');
+  const grado = document.getElementById("grado").value;
+  const grupo = document.getElementById("grupo").value;
+  const materia = document.getElementById("materia").value;
+  const fechaSeleccionada = document.getElementById("fecha").value;
+  const checkboxes = document.querySelectorAll('.asistio');
+  const observaciones = document.querySelectorAll('.observacion');
 
-      if (!materia) {
-        alert("Selecciona una materia.");
-        return;
-      }
+  if (!materia) {
+    alert("Selecciona una materia.");
+    return;
+  }
 
-      for (let i = 0; i < checkboxes.length; i++) {
-        const matricula = checkboxes[i].dataset.matricula;
-        const asistencia = checkboxes[i].checked;
-        const observacion = observaciones[i].value;
+  for (let i = 0; i < checkboxes.length; i++) {
+    const matricula = checkboxes[i].dataset.matricula;
+    const asistencia = checkboxes[i].checked;
+    const observacion = observaciones[i].value;
 
-        const { data: usuario, error } = await supabase
-          .from('usuarios')
-          .select('*')
-          .eq('matricula', matricula)
-          .single();
+    const { data: usuario, error } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('usuario', matricula)
+      .single();
 
-        if (error || !usuario) continue;
-        console.log({
-  matricula: alumno.matricula,
-  nombres: alumno.nombres,
-  apellido_paterno: alumno.apellido_paterno,
-  apellido_materno: alumno.apellido_materno,
-  grado: alumno.grado,
-  grupo: alumno.grupo,
-  fecha: fechaSeleccionada,
-  asistencia: asistencia,
-  observaciones: observacion,
-  Materia: MateriaSeleccionada
-});
-
-        const resultado = await supabase
-  .from('asistencias_esperadas')
-  .insert([{
-    matricula: alumno.matricula, // <-- Asegúrate que esto existe
-    nombres: alumno.nombres,
-    apellido_paterno: alumno.apellido_paterno,
-    apellido_materno: alumno.apellido_materno,
-    grado: alumno.grado,
-    grupo: alumno.grupo,
-    fecha: fechaSeleccionada,
-    asistencia: asistencia,
-    observaciones: observacion,
-    Materia: MateriaSeleccionada // si agregaste esta columna
-  }]);
-
-      }
-
-      alert("✅ Pase de lista guardado correctamente.");
+    if (error || !usuario) {
+      console.warn(`No se encontró usuario con matrícula: ${matricula}`);
+      continue;
     }
+
+    const resultado = await supabase
+      .from('asistencias_esperadas')
+      .insert([{
+        matricula: usuario.usuario,
+        nombres: usuario.nombre,
+        apellido_paterno: usuario.apellido_paterno,
+        apellido_materno: usuario.apellido_materno,
+        grado: usuario.grado,
+        grupo: usuario.grupo,
+        fecha: fechaSeleccionada,
+        asistencia: asistencia,
+        observaciones: observacion,
+        materia: materia
+      }]);
+
+    if (resultado.error) {
+      console.error(`Error al guardar asistencia para ${usuario.usuario}:`, resultado.error.message);
+    }
+  }
+
+  alert("✅ Pase de lista guardado correctamente.");
+}
   </script>
 </body>
 </html>
