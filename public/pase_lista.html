@@ -66,7 +66,7 @@
     const fechaHoy = new Date().toISOString().split('T')[0];
     document.getElementById("fecha").value = fechaHoy;
 
-    document.getElementById("fecha").textContent = fechaHoy;
+    document.getElementById("fecha") = fechaHoy;
 
     async function cargarAlumnos() {
       const grado = document.getElementById("grado").value;
@@ -113,9 +113,15 @@ if (!materia) {
     async function guardarAsistencia() {
   const grado = document.getElementById("grado").value;
   const grupo = document.getElementById("grupo").value;
+  const materia = document.getElementById("materia").value;
   const fechaSeleccionada = document.getElementById("fecha").value;
   const checkboxes = document.querySelectorAll('.asistio');
   const observaciones = document.querySelectorAll('.observacion');
+
+  if (!materia) {
+    alert("Selecciona una materia.");
+    return;
+  }
 
   for (let i = 0; i < checkboxes.length; i++) {
     const matricula = checkboxes[i].dataset.matricula;
