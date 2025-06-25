@@ -42,8 +42,6 @@
   <option value="Historia">Historia</option>
   <option value="Taller">Taller</option>
 </select>
-
-
   <p><strong>Fecha:</strong> 
     <input type="date" id="fecha" />
   </p>
@@ -78,6 +76,11 @@
         alert("Selecciona grado y grupo.");
         return;
       }
+      const materia = document.getElementById("materia").value;
+if (!materia) {
+  alert("Selecciona una materia.");
+  return;
+}
 
       const { data, error } = await supabase
         .from('usuarios')
@@ -138,6 +141,7 @@
         grupo: usuario.data.grupo,
         fecha: fechaSeleccionada,
         asistencia: asistencia,
+        materia: materia,
         observaciones: observacion
       }]);
   }
