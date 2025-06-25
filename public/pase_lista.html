@@ -163,20 +163,21 @@
 
         if (error || !usuario) continue;
 
-        await supabase
-          .from('asistencias_esperadas')
-          .insert([{
-            matricula: usuario.matricula,
-            nombres: usuario.nombre,
-            apellido_paterno: usuario.apellido_paterno,
-            apellido_materno: usuario.apellido_materno,
-            grado: usuario.grado,
-            grupo: usuario.grupo,
-            fecha: fechaSeleccionada,
-            asistencia: asistencia,
-            Materia: materia,
-            observaciones: observacion
-          }]);
+        const resultado = await supabase
+  .from('asistencias_esperadas')
+  .insert([{
+    matricula: alumno.matricula, // <-- Asegúrate que esto existe
+    nombres: alumno.nombres,
+    apellido_paterno: alumno.apellido_paterno,
+    apellido_materno: alumno.apellido_materno,
+    grado: alumno.grado,
+    grupo: alumno.grupo,
+    fecha: fechaSeleccionada,
+    asistencia: asistencia,
+    observaciones: observacion,
+    materia: materiaSeleccionada // si agregaste esta columna
+  }]);
+
       }
 
       alert("✅ Pase de lista guardado correctamente.");
