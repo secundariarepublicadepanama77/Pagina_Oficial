@@ -148,6 +148,20 @@
     alert("Selecciona una materia.");
     return;
   }
+  // Verificar si ya se pasó lista para esta materia, grado, grupo y fecha
+  const { data: existentes, error: errorExistente } = await supabase
+    .from('asistencias_esperadas')
+    .select('*')
+    .eq('grado', grado)
+    .eq('grupo', grupo)
+    .eq('materia', materia)
+    .eq('fecha', fechaSeleccionada)
+    .limit(1);  // solo necesitamos saber si ya hay una
+
+  if (existentes && existentes.length > 0) {
+    alert(`⚠️ La maestra o maestro de ${materia} ya pasó lista el día de hoy para ${grado}°${grupo}.`);
+    return;
+  }
 
   for (let i = 0; i < checkboxes.length; i++) {
     const matricula = checkboxes[i].dataset.matricula;
