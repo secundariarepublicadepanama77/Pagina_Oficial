@@ -16,7 +16,7 @@
     <a href="menu-docente.html">🏠 Inicio</a>
     <a href="reporte_docente.html">📅 Reportes</a>
     <a href="materiales.html">📁 Materiales</a>
-    <a class="asistencias.html">📝 Asistencias</a>
+    <a href="asistencias.html">📝 Asistencias</a>
     <a class="disabled">📝 Próximamente</a>
     <a class="disabled">👥 Próximamente</a>
     <a class="disabled">📅 Horarios</a>
@@ -26,31 +26,32 @@
 
   <main class="contenido-menu">
     <h2>PASE DE LISTA - GRADO: <span id="gradoText"></span> GRUPO: <span id="grupoText"></span></h2>
+
     <section>
       <h3>Primeros Años</h3>
-      <button onclick="window.location.href='pase_lista.html?grado=1&grupo=A'">1A</button>
-      <button class="grupo-btn" onclick="redirigir('1B')">1B</button>
-      <button class="grupo-btn" onclick="redirigir('1C')">1C</button>
-      <button class="grupo-btn" onclick="redirigir('1D')">1D</button>
-      <button class="grupo-btn" onclick="redirigir('1E')">1E</button>
+      <button onclick="redirigir('1A')">1A</button>
+      <button onclick="redirigir('1B')">1B</button>
+      <button onclick="redirigir('1C')">1C</button>
+      <button onclick="redirigir('1D')">1D</button>
+      <button onclick="redirigir('1E')">1E</button>
     </section>
 
     <section>
       <h3>Segundos Años</h3>
-      <button class="grupo-btn" onclick="redirigir('2A')">2A</button>
-      <button class="grupo-btn" onclick="redirigir('2B')">2B</button>
-      <button class="grupo-btn" onclick="redirigir('2C')">2C</button>
-      <button class="grupo-btn" onclick="redirigir('2D')">2D</button>
-      <button class="grupo-btn" onclick="redirigir('2E')">2E</button>
+      <button onclick="redirigir('2A')">2A</button>
+      <button onclick="redirigir('2B')">2B</button>
+      <button onclick="redirigir('2C')">2C</button>
+      <button onclick="redirigir('2D')">2D</button>
+      <button onclick="redirigir('2E')">2E</button>
     </section>
 
     <section>
       <h3>Terceros Años</h3>
-      <button class="grupo-btn" onclick="redirigir('3A')">3A</button>
-      <button class="grupo-btn" onclick="redirigir('3B')">3B</button>
-      <button class="grupo-btn" onclick="redirigir('3C')">3C</button>
-      <button class="grupo-btn" onclick="redirigir('3D')">3D</button>
-      <button class="grupo-btn" onclick="redirigir('3E')">3E</button>
+      <button onclick="redirigir('3A')">3A</button>
+      <button onclick="redirigir('3B')">3B</button>
+      <button onclick="redirigir('3C')">3C</button>
+      <button onclick="redirigir('3D')">3D</button>
+      <button onclick="redirigir('3E')">3E</button>
     </section>
   </main>
 
@@ -59,33 +60,43 @@
   </footer>
 
   <script>
-    // Validar sesión y tipo de usuario
+    // Validar sesión
     const nombre = localStorage.getItem("nombreUsuario");
     const tipo = localStorage.getItem("tipoUsuario");
 
     if (!nombre || tipo !== "maestro") {
       alert("Acceso denegado. Redirigiendo al login.");
       window.location.href = "login.html";
-    } else {
-      document.getElementById("saludo")?.remove(); // eliminamos el saludo si existía
     }
 
-    function redirigir(grupo) {
-      localStorage.setItem("grupoSeleccionado", grupo);
-      window.location.href = "pase_lista.html";
+    // Redirección al pase de lista con grado y grupo
+    function redirigir(grupoCompleto) {
+      const grado = grupoCompleto.charAt(0);
+      const grupo = grupoCompleto.charAt(1);
+      const url = `pase_lista.html?grado=${grado}&grupo=${grupo}`;
+      window.location.href = url;
     }
 
     function cerrarSesion() {
       localStorage.clear();
       window.location.href = "login.html";
     }
-  </script>
 
-  <script>
-    // Bloqueo de clic derecho
+    // Obtener parámetros de la URL y mostrarlos
+    function obtenerParametro(nombre) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(nombre);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const gradoSeleccionado = obtenerParametro('grado');
+      const grupoSeleccionado = obtenerParametro('grupo');
+      document.getElementById("gradoText").textContent = gradoSeleccionado || "—";
+      document.getElementById("grupoText").textContent = grupoSeleccionado || "—";
+    });
+
+    // Bloqueo de clic derecho y combinaciones
     document.addEventListener("contextmenu", e => e.preventDefault());
-
-    // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
     document.addEventListener("keydown", e => {
       const bloqueadas = ["F12", "u", "i", "c"];
       if (
@@ -97,24 +108,7 @@
       }
     });
   </script>
-<script>
-    // FUNCIÓN PARA LEER PARÁMETROS DE LA URL (por ejemplo: ?grado=1&grupo=A)
-    function obtenerParametro(nombre) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(nombre);
-    }
-  
-    // OBTENEMOS GRADO Y GRUPO DE LA URL
-    const gradoSeleccionado = obtenerParametro('grado');
-    const grupoSeleccionado = obtenerParametro('grupo');
 
-    document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("gradoText").textContent = gradoSeleccionado;
-  document.getElementById("grupoText").textContent = grupoSeleccionado;
-});
-
-  </script>
-  
   <style>
     h2, h3 {
       text-align: center;

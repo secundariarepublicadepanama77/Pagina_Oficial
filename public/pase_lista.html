@@ -10,6 +10,7 @@
     th { background-color: lightgray; }
     input[type="checkbox"] { transform: scale(1.3); }
     textarea { width: 90%; height: 40px; }
+    select, input[type="date"] { margin: 5px; padding: 5px; }
   </style>
 </head>
 <body>
@@ -30,19 +31,21 @@
     <option value="B">B</option>
     <option value="C">C</option>
   </select>
+
   <label for="materia">Materia:</label>
-<select id="materia">
-  <option value="">Selecciona</option>
-  <option value="Español">Español</option>
-  <option value="Inglés">Inglés</option>
-  <option value="Matemáticas">Matemáticas</option>
-  <option value="Ciencias">Ciencias</option>
-  <option value="Historia">Historia</option>
-  <option value="Taller">Taller</option>
-</select>
-  <p><strong>Fecha:</strong> 
-    <input type="date" id="fecha" />
-  </p>
+  <select id="materia">
+    <option value="">Selecciona</option>
+    <option value="Español">Español</option>
+    <option value="Inglés">Inglés</option>
+    <option value="Matemáticas">Matemáticas</option>
+    <option value="Ciencias">Ciencias</option>
+    <option value="Historia">Historia</option>
+    <option value="Taller">Taller</option>
+  </select>
+
+  <label for="fecha"><strong>Fecha:</strong></label>
+  <input type="date" id="fecha" />
+
   <button onclick="cargarAlumnos()">Cargar alumnos</button>
 
   <table id="tabla-asistencia">
@@ -61,25 +64,39 @@
   <button onclick="guardarAsistencia()">Guardar pase de lista</button>
 
   <script>
-    const supabase = supabase.createClient('https://mhnzjhelbupyifdlpngv.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY');
-    const fechaHoy = new Date().toISOString().split('T')[0];
-    document.getElementById("fecha").value = fechaHoy;
+    const supabase = supabase.createClient(
+      'https://mhnzjhelbupyifdlpngv.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
+    );
 
-    document.getElementById("fecha") = fechaHoy;
+    function obtenerParametro(nombre) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(nombre);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const grado = obtenerParametro('grado');
+      const grupo = obtenerParametro('grupo');
+      if (grado) document.getElementById("grado").value = grado;
+      if (grupo) document.getElementById("grupo").value = grupo;
+
+      const fechaHoy = new Date().toISOString().split('T')[0];
+      document.getElementById("fecha").value = fechaHoy;
+    });
 
     async function cargarAlumnos() {
       const grado = document.getElementById("grado").value;
       const grupo = document.getElementById("grupo").value;
+      const materia = document.getElementById("materia").value;
 
       if (!grado || !grupo) {
         alert("Selecciona grado y grupo.");
         return;
       }
-      const materia = document.getElementById("materia").value;
-if (!materia) {
-  alert("Selecciona una materia.");
-  return;
-}
+      if (!materia) {
+        alert("Selecciona una materia.");
+        return;
+      }
 
       const { data, error } = await supabase
         .from('usuarios')
@@ -88,7 +105,7 @@ if (!materia) {
         .eq('grupo', grupo)
         .eq('tipo', 'alumno');
 
-      if (error || !data.length) {
+      if (error || !data || data.length === 0) {
         alert("No se encontraron alumnos.");
         return;
       }
@@ -110,49 +127,54 @@ if (!materia) {
     }
 
     async function guardarAsistencia() {
-  const grado = document.getElementById("grado").value;
-  const grupo = document.getElementById("grupo").value;
-  const materia = document.getElementById("materia").value;
-  const fechaSeleccionada = document.getElementById("fecha").value;
-  const checkboxes = document.querySelectorAll('.asistio');
-  const observaciones = document.querySelectorAll('.observacion');
+      const grado = document.getElementById("grado").value;
+      const grupo = document.getElementById("grupo").value;
+      const materia = document.getElementById("materia").value;
+      const fechaSeleccionada = document.getElementById("fecha").value;
+      const checkboxes = document.querySelectorAll('.asistio');
+      const observaciones = document.querySelectorAll('.observacion');
 
-  if (!materia) {
-    alert("Selecciona una materia.");
-    return;
-  }
+      if (!materia) {
+        alert("Selecciona una materia.");
+        return;
+      }
 
-  for (let i = 0; i < checkboxes.length; i++) {
-    const matricula = checkboxes[i].dataset.matricula;
-    const asistencia = checkboxes[i].checked;
-    const observacion = observaciones[i].value;
+      if (checkboxes.length === 0) {
+        alert("Primero carga la lista de alumnos.");
+        return;
+      }
 
-    const usuario = await supabase
-      .from('usuarios')
-      .select('*')
-      .eq('matricula', matricula)
-      .single();
+      for (let i = 0; i < checkboxes.length; i++) {
+        const matricula = checkboxes[i].dataset.matricula;
+        const asistencia = checkboxes[i].checked;
+        const observacion = observaciones[i].value;
 
-    if (usuario.error) continue;
+        const usuario = await supabase
+          .from('usuarios')
+          .select('*')
+          .eq('matricula', matricula)
+          .single();
 
-    await supabase
-      .from('asistencias_esperadas')
-      .insert([{
-        matricula: usuario.data.matricula,
-        nombres: usuario.data.nombre,
-        apellido_paterno: usuario.data.apellido_paterno,
-        apellido_materno: usuario.data.apellido_materno,
-        grado: usuario.data.grado,
-        grupo: usuario.data.grupo,
-        fecha: fechaSeleccionada,
-        asistencia: asistencia,
-        materia: materia,
-        observaciones: observacion
-      }]);
-  }
+        if (usuario.error) continue;
 
-  alert("✅ Pase de lista guardado correctamente.");
-}
+        await supabase
+          .from('asistencias_esperadas')
+          .insert([{
+            matricula: usuario.data.matricula,
+            nombres: usuario.data.nombre,
+            apellido_paterno: usuario.data.apellido_paterno,
+            apellido_materno: usuario.data.apellido_materno,
+            grado: usuario.data.grado,
+            grupo: usuario.data.grupo,
+            fecha: fechaSeleccionada,
+            asistencia: asistencia,
+            materia: materia,
+            observaciones: observacion
+          }]);
+      }
+
+      alert("✅ Pase de lista guardado correctamente.");
+    }
   </script>
 </body>
 </html>
