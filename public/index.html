@@ -7,16 +7,13 @@
   <link rel="stylesheet" href="estilo-global.css" />
 </head>
 <body>
-
-  <!-- Encabezado-->
+    <!-- ///////////////////////////////////////////-->
   <header>
     <div class="franja bandera"></div>
     <div class="header-contenido">
       <img src="img/logo.png" alt="Logo de la escuela" class="logo">
       <h2>Escuela Secundaria N. 77 “República de Panamá”</h2>
     </div>
-
-    <!-- MH -->
     <nav>
       <button class="menu-toggle" aria-label="Abrir menú">☰</button>
       <ul class="nav-bar">
@@ -29,11 +26,8 @@
       </ul>
     </nav>
   </header>
-
-  <!-- CP-->
+    <!-- ///////////////////////////////////////////-->
   <main class="contenido-principal">
-
-    <!-- Fila 1: B+Mapa -->
     <section class="fila fila-arriba">
       <div class="tarjeta bienvenida">
         <h2>🏠 Bienvenidos a la Escuela Secundaria N.º 77 “República de Panamá”</h2>
@@ -45,8 +39,6 @@
         <iframe src="https://www.google.com/maps?q=19.383300843023903,-99.2416994574762&hl=es&z=17&output=embed" height="200" allowfullscreen loading="lazy"></iframe>
       </div>
     </section>
-
-    <!-- Fila 2: G -->
     <section class="fila fila-galeria">
       <div class="tarjeta galeria">
         <h3>📷 Galería destacada</h3>
@@ -66,8 +58,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Fila 3: N + Pforma -->
     <section class="fila fila-abajo">
       <div class="tarjeta navegacion">
         <h3>🗺️ Navegación rápida</h3>
@@ -83,22 +73,16 @@
         <p>Si eres alumno o docente, entra a tu cuenta desde el menú <strong>"Login"</strong> para ver información personalizada. Si no tienes cuenta acércate a la Academia de tecnologías.</p>
       </div>
     </section>
-
   </main>
-  
-  
-   
-  <!-- PP -->
+  <!-- ///////////////////////////////////////////-->
   <footer style="background-color: #0D1B4C; color: white; padding: 40px 20px; margin-top: 40px;">
     <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start; gap: 40px;">
-      
       <div style="flex: 1; min-width: 250px;">
         <h2>Contáctanos</h2>
         <p>Calle Gregorio López, Fuentes S/N, Sta Fé, Álvaro Obregón, 01210 Ciudad de México, CDMX</p>
         <h3>BUZÓN DE QUEJAS Y SUGERENCIAS</h3>
         <a href="#" style="display: inline-block; background-color: #FFC107; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none;">Escríbenos aquí</a>
       </div>
-
       <div style="flex: 1; min-width: 250px;">
         <form>
           <label>Nombre*</label><br>
@@ -110,40 +94,32 @@
           <button type="submit" style="margin-top: 10px; background-color: #FF5722; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Enviar</button>
         </form>
       </div>
-
     </div>
-
     <div style="text-align: center; margin-top: 40px;">
       <p>SÍGUENOS EN NUESTRAS REDES SOCIALES</p>
       <a href="https://www.facebook.com/p/Escuela-Secundaria-no-77-Rep%C3%BAblica-de-Panam%C3%A1-oficial-100064451301182/?locale=es_LA"><img src="img/facebook.png" alt="Facebook" style="height: 30px; margin: 0 10px;"></a>
       <a href="#"><img src="img/instagram.png" alt="Instagram" style="height: 30px; margin: 0 10px;"></a>
     </div>
-
     <p style="text-align: center; margin-top: 20px; font-size: 0.9em;">
       © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
     </p>
   </footer>  
-
-  <!-- Script menú H -->
+  <!-- ///////////////////////////////////////////-->
   <script>
     const toggleBtn = document.querySelector(".menu-toggle");
     const navBar = document.querySelector(".nav-bar");
-
     toggleBtn.addEventListener("click", () => {
       navBar.classList.toggle("open");
     });
   </script>
 <script>
-  // Bloqueo de clic derecho
-  document.addEventListener("contextmenu", e => e.preventDefault());
-
-  // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
-  document.addEventListener("keydown", e => {
+  document.addEventListener("contextmenu", e => e.preventDefault());// Bloqueo de clic derecho
+  document.addEventListener("keydown", e => { // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
     const bloqueadas = [
       "F12",
       "u", // Ctrl+U
       "i", // Ctrl+Shift+I
-      "c"  // Ctrl+Shift+C
+      "c"  // Ctrl+Shift+C 
     ];
     if (
       bloqueadas.includes(e.key.toLowerCase()) && 
@@ -154,6 +130,5 @@
     }
   });
 </script>
-
 </body>
 </html>
