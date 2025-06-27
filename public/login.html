@@ -6,12 +6,12 @@
   <title>Iniciar sesión</title>
   <link rel="stylesheet" href="login.css">
 </head>
+ <!--/////////////////////////////////////////////-->
 <body>
   <div class="fondo-login">
     <div class="formulario-contenedor">
       <img src="img/logo.png" alt="Logo escuela" class="logo-login">
       <h2>Inicia sesión</h2>
-
       <form id="form-login">
         <input type="text" id="usuario" placeholder="Usuario" required>
         <input type="password" id="contrasena" placeholder="Contraseña" required>
@@ -20,42 +20,35 @@
           <button type="submit" class="btn-ingresar">Ingresar</button>
         </div>
       </form>      
-
       <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
     </div>
   </div>
+  <!--/////////////////////////////////////////////-->
   <script>
     document.getElementById("form-login").addEventListener("submit", async function (event) {
       event.preventDefault();
-  
       const datos = {
         usuario: document.getElementById("usuario").value.trim(),
         contrasena: document.getElementById("contrasena").value
       };
-  
       try {
         const respuesta = await fetch("/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(datos)
         });
-  
         const resultado = await respuesta.json();
         const mensaje = document.getElementById("mensaje");
-  
         if (respuesta.ok) {
           localStorage.setItem("usuarioID", resultado.id);
 localStorage.setItem("nombreUsuario", resultado.nombre);
 localStorage.setItem("tipoUsuario", resultado.tipo);
-localStorage.setItem("matriculaUsuario", datos.usuario); // ✅ Usa el valor correcto del formulario
-
+localStorage.setItem("matriculaUsuario", datos.usuario);
 localStorage.setItem("usuarioActual", JSON.stringify({
   usuario: datos.usuario,
   tipo: resultado.tipo,
   nombre: resultado.nombre
 }));
-
-
           if (resultado.tipo === "administrativo") {
                 window.location.href = "menu-admin.html";
 } else if (resultado.tipo === "maestro") {
@@ -65,7 +58,6 @@ localStorage.setItem("usuarioActual", JSON.stringify({
 } else {
   mensaje.innerText = "❌ Tipo de usuario no reconocido: " + resultado.tipo;
 }
-
         } else {
           mensaje.innerText = "❌ " + resultado.error;
         }
@@ -74,37 +66,13 @@ localStorage.setItem("usuarioActual", JSON.stringify({
       }
     });
   </script>
-  <script>
-    // Bloqueo de clic derecho
-    document.addEventListener("contextmenu", e => e.preventDefault());
-  
-    //  Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
-    document.addEventListener("keydown", e => {
-      const bloqueadas = [
-        "F12",
-        "u", // Ctrl+U
-        "i", // Ctrl+Shift+I
-        "c"  // Ctrl+Shift+C
-      ];
-      if (
-        bloqueadas.includes(e.key.toLowerCase()) && 
-        (e.ctrlKey || e.metaKey || e.shiftKey)
-      ) {
-        e.preventDefault();
-        console.log("🚫 Acción bloqueada");
-      }
-    });
-  </script>
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-  
     const supabase = createClient(
       'https://mhnzjhelbupyifdlpngv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
     );
-  
     const matricula = localStorage.getItem("matriculaUsuario");
-  
     if (matricula) {
       const { data, error } = await supabase
         .from("usuarios")
@@ -122,6 +90,24 @@ localStorage.setItem("usuarioActual", JSON.stringify({
     } else {
       console.warn("⚠️ No se encontró matrícula en localStorage");
     }
+  </script>
+  <script>
+    document.addEventListener("contextmenu", e => e.preventDefault());// Bloqueo de clic derecho
+    document.addEventListener("keydown", e => { // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
+      const bloqueadas = [
+        "F12",
+        "u", // Ctrl+U
+        "i", // Ctrl+Shift+I
+        "c"  // Ctrl+Shift+C 
+      ];
+      if (
+        bloqueadas.includes(e.key.toLowerCase()) && 
+        (e.ctrlKey || e.metaKey || e.shiftKey)
+      ) {
+        e.preventDefault();
+        console.log("🚫 Acción bloqueada");
+      }
+    });
   </script>  
 </body>
 </html>

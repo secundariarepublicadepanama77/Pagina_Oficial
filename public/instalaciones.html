@@ -8,14 +8,13 @@
 </head>
 <body>
 
-  <!-- Encabezado -->
+  <!-- ////////////////////////////////////////////////// -->
   <header>
     <div class="franja bandera"></div>
     <div class="header-contenido">
       <img src="img/logo.png" alt="Logo de la escuela" class="logo">
       <h1>Escuela Secundaria N. 77 “República de Panamá”</h1>
     </div>
-
     <nav>
       <button class="menu-toggle" aria-label="Abrir menú">☰</button>
       <ul class="nav-bar">
@@ -29,15 +28,12 @@
     </nav>
   </header>
 
-  <!-- Contenido principal -->
+  <!-- ////////////////////////////////////////////////// -->
   <main class="contenido-principal">
     <section class="galeria-contenedor">
-
       <h2>📸 Conoce nuestras instalaciones</h2>
       <p>Explora los espacios donde crecemos, aprendemos y convivimos como comunidad educativa.</p>
-    
-      <!-- Submenú de categorías -->
-      <div class="categorias">
+          <div class="categorias">
         <button class="btn-categoria activa" data-categoria="patios">Patios</button>
         <button class="btn-categoria" data-categoria="talleres">Talleres</button>
         <button class="btn-categoria" data-categoria="salones">Salones</button>
@@ -45,23 +41,21 @@
         <button class="btn-categoria" data-categoria="laboratorio">Laboratorio</button>
       </div>
     
-      <!-- Carrusel -->
+  <!-- ////////////////////////////////////////////////// -->
       <div class="carrusel-principal">
         <button class="btn-prev">⬅️</button>
-    
         <div class="carrusel-imagenes" id="carrusel-imagenes">
-          <!-- Imágenes generadas dinámicamente -->
         </div>
-    
         <button class="btn-next">➡️</button>
       </div>
     </section>    
   </main>
 
-  <!-- Pie de página -->
+  <!-- ////////////////////////////////////////////////// -->
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
+  <!-- ////////////////////////////////////////////////// -->
 
   <script>
     const imagenes = {
@@ -86,13 +80,10 @@
         "img/taller8.jpg"
       ],
     };
-  
     let categoriaActual = "patios";
     let posicion = 0;
-  
     const carrusel = document.getElementById("carrusel-imagenes");
     const btns = document.querySelectorAll(".btn-categoria");
-  
     function mostrarCarrusel() {
       carrusel.innerHTML = "";
       imagenes[categoriaActual].forEach((src) => {
@@ -103,7 +94,6 @@
       carrusel.scrollLeft = 0;
       posicion = 0;
     }
-  
     btns.forEach(btn => {
       btn.addEventListener("click", () => {
         btns.forEach(b => b.classList.remove("activa"));
@@ -112,33 +102,25 @@
         mostrarCarrusel();
       });
     });
-  
     document.querySelector(".btn-prev").addEventListener("click", () => {
       carrusel.scrollBy({ left: -carrusel.offsetWidth / 3, behavior: "smooth" });
     });
-  
     document.querySelector(".btn-next").addEventListener("click", () => {
       carrusel.scrollBy({ left: carrusel.offsetWidth / 3, behavior: "smooth" });
     });
-  
     setInterval(() => {
       carrusel.scrollBy({ left: carrusel.offsetWidth / 3, behavior: "smooth" });
     }, 10000); // cada 10 segundos
-  
     mostrarCarrusel();
   </script>
-  
   <script>
-    // Bloqueo de clic derecho
-    document.addEventListener("contextmenu", e => e.preventDefault());
-  
-    // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
-    document.addEventListener("keydown", e => {
+    document.addEventListener("contextmenu", e => e.preventDefault());// Bloqueo de clic derecho
+    document.addEventListener("keydown", e => { // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
       const bloqueadas = [
         "F12",
         "u", // Ctrl+U
         "i", // Ctrl+Shift+I
-        "c"  // Ctrl+Shift+C
+        "c"  // Ctrl+Shift+C 
       ];
       if (
         bloqueadas.includes(e.key.toLowerCase()) && 
@@ -149,6 +131,5 @@
       }
     });
   </script>
-  
 </body>
 </html>

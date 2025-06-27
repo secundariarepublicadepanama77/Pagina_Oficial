@@ -7,16 +7,14 @@
   <link rel="stylesheet" href="estilo-global.css" />
 </head>
 <body>
-
-  <!-- Encabezado-->
+  
+<!--///////////////////////////////////-->
   <header>
     <div class="franja bandera"></div>
     <div class="header-contenido">
       <img src="img/logo.png" alt="Logo de la escuela" class="logo">
       <h1>Escuela Secundaria N. 77 “República de Panamá”</h1>
     </div>
-
-    <!-- Menú botón H -->
     <nav>
       <button class="menu-toggle" aria-label="Abrir menú">☰</button>
       <ul class="nav-bar">
@@ -30,7 +28,7 @@
     </nav>
   </header>
 
-  <!-- CP -->
+<!--///////////////////////////////////-->
   <main class="contenido-principal">
     <div class="caja-bienvenida">
       <h2>¡Bienvenidos a nuestra escuela!</h2>
@@ -41,7 +39,7 @@
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>  
 
-  <!-- Script MH -->
+  <!--///////////////////////////////////-->
   <script>
     const toggleBtn = document.querySelector(".menu-toggle");
     const navBar = document.querySelector(".nav-bar");
@@ -51,16 +49,13 @@
     });
   </script>
 <script>
-  // Bloqueo de clic derecho
-  document.addEventListener("contextmenu", e => e.preventDefault());
-
-  // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
-  document.addEventListener("keydown", e => {
+  document.addEventListener("contextmenu", e => e.preventDefault());// Bloqueo de clic derecho
+  document.addEventListener("keydown", e => { // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
     const bloqueadas = [
       "F12",
       "u", // Ctrl+U
       "i", // Ctrl+Shift+I
-      "c"  // Ctrl+Shift+C
+      "c"  // Ctrl+Shift+C 
     ];
     if (
       bloqueadas.includes(e.key.toLowerCase()) && 

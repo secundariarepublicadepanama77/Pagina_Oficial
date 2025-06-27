@@ -8,14 +8,14 @@
 </head>
 <body>
 
-  <!-- Encabezado con logo y título -->
+ <!-- ////////////////////////////////////////////////// -->
   <header>
     <div class="header-contenido">
       <img src="img/logo.png" alt="Logo de la escuela" class="logo">
       <h1>Escuela Secundaria N. 77 “República de Panamá”</h1>
     </div>
 
-    <!-- Menú con botón hamburguesa -->
+     <!-- ////////////////////////////////////////////////// -->
     <nav>
       <button class="menu-toggle" aria-label="Abrir menú">☰</button>
       <ul class="nav-bar">
@@ -29,7 +29,7 @@
     </nav>
   </header>
 
-  <!-- Contenido principal -->
+   <!-- ////////////////////////////////////////////////// -->
   <main class="contenido">
     <section class="seccion">
       <h2 class="titulo-rojo">🎯 Misión</h2>
@@ -89,7 +89,8 @@
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>  
-  <!-- Script del menú hamburguesa -->
+
+  <!-- ////////////////////////////////////////////////// -->
   <script>
     const toggleBtn = document.querySelector(".menu-toggle");
     const navBar = document.querySelector(".nav-bar");
@@ -98,28 +99,24 @@
       navBar.classList.toggle("open");
     });
   </script>
-  <script>
-    //  Bloqueo de clic derecho
-    document.addEventListener("contextmenu", e => e.preventDefault());
-  
-    //  Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
-    document.addEventListener("keydown", e => {
-      const bloqueadas = [
-        "F12",
-        "u", // Ctrl+U
-        "i", // Ctrl+Shift+I
-        "c"  // Ctrl+Shift+C
-      ];
-      if (
-        bloqueadas.includes(e.key.toLowerCase()) && 
-        (e.ctrlKey || e.metaKey || e.shiftKey)
-      ) {
-        e.preventDefault();
-        console.log("🚫 Acción bloqueada");
-      }
-    });
-  </script>
-  
+<script>
+  document.addEventListener("contextmenu", e => e.preventDefault());// Bloqueo de clic derecho
+  document.addEventListener("keydown", e => { // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
+    const bloqueadas = [
+      "F12",
+      "u", // Ctrl+U
+      "i", // Ctrl+Shift+I
+      "c"  // Ctrl+Shift+C 
+    ];
+    if (
+      bloqueadas.includes(e.key.toLowerCase()) && 
+      (e.ctrlKey || e.metaKey || e.shiftKey)
+    ) {
+      e.preventDefault();
+      console.log("🚫 Acción bloqueada");
+    }
+  });
+</script>
 </body>
 </html>
 
