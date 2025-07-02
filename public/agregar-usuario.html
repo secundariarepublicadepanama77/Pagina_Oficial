@@ -168,6 +168,7 @@
       }
     });
   </script> 
+  
   <script>
     // Bloqueo de clic derecho
     document.addEventListener("contextmenu", e => e.preventDefault());
@@ -189,6 +190,18 @@
       }
     });
   </script>
-  
+  <script>
+  function previsualizarFoto() {
+    const url = document.getElementById("foto").value;
+    const img = document.getElementById("preview-foto");
+
+    if (url.trim() !== "") {
+      img.src = url;
+      img.style.display = "block";
+    } else {
+      img.style.display = "none";
+    }
+  }
+</script>
 </body>
 </html>
