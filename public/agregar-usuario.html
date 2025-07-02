@@ -101,10 +101,13 @@
         <input type="text" id="telegram_user" name="telegram_user">
       </div>
     
-      <div class="campo">
-        <label for="foto">URL de foto (opcional)</label>
-        <input type="text" id="foto" name="foto">
-      </div>
+    <div class="campo">
+  <label for="foto">URL de foto (opcional)</label>
+  <input type="text" id="foto" name="foto" oninput="previsualizarFoto()">
+  <div style="margin-top:10px;">
+    <img id="preview-foto" src="" alt="Preview" style="max-width: 120px; display: none; border: 1px solid #ccc; padding: 4px;">
+  </div>
+</div>
     
       <div class="campo-boton">
         <button type="submit">Agregar Usuario</button>
