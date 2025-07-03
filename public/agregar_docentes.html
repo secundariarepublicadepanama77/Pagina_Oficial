@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agregar Docente</title>
+</head>
+<body>
+  <h1>Registrar datos adicionales del Docente</h1>
+
+  <label>Matrícula (usuario):</label>
+  <input type="text" id="matricula" required>
+  <button onclick="buscarUsuario()">Buscar</button>
+
+  <hr>
+
+  <form id="form-docente" onsubmit="guardarDocente(event)">
+    <label>Nombre:</label>
+    <input type="text" id="nombre" readonly><br>
+
+    <label>Academia:</label>
+    <input type="text" id="academia" required><br>
+
+    <label>Disciplina:</label>
+    <input type="text" id="disciplina" required><br>
+
+    <label>Ciclo Escolar:</label>
+    <input type="text" id="ciclo" value="2025-2026" required><br>
+
+    <label>Asesor:</label>
+    <input type="text" id="asesor" required><br>
+
+    <label>URL Foto:</label>
+    <input type="text" id="foto"><br>
+
+    <button type="submit">Guardar docente</button>
+  </form>
+
+  <script>
+    async function buscarUsuario() {
+      const matricula = document.getElementById("matricula").value.trim();
+      if (!matricula) return alert("Ingresa matrícula");
+      
+      const res = await fetch(`/api/usuarios/${matricula}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        document.getElementById("nombre").value = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+      } else {
+        alert("No se encontró usuario");
+      }
+    }
+
+    async function guardarDocente(e) {
+      e.preventDefault();
+      const docente = {
+        usuario: document.getElementById("matricula").value.trim(),
+        academia: document.getElementById("academia").value,
+        disciplina: document.getElementById("disciplina").value,
+        ciclo_escolar: document.getElementById("ciclo").value,
+        asesor: document.getElementById("asesor").value,
+        foto: document.getElementById("foto").value
+      };
+
+      const resp = await fetch('/api/docentes', {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(docente)
+      });
+
+      const result = await resp.json();
+      if (resp.ok) {
+        alert("✅ Docente guardado correctamente");
+      } else {
+        alert("❌ Error: " + result.error);
+      }
+    }
+  </script>
+</body>
+</html>
