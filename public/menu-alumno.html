@@ -78,17 +78,7 @@
       window.location.href = "login.html";
     }
   </script>
-  <script>
-    // Bloqueo básico
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", e => {
-      const bloqueadas = ["F12", "u", "i", "c"];
-      if (bloqueadas.includes(e.key.toLowerCase()) && (e.ctrlKey || e.metaKey || e.shiftKey)) {
-        e.preventDefault();
-        console.log("🚫 Acción bloqueada");
-      }
-    });
-  </script>
+<script src="Bloqueos.js"></script>
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
   
