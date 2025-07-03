@@ -123,19 +123,19 @@
   // Eliminar usuario por ID
   app.delete("/api/usuarios/:id", async (req, res) => {
     const id = req.params.id;
-
+  
     const { error } = await supabase
       .from("usuarios")
       .delete()
       .eq("id", id);
-
+  
     if (error) {
       console.error("❌ Error al eliminar usuario:", error.message);
       return res.status(500).json({ error: "Error al eliminar usuario" });
     }
-
+  
     res.json({ mensaje: "✅ Usuario eliminado correctamente" });
-  });
+  });  
 
     // 🔐 LOGIN SOLO ADMINISTRATIVOS
     app.post("/api/login-admin", (req, res) => {
