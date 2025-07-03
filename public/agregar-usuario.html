@@ -101,10 +101,13 @@
         <input type="text" id="telegram_user" name="telegram_user">
       </div>
     
-      <div class="campo">
-        <label for="foto">URL de foto (opcional)</label>
-        <input type="text" id="foto" name="foto">
-      </div>
+    <div class="campo">
+  <label for="foto">URL de foto (opcional)</label>
+  <input type="text" id="foto" name="foto" oninput="previsualizarFoto()">
+  <div style="margin-top:10px;">
+    <img id="preview-foto" src="" alt="Preview" style="max-width: 120px; display: none; border: 1px solid #ccc; padding: 4px;">
+  </div>
+</div>
     
       <div class="campo-boton">
         <button type="submit">Agregar Usuario</button>
@@ -164,28 +167,20 @@
         mensaje.style.color = "red";
       }
     });
-  </script> 
+  </script>   
+<script src="Bloqueos.js"></script>
   <script>
-    // Bloqueo de clic derecho
-    document.addEventListener("contextmenu", e => e.preventDefault());
-  
-    // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
-    document.addEventListener("keydown", e => {
-      const bloqueadas = [
-        "F12",
-        "u", // Ctrl+U
-        "i", // Ctrl+Shift+I
-        "c"  // Ctrl+Shift+C
-      ];
-      if (
-        bloqueadas.includes(e.key.toLowerCase()) && 
-        (e.ctrlKey || e.metaKey || e.shiftKey)
-      ) {
-        e.preventDefault();
-        console.log("🚫 Acción bloqueada");
-      }
-    });
-  </script>
-  
+  function previsualizarFoto() {
+    const url = document.getElementById("foto").value;
+    const img = document.getElementById("preview-foto");
+
+    if (url.trim() !== "") {
+      img.src = url;
+      img.style.display = "block";
+    } else {
+      img.style.display = "none";
+    }
+  }
+</script>
 </body>
 </html>
