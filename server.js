@@ -544,21 +544,6 @@
       res.status(500).json({ error: "Error al obtener reportes del alumno" });
     }
   });
-  /* Agregar docente*/
-  app.post("/api/docentes", async (req, res) => {
-    const { usuario, academia, disciplina, ciclo_escolar, asesor, foto } = req.body;
-  
-    const { error } = await supabase
-      .from("docentes")
-      .insert([{ usuario, academia, disciplina, ciclo_escolar, asesor, foto }]);
-  
-    if (error) {
-      console.error("❌ Error al guardar docente:", error.message);
-      return res.status(500).json({ error: "Error al guardar docente" });
-    }
-  
-    res.json({ mensaje: "✅ Docente registrado correctamente" });
-  });
   
   // Inicia el servidor
   app.listen(PORT, () => {
