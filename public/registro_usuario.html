@@ -23,12 +23,6 @@
         <option value="Administrativo">Administrativo</option>
       </select>
 
-      <div id="campos-docente" style="display:none;">
-        <input type="text" id="academia" placeholder="Academia (ej. Ciencias Sociales)" />
-        <input type="text" id="disciplina" placeholder="Disciplina (ej. Historia)" />
-        <input type="text" id="asesor" placeholder="Asesor (ej. Mtra. Pérez)" />
-      </div>
-
       <select id="grado">
         <option value=""> Grado </option>
         <option value="Primero">Primero</option>
@@ -50,6 +44,9 @@
         <option value="2024-2025">2024-2025</option>
         <option value="2025-2026">2025-2026</option>
         <option value="2026-2027">2026-2027</option>
+        <option value="2027-2028">2027-2028</option>
+        <option value="2028-2029">2028-2029</option>
+        <option value="2029-2030">2029-2030</option>
       </select> 
 
       <input type="text" id="telegram" placeholder="Usuario de Telegram (opcional)" />
@@ -70,16 +67,6 @@
 
   <script>
     const form = document.getElementById("form-registro");
-    const tipo = document.getElementById("tipo");
-    const camposDocente = document.getElementById("campos-docente");
-
-    tipo.addEventListener("change", () => {
-      if (tipo.value.toLowerCase() === "docente") {
-        camposDocente.style.display = "block";
-      } else {
-        camposDocente.style.display = "none";
-      }
-    });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -95,10 +82,7 @@
         grupo: document.getElementById("grupo").value.trim(),
         ciclo_escolar: document.getElementById("ciclo_escolar").value.trim(),
         telegram: document.getElementById("telegram").value.trim(),
-        foto: document.getElementById("foto").value.trim(),
-        academia: document.getElementById("academia").value.trim(),
-        disciplina: document.getElementById("disciplina").value.trim(),
-        asesor: document.getElementById("asesor").value.trim()
+        foto: document.getElementById("foto").value.trim()
       };
 
       const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/usuarios", {
@@ -111,12 +95,11 @@
       alert(result.mensaje || "Usuario registrado");
       if (result.success) {
         form.reset();
-        camposDocente.style.display = "none";
         document.getElementById("preview").style.display = "none";
       }
     });
 
-    // Vista previa
+    // Vista previa de imagen
     const inputFoto = document.getElementById("foto");
     const previewDiv = document.getElementById("preview");
     const previewImg = document.getElementById("foto-preview");
@@ -135,6 +118,7 @@
         errorMsg.textContent = "";
         return;
       }
+
       previewImg.onload = () => {
         previewImg.style.display = "block";
         errorMsg.textContent = "";
