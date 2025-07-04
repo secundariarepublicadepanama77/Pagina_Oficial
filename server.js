@@ -20,13 +20,14 @@
   app.use(express.json());
   app.use(express.static("public"));// Servir frontend desde /public
 
+  // ✅ agregar usuario
   app.post("/api/usuarios", async (req, res) => {
     const {
-      usuario,
-      contrasena,
       nombre,
       apellido_paterno,
       apellido_materno,
+      usuario,
+      contrasena,
       tipo,
       grado,
       grupo,
@@ -38,38 +39,39 @@
       asesor
     } = req.body;
   
-    // Validación básica
-    if (!usuario || !contrasena || !nombre || !apellido_paterno || !tipo) {
-      return res.status(400).json({ success: false, mensaje: "Faltan campos obligatorios." });
+    if (!nombre || !apellido_paterno || !usuario || !contrasena || !tipo) {
+      return res.status(400).json({ error: "Faltan campos obligatorios" });
     }
   
-    // Insertar en Supabase
     const { data, error } = await supabase
       .from("usuarios")
-      .insert([{
-        usuario,
-        contrasena,
-        nombre,
-        apellido_paterno,
-        apellido_materno,
-        tipo,
-        grado,
-        grupo,
-        ciclo_escolar,
-        telegram_user: telegram,
-        foto,
-        academia,
-        disciplina,
-        asesor
-      }]);
+      .insert([
+        {
+          nombre,
+          apellido_paterno,
+          apellido_materno,
+          usuario,
+          contrasena,
+          tipo,
+          grado,
+          grupo,
+          ciclo_escolar,
+          telegram,
+          foto,
+          academia,
+          disciplina,
+          asesor
+        }
+      ]);
   
     if (error) {
       console.error("❌ Error Supabase:", error.message);
-      return res.status(500).json({ success: false, mensaje: "Error al registrar usuario." });
+      return res.status(500).json({ error: "Error en el servidor" });
     }
   
-    res.status(201).json({ success: true, mensaje: "✅ Usuario registrado correctamente." });
-  });  
+    res.status(201).json({ mensaje: "✅ Usuario agregado correctamente" });
+  });
+  
 
   // 🔐 LOGIN DE USUARIOS
   app.post("/api/login", async (req, res) => {
