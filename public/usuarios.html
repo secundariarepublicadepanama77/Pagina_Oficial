@@ -138,59 +138,62 @@
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
-
   <script>
     let usuariosGlobal = [];
-
+    
     async function cargarUsuarios() {
-  const respuesta = await fetch("/api/usuarios");
-  const datos = await respuesta.json();
-  usuariosGlobal = datos;
-  const cuerpo = document.querySelector("#tabla-usuarios tbody");
-  cuerpo.innerHTML = "";
-  datos.forEach(usuario => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td>${usuario.id}</td>
-      <td>${usuario.nombre || ''}</td>
-      <td>${usuario.apellido_paterno || ''}</td>
-      <td>${usuario.apellido_materno || ''}</td>
-      <td>${usuario.usuario || ''}</td>
-      <td>${usuario.tipo || ''}</td>
-      <td>${usuario.grado || '-'}</td>
-      <td>${usuario.grupo || '-'}</td>
-      <td>${usuario.ciclo_escolar || '-'}</td>
-      <td>${usuario.academia || '-'}</td>
-      <td>${usuario.disciplina || '-'}</td>
-      <td>${usuario.asesor || '-'}</td>
-      <td>${usuario.telegram_user || '-'}</td>
-      <td>${usuario.foto ? `<img src="${usuario.foto}" alt="Foto" width="40">` : '-'}</td>
-      <td>
-        <button title="Eliminar usuario" onclick="eliminarUsuario(${usuario.id})">🗑️</button>
-        <button title="Editar usuario" onclick="modificarUsuario(${usuario.id})">✏️</button>
-      </td>
-    `;
-    cuerpo.appendChild(fila);
-  });
-}
-function filtrarTabla() {
-    const texto = document.getElementById("busqueda").value.toLowerCase();
-    const tipo = document.getElementById("filtro-tipo").value;
-    const ciclo = document.getElementById("filtro-ciclo").value;
-
-    let filtrados = usuariosGlobal.filter(u =>
-      (`${u.nombre} ${u.apellido_paterno} ${u.apellido_materno} ${u.usuario}`.toLowerCase().includes(texto))
-      && (tipo === "" || u.tipo === tipo)
-      && (ciclo === "" || u.ciclo_escolar === ciclo)
-    );
-
-    renderTabla(filtrados);
-  }
+      const respuesta = await fetch("/api/usuarios");
+      const datos = await respuesta.json();
+      usuariosGlobal = datos;
+      pintarTabla(usuariosGlobal);
+    }
+    
+    function pintarTabla(lista) {
+      const cuerpo = document.querySelector("#tabla-usuarios tbody");
+      cuerpo.innerHTML = "";
+      lista.forEach(usuario => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${usuario.id}</td>
+          <td>${usuario.nombre || ''}</td>
+          <td>${usuario.apellido_paterno || ''}</td>
+          <td>${usuario.apellido_materno || ''}</td>
+          <td>${usuario.usuario || ''}</td>
+          <td>${usuario.tipo || ''}</td>
+          <td>${usuario.grado || '-'}</td>
+          <td>${usuario.grupo || '-'}</td>
+          <td>${usuario.ciclo_escolar || '-'}</td>
+          <td>${usuario.academia || '-'}</td>
+          <td>${usuario.disciplina || '-'}</td>
+          <td>${usuario.asesor || '-'}</td>
+          <td>${usuario.telegram_user || '-'}</td>
+          <td>${usuario.foto ? `<img src="${usuario.foto}" alt="Foto" width="40">` : '-'}</td>
+          <td>
+            <button title="Eliminar usuario" onclick="eliminarUsuario(${usuario.id})">🗑️</button>
+            <button title="Editar usuario" onclick="modificarUsuario(${usuario.id})">✏️</button>
+          </td>
+        `;
+        cuerpo.appendChild(fila);
+      });
+    }
+    
+    function filtrarTabla() {
+      const texto = document.getElementById("busqueda").value.toLowerCase();
+      const tipo = document.getElementById("filtro-tipo").value;
+      const ciclo = document.getElementById("filtro-ciclo").value;
+    
+      let filtrados = usuariosGlobal.filter(u =>
+        (`${u.nombre} ${u.apellido_paterno} ${u.apellido_materno} ${u.usuario}`.toLowerCase().includes(texto))
+        && (tipo === "" || u.tipo === tipo)
+        && (ciclo === "" || u.ciclo_escolar === ciclo)
+      );
+    
+      pintarTabla(filtrados);
+    }
+    
     async function eliminarUsuario(id) {
       if (confirm("¿Estás seguro de eliminar este usuario?")) {
-        const respuesta = await fetch(`/api/usuarios/${id}`, {
-          method: "DELETE"
-        });
+        const respuesta = await fetch(`/api/usuarios/${id}`, { method: "DELETE" });
         const resultado = await respuesta.json();
         if (respuesta.ok) {
           alert("Usuario eliminado");
@@ -200,23 +203,23 @@ function filtrarTabla() {
         }
       }
     }
-
+    
     function modificarUsuario(id) {
       const usuario = usuariosGlobal.find(u => u.id === id);
       if (!usuario) return alert("Usuario no encontrado");
-
+    
       document.getElementById("edit-id").value = usuario.id;
       document.getElementById("edit-nombre").value = usuario.nombre;
       document.getElementById("edit-usuario").value = usuario.usuario;
       document.getElementById("edit-tipo").value = usuario.tipo;
-
+    
       document.getElementById("modal-editar").style.display = "flex";
     }
-
+    
     function cerrarModal() {
       document.getElementById("modal-editar").style.display = "none";
     }
-
+    
     document.getElementById("form-editar-usuario").addEventListener("submit", async function(e) {
       e.preventDefault();
       const id = document.getElementById("edit-id").value;
@@ -225,15 +228,15 @@ function filtrarTabla() {
         usuario: document.getElementById("edit-usuario").value,
         tipo: document.getElementById("edit-tipo").value
       };
-
+    
       const respuesta = await fetch(`/api/usuarios/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
       });
-
+    
       const resultado = await respuesta.json();
-
+    
       if (respuesta.ok) {
         alert("✅ Usuario actualizado");
         cerrarModal();
@@ -242,8 +245,9 @@ function filtrarTabla() {
         alert("❌ Error: " + resultado.error);
       }
     });
+    
     window.onload = cargarUsuarios;
-  </script>
+    </script>    
 <script src="Bloqueos.js"></script>
 </body>
 </html>
