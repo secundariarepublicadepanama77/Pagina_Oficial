@@ -369,5 +369,49 @@ footer.pie {
   font-size: 1.1rem;
   border-radius: 8px;
 }
+.panel-docente {
+  margin: 20px auto;
+  max-width: 800px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.datos-docente {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.foto-docente {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #0A4C68;
+}
+
+.info-docente p {
+  margin: 6px 0;
+  font-size: 16px;
+}
+
+.panel-extra {
+  margin: 20px auto;
+  max-width: 800px;
+  background: #e8f4f8;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.cuadro-horario {
+  min-height: 100px;
+  border: 2px dashed #0A4C68;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
+  color: #555;
+}
 
 

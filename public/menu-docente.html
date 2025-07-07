@@ -25,10 +25,26 @@
   </nav>
 
   <main class="contenido-menu">
-    <p id="saludo"></p>
-    <section class="panel-resumen">
-      <h2>📊 Tus datos generales</h2>
-      <div id="datos-docente" style="margin-top:15px;"></div>
+    <section class="panel-docente">
+      <h2 id="saludo">👋 Bienvenido, </h2>
+      <div class="datos-docente">
+        <img id="foto" src="img/default-user.png" alt="Foto" class="foto-docente">
+        <div class="info-docente">
+          <p><strong>Matrícula:</strong> <span id="matricula"></span></p>
+          <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+          <p><strong>Academia:</strong> <span id="academia"></span></p>
+          <p><strong>Disciplina:</strong> <span id="disciplina"></span></p>
+          <p><strong>Ciclo Escolar:</strong> <span id="ciclo"></span></p>
+          <p><strong>Asesor:</strong> <span id="asesor"></span></p>
+        </div>
+      </div>
+    </section>
+  
+    <section class="panel-extra">
+      <h3>📅 Tu Horario o Próximos Módulos</h3>
+      <div class="cuadro-horario">
+        <p>Aquí puedes mostrar tu horario o módulos futuros.</p>
+      </div>
     </section>
   </main>
 
