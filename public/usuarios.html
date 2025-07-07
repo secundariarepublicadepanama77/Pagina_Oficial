@@ -173,6 +173,19 @@
     cuerpo.appendChild(fila);
   });
 }
+function filtrarTabla() {
+    const texto = document.getElementById("busqueda").value.toLowerCase();
+    const tipo = document.getElementById("filtro-tipo").value;
+    const ciclo = document.getElementById("filtro-ciclo").value;
+
+    let filtrados = usuariosGlobal.filter(u =>
+      (`${u.nombre} ${u.apellido_paterno} ${u.apellido_materno} ${u.usuario}`.toLowerCase().includes(texto))
+      && (tipo === "" || u.tipo === tipo)
+      && (ciclo === "" || u.ciclo_escolar === ciclo)
+    );
+
+    renderTabla(filtrados);
+  }
     async function eliminarUsuario(id) {
       if (confirm("¿Estás seguro de eliminar este usuario?")) {
         const respuesta = await fetch(`/api/usuarios/${id}`, {
@@ -229,19 +242,6 @@
         alert("❌ Error: " + resultado.error);
       }
     });
-    function filtrarTabla() {
-    const texto = document.getElementById("busqueda").value.toLowerCase();
-    const tipo = document.getElementById("filtro-tipo").value;
-    const ciclo = document.getElementById("filtro-ciclo").value;
-
-    let filtrados = usuariosGlobal.filter(u =>
-      (`${u.nombre} ${u.apellido_paterno} ${u.apellido_materno} ${u.usuario}`.toLowerCase().includes(texto))
-      && (tipo === "" || u.tipo === tipo)
-      && (ciclo === "" || u.ciclo_escolar === ciclo)
-    );
-
-    renderTabla(filtrados);
-  }
     window.onload = cargarUsuarios;
   </script>
 <script src="Bloqueos.js"></script>
