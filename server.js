@@ -547,6 +547,25 @@
       res.status(500).json({ error: "Error al obtener reportes del alumno" });
     }
   });
+  app.get("/api/usuarios/:matricula", async (req, res) => {
+    const matricula = req.params.matricula;
+    try {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("usuario", matricula)
+        .single();
+  
+      if (error || !data) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+  
+      res.json(data);
+    } catch (err) {
+      console.error("Error en /api/usuarios/:matricula", err);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  });
   // Inicia el servidor
   app.listen(PORT, () => {
     console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
