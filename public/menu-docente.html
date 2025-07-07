@@ -27,21 +27,20 @@
   <main class="contenido-menu">
     <p id="saludo"></p>
     <section class="panel-resumen">
-      <h2>📊 Tu Historial en la Escuela</h2>
-
-
-
+      <h2>📊 Tus datos generales</h2>
+      <div id="datos-docente" style="margin-top:15px;"></div>
+    </section>
   </main>
-
 
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
   <script>
-    // Validar sesión y tipo de usuario
+    // Validar sesión
     const nombre = localStorage.getItem("nombreUsuario");
     const tipo = localStorage.getItem("tipoUsuario");
+    const usuarioMatricula = localStorage.getItem("usuarioMatricula");
 
     if (!nombre || tipo !== "maestro") {
       alert("Acceso denegado. Redirigiendo al login.");
@@ -50,12 +49,42 @@
       document.getElementById("saludo").innerText = "👋 Bienvenido, " + nombre + ".";
     }
 
+    // Obtener datos del docente
+    async function cargarDatosDocente() {
+      if (!usuarioMatricula) return;
+
+      try {
+        const respuesta = await fetch(`/api/usuarios/${usuarioMatricula}`);
+        if (!respuesta.ok) throw new Error("No se pudo cargar el docente");
+
+        const docente = await respuesta.json();
+
+        document.getElementById("datos-docente").innerHTML = `
+          <div style="display:flex; align-items:center; gap:20px;">
+            <img src="${docente.foto || 'img/default.png'}" alt="Foto" style="width:100px;height:100px;border-radius:50%;object-fit:cover;">
+            <div>
+              <p><strong>Matrícula:</strong> ${docente.usuario}</p>
+              <p><strong>Nombre:</strong> ${docente.nombre} ${docente.apellido_paterno} ${docente.apellido_materno}</p>
+              <p><strong>Academia:</strong> ${docente.academia || '-'}</p>
+              <p><strong>Disciplina:</strong> ${docente.disciplina || '-'}</p>
+              <p><strong>Ciclo escolar:</strong> ${docente.ciclo_escolar || '-'}</p>
+              <p><strong>Asesor:</strong> ${docente.asesor || '-'}</p>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        console.error(err);
+        document.getElementById("datos-docente").innerText = "❌ No se pudieron cargar los datos del docente.";
+      }
+    }
+
     function cerrarSesion() {
       localStorage.clear();
       window.location.href = "login.html";
     }
+
+    window.onload = cargarDatosDocente;
   </script>
 <script src="Bloqueos.js"></script>
 </body>
 </html>
-
