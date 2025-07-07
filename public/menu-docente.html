@@ -25,14 +25,20 @@
   </nav>
 
   <main class="contenido-menu">
-    <p id="saludo"></p>
-    <section class="panel-resumen">
-      <h2>📊 Tus datos generales</h2>
-      <div id="datos-docente" style="margin-top: 15px;">
-        <!-- Aquí el script insertará los datos -->
+    <section class="panel-docente">
+      <h2 id="saludo">👋 Bienvenido, </h2>
+      <div class="datos-docente">
+        <img id="foto" src="img/default-user.png" alt="Foto del docente" class="foto-docente">
+        <div class="info-docente">
+          <p><strong>Matrícula:</strong> <span id="matricula">-</span></p>
+          <p><strong>Nombre:</strong> <span id="nombre">-</span></p>
+          <p><strong>Academia:</strong> <span id="academia">-</span></p>
+          <p><strong>Disciplina:</strong> <span id="disciplina">-</span></p>
+          <p><strong>Ciclo Escolar:</strong> <span id="ciclo">-</span></p>
+          <p><strong>Asesor:</strong> <span id="asesor">-</span></p>
+        </div>
       </div>
     </section>
-  
     <section class="panel-extra" style="margin-top:30px;">
       <h3>📅 Tu horario</h3>
       <div class="cuadro-horario" style="
@@ -55,54 +61,49 @@
   </footer>
 
   <script>
-    // Validar sesión
     const nombre = localStorage.getItem("nombreUsuario");
     const tipo = localStorage.getItem("tipoUsuario");
     const usuarioMatricula = localStorage.getItem("usuarioMatricula");
-
+  
     if (!nombre || tipo !== "maestro") {
       alert("Acceso denegado. Redirigiendo al login.");
       window.location.href = "login.html";
     } else {
       document.getElementById("saludo").innerText = "👋 Bienvenido, " + nombre + ".";
     }
-
-    // Obtener datos del docente
+  
     async function cargarDatosDocente() {
       if (!usuarioMatricula) return;
-
+  
       try {
         const respuesta = await fetch(`/api/usuarios/${usuarioMatricula}`);
         if (!respuesta.ok) throw new Error("No se pudo cargar el docente");
-
+  
         const docente = await respuesta.json();
-
-        document.getElementById("datos-docente").innerHTML = `
-          <div style="display:flex; align-items:center; gap:20px;">
-            <img src="${docente.foto || 'img/default.png'}" alt="Foto" style="width:100px;height:100px;border-radius:50%;object-fit:cover;">
-            <div>
-              <p><strong>Matrícula:</strong> ${docente.usuario}</p>
-              <p><strong>Nombre:</strong> ${docente.nombre} ${docente.apellido_paterno} ${docente.apellido_materno}</p>
-              <p><strong>Academia:</strong> ${docente.academia || '-'}</p>
-              <p><strong>Disciplina:</strong> ${docente.disciplina || '-'}</p>
-              <p><strong>Ciclo escolar:</strong> ${docente.ciclo_escolar || '-'}</p>
-              <p><strong>Asesor:</strong> ${docente.asesor || '-'}</p>
-            </div>
-          </div>
-        `;
+  
+        // Aquí usamos tus spans por ID
+        document.getElementById("foto").src = docente.foto || "img/default-user.png";
+        document.getElementById("matricula").innerText = docente.usuario || "-";
+        document.getElementById("nombre").innerText = `${docente.nombre || ""} ${docente.apellido_paterno || ""} ${docente.apellido_materno || ""}`.trim();
+        document.getElementById("academia").innerText = docente.academia || "-";
+        document.getElementById("disciplina").innerText = docente.disciplina || "-";
+        document.getElementById("ciclo").innerText = docente.ciclo_escolar || "-";
+        document.getElementById("asesor").innerText = docente.asesor || "-";
+  
       } catch (err) {
         console.error(err);
-        document.getElementById("datos-docente").innerText = "❌ No se pudieron cargar los datos del docente.";
+        alert("❌ No se pudieron cargar los datos del docente.");
       }
     }
-
+  
     function cerrarSesion() {
       localStorage.clear();
       window.location.href = "login.html";
     }
-
+  
     window.onload = cargarDatosDocente;
   </script>
+  
 <script src="Bloqueos.js"></script>
 </body>
 </html>
