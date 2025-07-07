@@ -62,7 +62,7 @@
   <script>
     const nombre = localStorage.getItem("nombreUsuario");
     const tipo = localStorage.getItem("tipoUsuario");
-    const usuarioMatricula = localStorage.getItem("usuarioMatricula"); // <-- AQUI
+    const usuarioMatricula = localStorage.getItem("usuarioMatricula");
     
     if (!nombre || tipo !== "maestro") {
       alert("Acceso denegado. Redirigiendo al login.");
@@ -75,14 +75,14 @@
       if (!usuarioMatricula) return;
     
       try {
-        const respuesta = await fetch(`/api/usuarios/${usuarioMatricula}`);
+        const respuesta = await fetch(`https://pagina-oficial-amhj.onrender.com/api/usuarios/${usuarioMatricula}`);
         if (!respuesta.ok) throw new Error("No se pudo cargar el docente");
     
         const docente = await respuesta.json();
     
-        document.getElementById("foto").src = docente.foto || "img/default-user.png";
+        document.getElementById("foto").src = docente.foto || "https://via.placeholder.com/150";
         document.getElementById("matricula").innerText = docente.usuario || "-";
-        document.getElementById("nombre").innerText = `${docente.nombre || ""} ${docente.apellido_paterno || ""} ${docente.apellido_materno || ""}`.trim();
+        document.getElementById("nombre").innerText = `${(docente.nombre || "")} ${(docente.apellido_paterno || "")} ${(docente.apellido_materno || "")}`.trim();
         document.getElementById("academia").innerText = docente.academia || "-";
         document.getElementById("disciplina").innerText = docente.disciplina || "-";
         document.getElementById("ciclo").innerText = docente.ciclo_escolar || "-";
@@ -101,7 +101,7 @@
     
     window.onload = cargarDatosDocente;
     </script>
-      
+    
 <script src="Bloqueos.js"></script>
 </body>
 </html>
