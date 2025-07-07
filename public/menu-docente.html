@@ -25,71 +25,83 @@
   </nav>
 
   <main class="contenido-menu">
-    <section class="panel-docente">
-      <h2 id="saludo">👋 Bienvenido, </h2>
-      <div class="datos-docente">
-        <img id="foto" src="img/default-user.png" alt="Foto" class="foto-docente">
-        <div class="info-docente">
-          <p><strong>Matrícula:</strong> <span id="matricula"></span></p>
-          <p><strong>Nombre:</strong> <span id="nombre"></span></p>
-          <p><strong>Academia:</strong> <span id="academia"></span></p>
-          <p><strong>Disciplina:</strong> <span id="disciplina"></span></p>
-          <p><strong>Ciclo Escolar:</strong> <span id="ciclo"></span></p>
-          <p><strong>Asesor:</strong> <span id="asesor"></span></p>
-        </div>
+    <p id="saludo"></p>
+    <section class="panel-resumen">
+      <h2>📊 Tus datos generales</h2>
+      <div id="datos-docente" style="margin-top: 15px;">
+        <!-- Aquí el script insertará los datos -->
       </div>
     </section>
   
-    <section class="panel-extra">
-      <h3>📅 Tu Horario o Próximos Módulos</h3>
-      <div class="cuadro-horario">
-        <p>Aquí puedes mostrar tu horario o módulos futuros.</p>
+    <section class="panel-extra" style="margin-top:30px;">
+      <h3>📅 Tu horario o próximos módulos</h3>
+      <div class="cuadro-horario" style="
+        min-height:100px;
+        border:2px dashed #0A4C68;
+        padding:15px;
+        border-radius:8px;
+        color:#555;
+        font-style:italic;
+        display:flex;
+        align-items:center;
+        justify-content:center;">
+        Aquí aparecerá tu horario próximamente...
       </div>
     </section>
-  </main>
+  </main>  
 
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
   <script>
+    // Validar sesión
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+    const usuarioMatricula = localStorage.getItem("usuarioMatricula");
+
+    if (!nombre || tipo !== "maestro") {
+      alert("Acceso denegado. Redirigiendo al login.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("saludo").innerText = "👋 Bienvenido, " + nombre + ".";
+    }
+
+    // Obtener datos del docente
     async function cargarDatosDocente() {
-      const matricula = localStorage.getItem("usuarioMatricula"); // o el nombre de tu localStorage
-      const tipo = localStorage.getItem("tipoUsuario");
-  
-      if (!matricula || tipo !== "maestro") {
-        alert("Acceso denegado. Redirigiendo al login.");
-        window.location.href = "login.html";
-        return;
-      }
-  
+      if (!usuarioMatricula) return;
+
       try {
-        const respuesta = await fetch(`/api/usuarios/${matricula}`);
-        const datos = await respuesta.json();
-  
-        if (respuesta.ok) {
-          document.getElementById("saludo").textContent = `👋 Bienvenido, ${datos.nombre}`;
-          document.getElementById("foto").src = datos.foto || "img/default-user.png";
-          document.getElementById("matricula").textContent = datos.usuario || '-';
-          document.getElementById("nombre").textContent = `${datos.nombre} ${datos.apellido_paterno} ${datos.apellido_materno}`;
-          document.getElementById("academia").textContent = datos.academia || '-';
-          document.getElementById("disciplina").textContent = datos.disciplina || '-';
-          document.getElementById("ciclo").textContent = datos.ciclo_escolar || '-';
-          document.getElementById("asesor").textContent = datos.asesor || '-';
-        } else {
-          console.error("No se encontraron datos del docente.");
-        }
+        const respuesta = await fetch(`/api/usuarios/${usuarioMatricula}`);
+        if (!respuesta.ok) throw new Error("No se pudo cargar el docente");
+
+        const docente = await respuesta.json();
+
+        document.getElementById("datos-docente").innerHTML = `
+          <div style="display:flex; align-items:center; gap:20px;">
+            <img src="${docente.foto || 'img/default.png'}" alt="Foto" style="width:100px;height:100px;border-radius:50%;object-fit:cover;">
+            <div>
+              <p><strong>Matrícula:</strong> ${docente.usuario}</p>
+              <p><strong>Nombre:</strong> ${docente.nombre} ${docente.apellido_paterno} ${docente.apellido_materno}</p>
+              <p><strong>Academia:</strong> ${docente.academia || '-'}</p>
+              <p><strong>Disciplina:</strong> ${docente.disciplina || '-'}</p>
+              <p><strong>Ciclo escolar:</strong> ${docente.ciclo_escolar || '-'}</p>
+              <p><strong>Asesor:</strong> ${docente.asesor || '-'}</p>
+            </div>
+          </div>
+        `;
       } catch (err) {
-        console.error("Error al cargar datos del docente:", err);
+        console.error(err);
+        document.getElementById("datos-docente").innerText = "❌ No se pudieron cargar los datos del docente.";
       }
     }
-  
+
     function cerrarSesion() {
       localStorage.clear();
       window.location.href = "login.html";
     }
-  
-    cargarDatosDocente();
+
+    window.onload = cargarDatosDocente;
   </script>
 <script src="Bloqueos.js"></script>
 </body>
