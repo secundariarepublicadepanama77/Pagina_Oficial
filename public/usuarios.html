@@ -139,15 +139,13 @@
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
   <script>
-    let usuariosGlobal = [];
-    
+    let usuariosGlobal = []; 
     async function cargarUsuarios() {
       const respuesta = await fetch("/api/usuarios");
       const datos = await respuesta.json();
       usuariosGlobal = datos;
       pintarTabla(usuariosGlobal);
     }
-    
     function pintarTabla(lista) {
       const cuerpo = document.querySelector("#tabla-usuarios tbody");
       cuerpo.innerHTML = "";
@@ -176,21 +174,17 @@
         cuerpo.appendChild(fila);
       });
     }
-    
     function filtrarTabla() {
       const texto = document.getElementById("busqueda").value.toLowerCase();
       const tipo = document.getElementById("filtro-tipo").value;
-      const ciclo = document.getElementById("filtro-ciclo").value;
-    
+      const ciclo = document.getElementById("filtro-ciclo").value; 
       let filtrados = usuariosGlobal.filter(u =>
         (`${u.nombre} ${u.apellido_paterno} ${u.apellido_materno} ${u.usuario}`.toLowerCase().includes(texto))
         && (tipo === "" || u.tipo === tipo)
         && (ciclo === "" || u.ciclo_escolar === ciclo)
       );
-    
       pintarTabla(filtrados);
     }
-    
     async function eliminarUsuario(id) {
       if (confirm("¿Estás seguro de eliminar este usuario?")) {
         const respuesta = await fetch(`/api/usuarios/${id}`, { method: "DELETE" });
@@ -203,23 +197,18 @@
         }
       }
     }
-    
     function modificarUsuario(id) {
       const usuario = usuariosGlobal.find(u => u.id === id);
       if (!usuario) return alert("Usuario no encontrado");
-    
       document.getElementById("edit-id").value = usuario.id;
       document.getElementById("edit-nombre").value = usuario.nombre;
       document.getElementById("edit-usuario").value = usuario.usuario;
       document.getElementById("edit-tipo").value = usuario.tipo;
-    
       document.getElementById("modal-editar").style.display = "flex";
     }
-    
     function cerrarModal() {
       document.getElementById("modal-editar").style.display = "none";
     }
-    
     document.getElementById("form-editar-usuario").addEventListener("submit", async function(e) {
       e.preventDefault();
       const id = document.getElementById("edit-id").value;
@@ -228,15 +217,12 @@
         usuario: document.getElementById("edit-usuario").value,
         tipo: document.getElementById("edit-tipo").value
       };
-    
       const respuesta = await fetch(`/api/usuarios/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos)
       });
-    
       const resultado = await respuesta.json();
-    
       if (respuesta.ok) {
         alert("✅ Usuario actualizado");
         cerrarModal();
