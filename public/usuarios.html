@@ -70,6 +70,21 @@
   </nav>
 
   <main class="contenido-menu">
+    <div style="margin: 1rem 0;">
+      🔍 <input type="text" id="busqueda" placeholder="Buscar usuario..." oninput="filtrarTabla()">
+      <select id="filtro-tipo" onchange="filtrarTabla()">
+        <option value="">Todos los tipos</option>
+        <option value="maestro">Maestro</option>
+        <option value="alumno">Alumno</option>
+        <option value="administrativo">Administrativo</option>
+      </select>
+      <select id="filtro-ciclo" onchange="filtrarTabla()">
+        <option value="">Todos los ciclos</option>
+        <option value="2024-2025">2024-2025</option>
+        <option value="2025-2026">2025-2026</option>
+        <option value="2026-2027">2026-2027</option>
+      </select>
+    </div>    
     <div class="tabla-contenedor">
       <h2>Lista de usuarios registrados</h2>
       <table id="tabla-usuarios">
@@ -214,7 +229,19 @@
         alert("❌ Error: " + resultado.error);
       }
     });
+    function filtrarTabla() {
+    const texto = document.getElementById("busqueda").value.toLowerCase();
+    const tipo = document.getElementById("filtro-tipo").value;
+    const ciclo = document.getElementById("filtro-ciclo").value;
 
+    let filtrados = usuariosGlobal.filter(u =>
+      (`${u.nombre} ${u.apellido_paterno} ${u.apellido_materno} ${u.usuario}`.toLowerCase().includes(texto))
+      && (tipo === "" || u.tipo === tipo)
+      && (ciclo === "" || u.ciclo_escolar === ciclo)
+    );
+
+    renderTabla(filtrados);
+  }
     window.onload = cargarUsuarios;
   </script>
 <script src="Bloqueos.js"></script>
