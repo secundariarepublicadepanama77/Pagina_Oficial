@@ -61,53 +61,39 @@
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
-  <script>
-    const nombre = localStorage.getItem("nombreUsuario");
-    const tipo = localStorage.getItem("tipoUsuario");
-    if (!nombre || tipo !== "maestro") {
-      alert("Acceso denegado. Redirigiendo al login.");
-      window.location.href = "login.html";
-    } else {
-      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
-    }
-    function cerrarSesion() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    } 
-  </script>
-    <script src="Bloqueos.js"></script>    
-    <script type="module">
-      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-    
-      const supabase = createClient(
-        "https://mhnzjhelbupyifdlpngv.supabase.co", // Tu URL de Supabase
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
-      );
-    
-      const matricula = localStorage.getItem("matriculaUsuario");
-    
-      if (matricula) {
-        const { data, error } = await supabase
-          .from("usuarios")
-          .select("*")
-          .eq("usuario", matricula)
-          .single();
-    
-        if (error || !data) {
-          console.error("❌ Error al obtener datos:", error?.message || "No encontrado");
-        } else {
-          console.log("✅ Datos del Docente:", data);
-          document.getElementById("matriculaDocente").textContent = data.usuario || "—";
-          document.getElementById("nombreDocente").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
-          document.getElementById("Academia").textContent = data.academia || "—";
-          document.getElementById("Disciplina").textContent = data.disciplina || "—";
-          document.getElementById("Asesor").textContent = data.asesor || "—";
-          document.getElementById("cicloAlumno").textContent = data.ciclo_escolar || "—";
-          document.getElementById("fotoAlumno").src = data.foto || "img/default.jpg";
-        }
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  
+    const supabase = createClient(
+      "https://mhnzjhelbupyifdlpngv.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    );
+  
+    const matricula = localStorage.getItem("matriculaUsuario");
+  
+    if (matricula) {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("usuario", matricula)
+        .single();
+  
+      if (error || !data) {
+        console.error("❌ Error al obtener datos:", error?.message || "No encontrado");
+      } else {
+        console.log("✅ Datos del Docente:", data);
+  
+        document.getElementById("matriculaDocente").textContent = data.usuario || "—";
+        document.getElementById("nombreDocente").textContent = `${data.nombre || ""} ${data.apellido_paterno || ""} ${data.apellido_materno || ""}`.trim();
+        document.getElementById("academiaDocente").textContent = data.academia || "—";
+        document.getElementById("disciplinaDocente").textContent = data.disciplina || "—";
+        document.getElementById("cicloDocente").textContent = data.ciclo_escolar || "—";
+        document.getElementById("asesorDocente").textContent = data.asesor || "—";
+        document.getElementById("fotoDocente").src = data.foto || "img/default.jpg";
+      }
     } else {
       console.warn("⚠️ No hay matrícula almacenada");
-    }    
-    </script>
+    }
+  </script>  
 </body>
 </html>
