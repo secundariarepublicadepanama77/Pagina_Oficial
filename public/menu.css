@@ -352,12 +352,20 @@ footer.pie {
   margin: 0 auto;
 }
 
-.panel-datos li {
-  background: #fff;
-  padding: 0.8rem;
-  border-bottom: 1px solid #ddd;
-  font-size: 1.1rem;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
+
+.panel-datos {
+  min-height: 100vh; /* 100% del alto visible */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 /* Mensaje dinámico */
 .panel-mensaje {
