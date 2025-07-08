@@ -24,7 +24,7 @@
     <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
   </nav>
   <!-- Contenido principal -->
-  <<!-- Se mantiene DOCTYPE y encabezado como está -->
+  <<!-- Se mantiene tu DOCTYPE y encabezado como está -->
 <main class="contenido-menu">
   <p id="saludo"></p>
 
@@ -71,7 +71,7 @@
       alert("Sesión no válida. Redirigiendo al login.");
       window.location.href = "login.html";
     } else {
-      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel                                                         .";
+      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
     }
     function cerrarSesion() {
       localStorage.clear();
