@@ -361,7 +361,7 @@ footer.pie {
 
 /* Mensaje dinámico */
 .panel-mensaje {
-  max-width: 500px;
+  max-width: 5000px;
   margin: 2rem auto;
   background: #e8f5e9;
   border-left: 6px solid #4caf50;
