@@ -352,18 +352,14 @@ footer.pie {
   margin: 0 auto;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 .panel-datos {
-  min-height: 100vh; /* 100% del alto visible */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  background: white;
+  padding: 30px;
+  border-radius: 0;    /* para quitar esquinas redondeadas */
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 
