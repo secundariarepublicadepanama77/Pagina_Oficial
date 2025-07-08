@@ -21,7 +21,7 @@
     <a class="disabled">📝 Próximamente</a>
     <a class="disabled">👥 Próximamente</a>
     <a class="disabled">🔒 Próximamente</a>
-    <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+    <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
   </nav>
   <main class="contenido-menu">
     <p id="saludo"></p>
@@ -68,7 +68,7 @@
       alert("Acceso denegado. Redirigiendo al login.");
       window.location.href = "login.html";
     } else {
-      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
+      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.                      ";
     }
     function cerrarSesion() {
       localStorage.clear();
