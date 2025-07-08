@@ -75,44 +75,39 @@
       window.location.href = "login.html";
     } 
   </script>
-    <script src="Bloqueos.js"></script>
-
-
-
-
-
-
+    <script src="Bloqueos.js"></script>    
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     
-
-    <script>
-    async function cargarDatosDocente() {
-      if (!usuarioMatricula) return;
+      const supabase = createClient(
+        "https://mhnzjhelbupyifdlpngv.supabase.co", // Tu URL de Supabase
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
+      );
     
-      try {
-        const respuesta = await fetch(`https://pagina-oficial-amhj.onrender.com/api/usuarios/${usuarioMatricula}`);
-        if (!respuesta.ok) throw new Error("No se pudo cargar el docente");
+      const matricula = localStorage.getItem("matriculaUsuario");
     
-        const docente = await respuesta.json();
+      if (matricula) {
+        const { data, error } = await supabase
+          .from("usuarios")
+          .select("*")
+          .eq("usuario", matricula)
+          .single();
     
-        document.getElementById("foto").src = docente.foto || "https://via.placeholder.com/150";
-        document.getElementById("matricula").innerText = docente.usuario || "-";
-        document.getElementById("nombre").innerText = `${(docente.nombre || "")} ${(docente.apellido_paterno || "")} ${(docente.apellido_materno || "")}`.trim();
-        document.getElementById("academia").innerText = docente.academia || "-";
-        document.getElementById("disciplina").innerText = docente.disciplina || "-";
-        document.getElementById("ciclo").innerText = docente.ciclo_escolar || "-";
-        document.getElementById("asesor").innerText = docente.asesor || "-";
-    
-      } catch (err) {
-        console.error(err);
-        alert("❌ No se pudieron cargar los datos del docente.");
-      }
-    }
-    
-
-    
-    window.onload = cargarDatosDocente;
+        if (error || !data) {
+          console.error("❌ Error al obtener datos:", error?.message || "No encontrado");
+        } else {
+          console.log("✅ Datos del Docente:", data);
+          document.getElementById("matriculaDocente").textContent = data.usuario || "—";
+          document.getElementById("nombreDocente").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+          document.getElementById("Academia").textContent = data.academia || "—";
+          document.getElementById("Disciplina").textContent = data.disciplina || "—";
+          document.getElementById("Asesor").textContent = data.asesor || "—";
+          document.getElementById("cicloAlumno").textContent = data.ciclo_escolar || "—";
+          document.getElementById("fotoAlumno").src = data.foto || "img/default.jpg";
+        }
+    } else {
+      console.warn("⚠️ No hay matrícula almacenada");
+    }    
     </script>
-    
-
 </body>
 </html>
