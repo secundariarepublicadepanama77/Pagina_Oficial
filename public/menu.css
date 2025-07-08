@@ -352,16 +352,12 @@ footer.pie {
   margin: 0 auto;
 }
 
-.panel-datos {
-  background: white;
-  padding: 30px;
-  border-radius: 0;    /* para quitar esquinas redondeadas */
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  box-sizing: border-box;
+.panel-datos li {
+  background: #fff;
+  padding: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.1rem;
 }
-
 
 /* Mensaje dinámico */
 .panel-mensaje {
