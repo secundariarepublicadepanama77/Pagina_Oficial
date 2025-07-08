@@ -75,40 +75,40 @@
       window.location.href = "login.html";
     } 
   </script>
-    <script src="Bloqueos.js"></script>    
-    <script type="module">
-      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-    
-      const supabase = createClient(
-        "https://mhnzjhelbupyifdlpngv.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-      );
-    
-      const matricula = localStorage.getItem("matriculaUsuario");
-    
-      if (matricula) {
-        const { data, error } = await supabase
-          .from("usuarios")
-          .select("*")
-          .eq("usuario", matricula)
-          .single();
-    
-        if (error || !data) {
-          console.error("❌ Error al obtener datos:", error?.message || "No encontrado");
-        } else {
-          console.log("✅ Datos del Docente:", data);
-    
-          document.getElementById("matriculaDocente").textContent = data.usuario || "—";
-          document.getElementById("nombreDocente").textContent = `${data.nombre || ""} ${data.apellido_paterno || ""} ${data.apellido_materno || ""}`.trim();
-          document.getElementById("academiaDocente").textContent = data.academia || "—";
-          document.getElementById("disciplinaDocente").textContent = data.disciplina || "—";
-          document.getElementById("cicloDocente").textContent = data.ciclo_escolar || "—";
-          document.getElementById("asesorDocente").textContent = data.asesor || "—";
-          document.getElementById("fotoDocente").src = data.foto || "img/default.jpg";
-        }
-      } else {
-        console.warn("⚠️ No hay matrícula almacenada");
-      }
-    </script>    
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  
+  const supabase = createClient(
+    "https://mhnzjhelbupyifdlpngv.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  );
+  
+  const matricula = localStorage.getItem("matriculaUsuario");
+  if (!matricula) {
+    console.warn("⚠️ No hay matrícula en localStorage");
+  } else {
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("usuario", matricula)
+      .single();
+  
+    if (error || !data) {
+      console.error("❌ No se encontraron datos:", error?.message);
+    } else {
+      console.log("✅ Datos recibidos:", data);
+      // PONEMOS SOLO LO NECESARIO, SIN NULOS
+      if (data.usuario) document.getElementById("matriculaDocente").textContent = data.usuario;
+      if (data.nombre || data.apellido_paterno || data.apellido_materno)
+        document.getElementById("nombreDocente").textContent =
+          `${data.nombre || ""} ${data.apellido_paterno || ""} ${data.apellido_materno || ""}`.trim();
+      if (data.academia) document.getElementById("academiaDocente").textContent = data.academia;
+      if (data.disciplina) document.getElementById("disciplinaDocente").textContent = data.disciplina;
+      if (data.ciclo_escolar) document.getElementById("cicloDocente").textContent = data.ciclo_escolar;
+      if (data.asesor) document.getElementById("asesorDocente").textContent = data.asesor;
+      if (data.foto) document.getElementById("fotoDocente").src = data.foto;
+    }
+  }
+  </script>      
 </body>
 </html>
