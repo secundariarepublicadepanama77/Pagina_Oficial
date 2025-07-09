@@ -467,5 +467,33 @@ form h2 {
   font-weight: bold;
   color: #333;
 }
+/* Ajuste especial para formularios largos */
+.contenido-menu form.form-grid {
+  max-width: 800px; /* antes 600px */
+  width: 90%;
+  margin: auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.contenido-menu input,
+.contenido-menu select {
+  font-size: 1rem;
+}
+
+.campo-boton button {
+  font-size: 1rem;
+  padding: 0.8rem 2rem;
+}
+
+/* Responsive suave */
+@media (max-width: 768px) {
+  .contenido-menu form.form-grid {
+    max-width: 95%;
+    padding: 1.5rem;
+  }
+}
 
 
