@@ -369,5 +369,103 @@ footer.pie {
   font-size: 1.1rem;
   border-radius: 8px;
 }
+/* ======= Mejoras a inputs y selects para formularios ======= */
+.form-grid input,
+.form-grid select {
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  outline: none;
+  border-color: #002b7f;
+  box-shadow: 0 0 5px rgba(0,43,127,0.4);
+}
+
+/* Botón principal */
+.campo-boton button,
+.form-grid button {
+  font-size: 1rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.campo-boton button:hover,
+.form-grid button:hover {
+  background-color: #001f5c;
+  transform: scale(1.02);
+}
+
+/* Mensajes de validación o estado */
+.mensaje {
+  font-size: 1rem;
+}
+
+/* Inputs largos en mobile */
+@media (max-width: 600px) {
+  .form-grid input,
+  .form-grid select {
+    width: 100%;
+  }
+}
+
+/* Imagen previsualización o horario */
+img#preview-foto, 
+img#img-horario {
+  max-width: 250px;
+  border-radius: 10px;
+  margin-top: 1rem;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* Mejor spacing general para campos */
+.form-grid > * {
+  margin-bottom: 0.8rem;
+}
+
+/* Títulos consistentes en forms */
+.formulario-card h2,
+form h2 {
+  font-size: 1.6rem;
+  color: #002b7f;
+}
+
+/* Botones de selección (en seleccionar-usuario.html) */
+.boton-opcion {
+  display: inline-block;
+  background: #002b7f;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  margin: 0.5rem;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.boton-opcion:hover {
+  background: #001f5c;
+  transform: scale(1.05);
+}
+
+/* Horario imagen flotante */
+.horario-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.horario-box img {
+  max-width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.horario-box span {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
 
 
