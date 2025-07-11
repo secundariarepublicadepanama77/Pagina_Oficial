@@ -1,1 +1,131 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Escuela Secundaria N. 77 “República de Panamá”</title><link rel="stylesheet" href="estilo-global.css"/></head><body><header><div class="franja bandera"></div><div class="header-contenido"><img src="img/PRPM/logo.png" alt="Logo de la escuela" class="logo"/><h2>Escuela Secundaria N. 77 “República de Panamá”</h2></div><nav><button class="menu-toggle" aria-label="Abrir menú">☰</button><ul class="nav-bar"><li><a href="index.html"><span>🏠</span> Inicio</a></li><li><a href="noticias.html"><span>📰</span> Noticias</a></li><li><a href="historia.html"><span>📜</span> Historia</a></li><li><a href="docente.html"><span>👨‍🏫</span> Docentes</a></li><li><a href="instalaciones.html"><span>🏫</span> Instalaciones</a></li><li><a href="login.html"><span>🔒</span> Login</a></li></ul></nav></header><main class="contenido-principal"><section class="fila fila-arriba"><div class="tarjeta bienvenida"><h2>🏠 Bienvenidos a la Escuela Secundaria N.º 77 “República de Panamá”</h2><p>¡Nos alegra contar con tu visita! Explora nuestra comunidad educativa, nuestras actividades y todo lo que tenemos preparado para ti.</p><img src="img/PRPM/logo.png" alt="Logo de la escuela" class="logo-bienvenida"/></div><div class="tarjeta mapa"><h3>📍 Cómo llegar</h3><iframe src="https://www.google.com/maps?q=19.383300843023903,-99.2416994574762&hl=es&z=17&output=embed" height="200" allowfullscreen loading="lazy"></iframe></div></section><section class="fila fila-galeria"><div class="tarjeta galeria"><h3>📷 Galería destacada</h3><div class="galeria-contenedor"><figure><img src="img/foto1.png" alt="Evento escolar"/><figcaption>Simulacro Nacional 2025</figcaption></figure><figure><img src="img/foto2.jpeg" alt="60 aniversario"/><figcaption>60 aniversario</figcaption></figure><figure><img src="img/foto3.jpeg" alt="Inauguración de aula"/><figcaption>Inauguración de aula</figcaption></figure></div></div></section><section class="fila fila-abajo"><div class="tarjeta navegacion"><h3>🗺️ Navegación rápida</h3><ul><li><a href="historia.html">Conoce nuestra historia</a></li><li><a href="docente.html">Docentes y personal</a></li><li><a href="instalaciones.html">Instalaciones</a></li><li><a href="contacto.html">Contacto</a></li></ul></div><div class="tarjeta plataforma"><h3>🔐 Acceso a plataforma</h3><p>Si eres alumno o docente, entra a tu cuenta desde el menú <strong>"Login"</strong> para ver información personalizada. Si no tienes cuenta acércate a la Academia de tecnologías.</p></div></section></main><footer style="background-color:#0D1B4C;color:white;padding:40px 20px;margin-top:40px;"><div style="display:flex;flex-wrap:wrap;justify-content:space-around;align-items:flex-start;gap:40px;"><div style="flex:1;min-width:250px;"><h2>Contáctanos</h2><p>Calle Gregorio López, Fuentes S/N, Sta Fé, Álvaro Obregón, 01210 Ciudad de México, CDMX</p><h3>BUZÓN DE QUEJAS Y SUGERENCIAS</h3><a href="#" style="display:inline-block;background-color:#FFC107;color:black;padding:10px 20px;border-radius:5px;font-weight:bold;text-decoration:none;">Escríbenos aquí</a></div><div style="flex:1;min-width:250px;"><form action="https://formsubmit.co/republicadepanamabuzon@gmail.com" method="POST"><input type="hidden" name="_captcha" value="false"/><input type="hidden" name="_next" value="https://pagina-oficial-amhj.onrender.com/gracias.html"/><label>Nombre*</label><br/><input type="text" name="nombre" required style="width:100%;padding:5px;margin-bottom:10px;"/><br/><label>Correo Electrónico*</label><br/><input type="email" name="email" required style="width:100%;padding:5px;margin-bottom:10px;"/><br/><label>Mensaje*</label><br/><textarea name="mensaje" required style="width:100%;padding:5px;" rows="3"></textarea><br/><button type="submit" style="margin-top:10px;background-color:#FF5722;color:white;padding:10px 20px;border:none;border-radius:5px;">Enviar</button></form></div></div><div style="text-align:center;margin-top:40px;"><p>SÍGUENOS EN NUESTRAS REDES SOCIALES</p><a href="https://www.facebook.com/p/Escuela-Secundaria-no-77-Rep%C3%BAblica-de-Panam%C3%A1-oficial-100064451301182/?locale=es_LA"><img src="img/PRPM/facebook.png" alt="Facebook" style="height:30px;margin:0 10px;"/></a><a href="#"><img src="img/PRPM/instagram.png" alt="Instagram" style="height:30px;margin:0 10px;"/></a></div><p style="text-align:center;margin-top:20px;font-size:0.9em;">© Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías</p></footer><script>if(window.location.hash==="#gracias"){alert("✅ ¡Gracias! Tu mensaje fue enviado. Te responderemos pronto.");}</script><script>const toggleBtn=document.querySelector(".menu-toggle"),navBar=document.querySelector(".nav-bar");toggleBtn.addEventListener("click",()=>{navBar.classList.toggle("open");});</script><script src="Bloqueos.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escuela Secundaria N. 77 “República de Panamá”</title>
+  <link rel="stylesheet" href="estilo-global.css" />
+</head>
+<body>
+    <!-- ///////////////////////////////////////////-->
+  <header>
+    <div class="franja bandera"></div>
+    <div class="header-contenido">
+      <img src="img/PRPM/logo.png" alt="Logo de la escuela" class="logo">
+      <h2>Escuela Secundaria N. 77 “República de Panamá”</h2>
+    </div>
+    <nav>
+      <button class="menu-toggle" aria-label="Abrir menú">☰</button>
+      <ul class="nav-bar">
+        <li><a href="index.html"><span>🏠</span> Inicio</a></li>
+        <li><a href="noticias.html"><span>📰</span> Noticias</a></li>
+        <li><a href="historia.html"><span>📜</span> Historia</a></li>
+        <li><a href="docente.html"><span>👨‍🏫</span> Docentes</a></li>
+        <li><a href="instalaciones.html"><span>🏫</span> Instalaciones</a></li>
+        <li><a href="login.html"><span>🔒</span> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+    <!-- ///////////////////////////////////////////-->
+  <main class="contenido-principal">
+    <section class="fila fila-arriba">
+      <div class="tarjeta bienvenida">
+        <h2>🏠 Bienvenidos a la Escuela Secundaria N.º 77 “República de Panamá”</h2>
+        <p>¡Nos alegra contar con tu visita! Explora nuestra comunidad educativa, nuestras actividades y todo lo que tenemos preparado para ti.</p>
+        <img src="img/PRPM/logo.png" alt="Logo de la escuela" class="logo-bienvenida">
+      </div>
+      <div class="tarjeta mapa">
+        <h3>📍 Cómo llegar</h3>
+        <iframe src="https://www.google.com/maps?q=19.383300843023903,-99.2416994574762&hl=es&z=17&output=embed" height="200" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </section>
+    <section class="fila fila-galeria">
+      <div class="tarjeta galeria">
+        <h3>📷 Galería destacada</h3>
+        <div class="galeria-contenedor">
+          <figure>
+            <img src="img/foto1.png" alt="Evento escolar">
+            <figcaption>Simulacro Nacional 2025</figcaption>
+          </figure>
+          <figure>
+            <img src="img/foto2.jpeg" alt="60 aniversario">
+            <figcaption>60 aniversario</figcaption>
+          </figure>
+          <figure>
+            <img src="img/foto3.jpeg" alt="Inauguración de aula">
+            <figcaption>Inauguración de aula</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+    <section class="fila fila-abajo">
+      <div class="tarjeta navegacion">
+        <h3>🗺️ Navegación rápida</h3>
+        <ul>
+          <li><a href="historia.html">Conoce nuestra historia</a></li>
+          <li><a href="docente.html">Docentes y personal</a></li>
+          <li><a href="instalaciones.html">Instalaciones</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="tarjeta plataforma">
+        <h3>🔐 Acceso a plataforma</h3>
+        <p>Si eres alumno o docente, entra a tu cuenta desde el menú <strong>"Login"</strong> para ver información personalizada. Si no tienes cuenta acércate a la Academia de tecnologías.</p>
+      </div>
+    </section>
+  </main>
+  <!-- ///////////////////////////////////////////-->
+  <footer style="background-color: #0D1B4C; color: white; padding: 40px 20px; margin-top: 40px;">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start; gap: 40px;">
+      <div style="flex: 1; min-width: 250px;">
+        <h2>Contáctanos</h2>
+        <p>Calle Gregorio López, Fuentes S/N, Sta Fé, Álvaro Obregón, 01210 Ciudad de México, CDMX</p>
+        <h3>BUZÓN DE QUEJAS Y SUGERENCIAS</h3>
+        <a href="#" style="display: inline-block; background-color: #FFC107; color: black; padding: 10px 20px; border-radius: 5px; font-weight: bold; text-decoration: none;">Escríbenos aquí</a>
+      </div>
+      <div style="flex: 1; min-width: 250px;">
+        <form action="https://formsubmit.co/republicadepanamabuzon@gmail.com" method="POST">
+          <!-- Desactiva captcha para envío directo -->
+          <input type="hidden" name="_captcha" value="false">
+          
+          <!-- Redirecciona a una página de gracias (puedes cambiar la URL) -->
+          <input type="hidden" name="_next" value="https://pagina-oficial-amhj.onrender.com/gracias.html">
+        
+          <label>Nombre*</label><br>
+          <input type="text" name="nombre" required style="width: 100%; padding: 5px; margin-bottom: 10px;"><br>
+          
+          <label>Correo Electrónico*</label><br>
+          <input type="email" name="email" required style="width: 100%; padding: 5px; margin-bottom: 10px;"><br>
+          
+          <label>Mensaje*</label><br>
+          <textarea name="mensaje" required style="width: 100%; padding: 5px;" rows="3"></textarea><br>
+          
+          <button type="submit" style="margin-top: 10px; background-color: #FF5722; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Enviar</button>
+        </form>                           
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+      <p>SÍGUENOS EN NUESTRAS REDES SOCIALES</p>
+      <a href="https://www.facebook.com/p/Escuela-Secundaria-no-77-Rep%C3%BAblica-de-Panam%C3%A1-oficial-100064451301182/?locale=es_LA"><img src="img/PRPM/facebook.png" alt="Facebook" style="height: 30px; margin: 0 10px;"></a>
+      <a href="#"><img src="img/PRPM/instagram.png" alt="Instagram" style="height: 30px; margin: 0 10px;"></a>
+    </div>
+    <p style="text-align: center; margin-top: 20px; font-size: 0.9em;">
+      © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+    </p>
+  </footer>  
+  <!-- ///////////////////////////////////////////-->
+  <script>
+    if (window.location.hash === "#gracias") {
+      alert("✅ ¡Gracias! Tu mensaje fue enviado. Te responderemos pronto.");
+    }
+  </script>  
+  <script>
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const navBar = document.querySelector(".nav-bar");
+    toggleBtn.addEventListener("click", () => {
+      navBar.classList.toggle("open");
+    });
+  </script>
+<script src="Bloqueos.js"></script>
+</body>
+</html>
