@@ -467,5 +467,47 @@ form h2 {
   font-weight: bold;
   color: #333;
 }
+/* Ajuste ultra responsivo para formularios grandes */
+.contenido-menu form.form-grid {
+  max-width: 1000px;
+  width: 95%;
+  margin: auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Campos ocuparán el 100% del ancho disponible */
+.contenido-menu .form-grid input,
+.contenido-menu .form-grid select,
+.contenido-menu .form-grid textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* Botón centrado y grande */
+.contenido-menu .campo-boton {
+  text-align: center;
+}
+.contenido-menu .campo-boton button {
+  width: 60%;
+  max-width: 300px;
+  font-size: 1.1rem;
+  padding: 0.8rem;
+}
+
+/* Ajuste móvil */
+@media (max-width: 768px) {
+  .contenido-menu form.form-grid {
+    padding: 1rem;
+  }
+  .contenido-menu .campo-boton button {
+    width: 90%;
+  }
+}
 
 
