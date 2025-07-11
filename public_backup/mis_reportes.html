@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <style>
+    #tabla-completa {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background-color: #fff;
+    }
+  
+    #tabla-completa th, #tabla-completa td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 14px;
+    }
+  
+    #tabla-completa th {
+      background-color: #002b7f;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+  
+    #tabla-completa tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  
+    #tabla-completa tr:hover {
+      background-color: #f1f1f1;
+    }
+  
+    .filtros-reportes input,
+    .filtros-reportes button {
+      margin-right: 0.5rem;
+      padding: 6px;
+      font-size: 14px;
+    }
+  
+    .filtros-reportes button {
+      background-color: #002b7f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  
+    .filtros-reportes button:hover {
+      background-color: #0045ad;
+    }
+  </style>     
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mis Reportes</title>
+  <link rel="stylesheet" href="menu.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Encabezado -->
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo" />
+    <h1>Panel del Alumno</h1>
+  </header>
+
+  <!-- Barra de botones del alumno -->
+  <nav class="barra-botones">
+    <a href="menu-alumno.html">🏠 Inicio</a>
+    <a href="#">📅 Horario</a>
+    <a href="mis_reportes.html" class="activo">📝 Reportes</a>
+    <a class="disabled">🎓 Calificaciones</a>
+    <a class="disabled">💬 Mensajes</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="contenido-menu">
+    <section class="filtros-reportes">
+      <h2>📋 Mis Reportes de Conducta</h2>
+      <label>📅 Fecha:
+        <input type="date" id="filtroFecha">
+      </label>
+      <label>📘 Clase:
+        <input type="text" id="filtroClase" placeholder="Ej. Historia">
+      </label>
+      <label>🔍 Palabra clave:
+        <input type="text" id="filtroPalabra" placeholder="Ej. celular">
+      </label>
+      <button onclick="cargarReportes()">Buscar</button>
+      <button onclick="descargarExcel()">⬇️ Excel</button>
+      <button onclick="descargarPDF()">⬇️ PDF</button>
+    </section>
+
+    <section id="reportes-conducta">
+      <table id="tabla-completa">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Clase</th>
+            <th>Hora</th>
+            <th>Descripción</th>
+            <th>Docente</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-reportes">
+          <!-- Se insertan dinámicamente -->
+        </tbody>
+      </table>
+      <div id="mensaje" style="color: red; margin-top: 1rem;"></div>
+    </section>
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <script>
+    const alumno = JSON.parse(localStorage.getItem("usuarioActual") || "{}");
+    const matricula = alumno.usuario;
+    let datosFiltrados = [];
+
+    function cargarReportes() {
+      const fecha = document.getElementById("filtroFecha").value;
+      const clase = document.getElementById("filtroClase").value;
+      const palabra = document.getElementById("filtroPalabra").value.toLowerCase();
+
+      let url = `https://pagina-oficial-amhj.onrender.com/api/reportes/alumno/${matricula}`;
+      const params = [];
+      if (fecha) params.push(`fecha=${fecha}`);
+      if (clase) params.push(`clase=${encodeURIComponent(clase)}`);
+      if (params.length > 0) url += "?" + params.join("&");
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const tabla = document.getElementById("tabla-reportes");
+          tabla.innerHTML = "";
+
+          datosFiltrados = palabra
+            ? data.filter(r => r.contenido.toLowerCase().includes(palabra))
+            : data;
+
+          if (!datosFiltrados || datosFiltrados.length === 0) {
+            tabla.innerHTML = `<tr><td colspan="6">No hay reportes</td></tr>`;
+            return;
+          }
+
+          datosFiltrados.forEach(reporte => {
+            let tipo = "Leve";
+let color = "🟢";
+const texto = reporte.contenido.toLowerCase();
+
+// Palabras clave
+const graves = ["golpe", "amenaza", "insulto", "inquieto", "golpeo", "robo", "escupio", "varios reportes", "navaja", "pistola", "droga", "sustancia", "bapeador"];
+const moderados = ["habló", "contesto", "no obedeció", "celular", "constantemente", "inquieto", "grito", "grita", "parado", "uniforme"];
+
+if (graves.some(palabra => texto.includes(palabra))) {
+  tipo = "Grave";
+  color = "🔴";
+} else if (moderados.some(palabra => texto.includes(palabra))) {
+  tipo = "Moderado";
+  color = "🟠";
+}
+            const fila = `
+              <tr>
+                <td>${reporte.fecha}</td>
+                <td>${reporte.clase}</td>
+                <td>${reporte.hora}</td>
+                <td>${reporte.contenido}</td>
+                <td>${reporte.nombre_docente || "—"}</td>
+                <td>${color} ${tipo}</td>
+              </tr>
+            `;
+            tabla.innerHTML += fila;
+          });
+        })
+        .catch(err => {
+          document.getElementById("mensaje").innerText = "❌ Error al cargar reportes";
+          console.error(err);
+        });
+    }
+
+    function descargarExcel() {
+      const ws = XLSX.utils.table_to_sheet(document.getElementById("tabla-completa"));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Reportes");
+      XLSX.writeFile(wb, "reportes_conducta.xlsx");
+    }
+
+    async function descargarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("Reporte de Conducta", 20, 20);
+
+      let y = 30;
+      datosFiltrados.forEach(r => {
+        doc.text(`📅 ${r.fecha} | ${r.clase} | ${r.hora}`, 20, y);
+        y += 7;
+        doc.text(`👤 Docente: ${r.nombre_docente || "—"}`, 20, y);
+        y += 7;
+        doc.text(`📝 ${r.contenido}`, 20, y);
+        y += 10;
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save("reportes_conducta.pdf");
+    }
+
+    window.onload = cargarReportes;
+  </script>
+<script src="Bloqueos.js"></script>
+</body>
+</html>

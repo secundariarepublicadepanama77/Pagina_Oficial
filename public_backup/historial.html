@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="historial.css">
+</head>
+<body>
+  <header class="barra-superior">
+    <h1>📊 Panel de Control</h1>
+    <nav class="menu">
+      <a href="admon.html">🏠 Inicio</a>
+      <a href="registro_usuario.html">➕ Agregar usuario</a>
+      <a href="usuario.html">👥 Ver usuarios</a>
+      <a href="historial.html">📅 Historial</a>
+      <a href="disabled">🧪 Próximamente</a>
+      <a href="disabled">🧪 Próximamente</a>
+      <a href="disabled">🧪 Próximamente</a>
+      <button id="logout">🚪 Cerrar sesión</button>
+    </nav>
+  </header>
+
+  <div class="top-bar">
+    <input type="text" id="filtro-nombre" placeholder="Nombre o matrícula">
+    <input type="date" id="filtro-fecha">
+    <select id="filtro-grado"><option value="">Grado</option></select>
+    <select id="filtro-grupo"><option value="">Grupo</option></select>
+    <input type="time" id="filtro-hora">
+  </div>
+
+  <div class="botones">
+    <button class="btn-exportar" onclick="exportarExcel()">📤 Exportar a Excel</button>
+    <button onclick="limpiarFiltros()">🧹 Limpiar filtros</button>
+    <a href="admin.html" class="btn-volver">⬅ Volver al panel</a>
+    <span id="contador-resultados" style="margin-left:auto; font-weight: bold;"></span>
+  </div>
+  
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre completo</th>
+        <th>Matrícula</th>
+        <th>Tipo</th>
+        <th>Grado</th>
+        <th>Grupo</th>
+        <th>Fecha</th>
+        <th>Entrada</th>
+        <th>Salida</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-historial">
+      <!-- Se llena con JS -->
+    </tbody>
+  </table>
+
+  <script>
+        if (localStorage.getItem("sesionIniciada") !== "true") {
+      window.location.href = "login2.html";
+    }
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("sesionIniciada");
+      window.location.href = "login2.html";
+    });
+    let todos = [];
+
+    async function cargarHistorial() {
+      const res = await fetch("/registros");
+      todos = await res.json();
+      renderizar(todos);
+      llenarFiltros(todos);
+    }
+
+    function renderizar(data) {
+  const cuerpo = document.getElementById("tabla-historial");
+  cuerpo.innerHTML = "";
+  const total = todos.length;
+const visibles = data.length;
+const contador = document.getElementById("contador-resultados");
+
+if (visibles > 0) {
+  contador.textContent = `Mostrando ${visibles} de ${total} resultado(s) totales`;
+} else {
+  contador.textContent = `⚠️ No hay resultados que coincidan con los filtros`;
+} 
+  data.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.id}</td>
+      <td>${r.nombres} ${r.apellido_paterno} ${r.apellido_materno}</td>
+      <td>${r.matricula}</td>
+      <td>${r.tipo}</td>
+      <td>${r.grado || ''}</td>
+      <td>${r.grupo || ''}</td>
+      <td>${r.fecha}</td>
+      <td>${r.hora_entrada || ''}</td>
+      <td>${r.hora_salida || ''}</td>
+    `;
+    cuerpo.appendChild(tr);
+  });
+}
+
+    function llenarFiltros(data) {
+      const grados = [...new Set(data.map(r => r.grado).filter(Boolean))];
+      const grupos = [...new Set(data.map(r => r.grupo).filter(Boolean))];
+
+      const gradoSelect = document.getElementById("filtro-grado");
+      grados.forEach(g => {
+        const opt = document.createElement("option");
+        opt.value = g;
+        opt.textContent = g;
+        gradoSelect.appendChild(opt);
+      });
+
+      const grupoSelect = document.getElementById("filtro-grupo");
+      grupos.forEach(g => {
+        const opt = document.createElement("option");
+        opt.value = g;
+        opt.textContent = g;
+        grupoSelect.appendChild(opt);
+      });
+    }
+
+    function aplicarFiltros() {
+      let filtrados = [...todos];
+      const nombre = document.getElementById("filtro-nombre").value.toLowerCase();
+      const fecha = document.getElementById("filtro-fecha").value;
+      const grado = document.getElementById("filtro-grado").value;
+      const grupo = document.getElementById("filtro-grupo").value;
+      const hora = document.getElementById("filtro-hora").value;
+
+      filtrados = filtrados.filter(r =>
+        (!nombre || (r.nombres + r.apellido_paterno + r.apellido_materno + r.matricula).toLowerCase().includes(nombre)) &&
+        (!fecha || r.fecha === fecha) &&
+        (!grado || r.grado === grado) &&
+        (!grupo || r.grupo === grupo) &&
+        (!hora || (r.hora_entrada && r.hora_entrada.startsWith(hora)) || (r.hora_salida && r.hora_salida.startsWith(hora)))
+      );
+
+      renderizar(filtrados);
+    }
+
+    document.querySelectorAll("#filtro-nombre, #filtro-fecha, #filtro-grado, #filtro-grupo, #filtro-hora")
+      .forEach(input => input.addEventListener("input", aplicarFiltros));
+
+  function exportarExcel() {
+    const filas = document.querySelectorAll("#tabla-historial tr");
+    if (filas.length === 0) {
+      alert("No hay datos para exportar");
+      return;
+    }
+
+    // Encabezado personalizado
+    const escuela = "Escuela Secundaria N. 77 'República de Panamá'";
+    const fechaActual = new Date();
+    const fechaTexto = fechaActual.toLocaleDateString("es-MX", { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const fechaArchivo = fechaActual.toISOString().split("T")[0];
+
+    let contenido = `
+      <table border="1">
+        <tr><td colspan="9" style="text-align:center; font-weight:bold;">${escuela}</td></tr>
+        <tr><td colspan="9" style="text-align:center;">${fechaTexto}</td></tr>
+        <tr>
+          <th>ID</th>
+          <th>Nombre completo</th>
+          <th>Matrícula</th>
+          <th>Tipo</th>
+          <th>Grado</th>
+          <th>Grupo</th>
+          <th>Fecha</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+        </tr>
+    `;
+
+    filas.forEach(row => {
+      contenido += `<tr>${row.innerHTML}</tr>`;
+    });
+
+    contenido += `</table>`;
+
+    const blob = new Blob(
+      [`<html><head><meta charset="UTF-8"></head><body>${contenido}</body></html>`],
+      { type: "application/vnd.ms-excel" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `historial_${fechaArchivo}.xls`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } 
+    cargarHistorial();
+    function limpiarFiltros() {
+  document.getElementById("filtro-nombre").value = "";
+  document.getElementById("filtro-fecha").value = "";
+  document.getElementById("filtro-grado").value = "";
+  document.getElementById("filtro-grupo").value = "";
+  document.getElementById("filtro-hora").value = "";
+  renderizar(todos);
+}
+  </script>
+<script src="Bloqueos.js"></script>
+</body>
+</html>

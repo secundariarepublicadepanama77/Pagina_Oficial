@@ -1,0 +1,98 @@
+
+/* ======= login.css (solo para login2.html) ======= */
+
+/* Reset general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  /* Fondo dividido para el login */
+  .background-split {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(to right, #0033a0 50%, #d52b1e 50%);
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Tarjeta del login */
+  .login-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .login-card img {
+    width: 90px;
+    margin-bottom: 1rem;
+  }
+  
+  .login-card h1 {
+    margin-bottom: 1.5rem;
+    color: #002b7f;
+    font-size: 1.4rem;
+  }
+  
+  .login-card input {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .botones {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .btn {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .volver {
+    background-color: #f0f0f0;
+    color: #002b7f;
+  }
+  
+  .volver:hover {
+    background-color: #ddd;
+  }
+  
+  .ingresar {
+    background-color: #002b7f;
+    color: white;
+  }
+  
+  .ingresar:hover {
+    background-color: #001f5c;
+  }
+  
+  /* Responsive para login */
+  @media (max-width: 768px) {
+    .login-card {
+      padding: 1.5rem;
+    }
+  
+    .botones {
+      flex-direction: column;
+    }
+  
+    .btn {
+      width: 100%;
+    }
+  }

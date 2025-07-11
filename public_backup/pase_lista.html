@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pase de Lista</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="pase_lista.css">
+</head>
+<body>
+  <h2>PASE DE LISTA</h2>
+
+  <label for="grado">Grado:</label>
+  <select id="grado"></select>
+
+  <label for="grupo">Grupo:</label>
+  <select id="grupo"></select>
+
+  <label for="materia">Materia:</label>
+  <select id="materia">
+    <option value="">Selecciona</option>
+    <option value="Español">Español</option>
+    <option value="Inglés">Inglés</option>
+    <option value="Matemáticas">Matemáticas</option>
+    <option value="Ciencias">Ciencias</option>
+    <option value="Historia">Historia</option>
+    <option value="Taller">Taller</option>
+  </select>
+
+  <p><strong>Fecha:</strong>
+    <input type="date" id="fecha" />
+  </p>
+
+  <button onclick="cargarAlumnos()">Cargar alumnos</button>
+
+  <table id="tabla-asistencia">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Matrícula</th>
+        <th>Nombre completo</th>
+        <th>Asistió</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpo-tabla"></tbody>
+  </table>
+
+  <button onclick="guardarAsistencia()">Guardar pase de lista</button>
+
+  <script>
+    const supabase = window.supabase.createClient('https://mhnzjhelbupyifdlpngv.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY');
+
+    // Obtener parámetros de la URL
+    function obtenerParametro(nombre) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(nombre);
+    }
+
+    const gradoParam = obtenerParametro("grado");
+    const grupoParam = obtenerParametro("grupo");
+
+    // Fecha local por defecto (corrige el desfase)
+    function obtenerFechaLocal() {
+      const hoy = new Date();
+      hoy.setMinutes(hoy.getMinutes() - hoy.getTimezoneOffset());
+      return hoy.toISOString().split('T')[0];
+    }
+
+    document.getElementById("fecha").value = obtenerFechaLocal();
+
+    // Rellenar grado y grupo automáticamente
+    document.addEventListener("DOMContentLoaded", () => {
+      const gradoSelect = document.getElementById("grado");
+      const grupoSelect = document.getElementById("grupo");
+
+      gradoSelect.innerHTML = `
+        <option value="">Selecciona</option>
+        <option value="1" ${gradoParam === "1" ? "selected" : ""}>1°</option>
+        <option value="2" ${gradoParam === "2" ? "selected" : ""}>2°</option>
+        <option value="3" ${gradoParam === "3" ? "selected" : ""}>3°</option>
+      `;
+
+      grupoSelect.innerHTML = `
+        <option value="">Selecciona</option>
+        <option value="A" ${grupoParam === "A" ? "selected" : ""}>A</option>
+        <option value="B" ${grupoParam === "B" ? "selected" : ""}>B</option>
+        <option value="C" ${grupoParam === "C" ? "selected" : ""}>C</option>
+        <option value="D" ${grupoParam === "D" ? "selected" : ""}>D</option>
+        <option value="E" ${grupoParam === "E" ? "selected" : ""}>E</option>
+      `;
+    });
+
+    async function cargarAlumnos() {
+      const grado = document.getElementById("grado").value;
+      const grupo = document.getElementById("grupo").value;
+      const materia = document.getElementById("materia").value;
+
+      if (!grado || !grupo || !materia) {
+        alert("Selecciona grado, grupo y materia.");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('*')
+        .eq('grado', grado)
+        .eq('grupo', grupo)
+        .eq('tipo', 'alumno')
+        .order('apellido_paterno', { ascending: true })
+        .order('apellido_materno', { ascending: true })
+        .order('nombre', { ascending: true });
+
+      if (error || !data.length) {
+        alert("No se encontraron alumnos.");
+        return;
+      }
+
+      const cuerpo = document.getElementById("cuerpo-tabla");
+      cuerpo.innerHTML = "";
+
+      data.forEach((alumno, index) => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+  <td data-label="#">${index + 1}</td>
+  <td data-label="Matrícula">${alumno.usuario || ''}</td>
+  <td data-label="Nombre completo">${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
+  <td data-label="Asistió"><input type="checkbox" data-matricula="${alumno.usuario}" class="asistio"></td>
+  <td data-label="Observaciones"><textarea class="observacion" data-matricula="${alumno.usuario}"></textarea></td>
+`;
+        cuerpo.appendChild(fila);
+      });
+    }
+    async function guardarAsistencia() {
+  const grado = document.getElementById("grado").value;
+  const grupo = document.getElementById("grupo").value;
+  const materia = document.getElementById("materia").value;
+  const fechaSeleccionada = document.getElementById("fecha").value;
+  const checkboxes = document.querySelectorAll('.asistio');
+  const observaciones = document.querySelectorAll('.observacion');
+
+  if (!materia) {
+    alert("Selecciona una materia.");
+    return;
+  }
+  // Verificar si ya se pasó lista para esta materia, grado, grupo y fecha
+  const { data: existentes, error: errorExistente } = await supabase
+    .from('asistencias_esperadas')
+    .select('*')
+    .eq('grado', grado)
+    .eq('grupo', grupo)
+    .eq('materia', materia)
+    .eq('fecha', fechaSeleccionada)
+    .limit(1);  // solo necesitamos saber si ya hay una
+
+  if (existentes && existentes.length > 0) {
+    alert(`⚠️ La maestra o maestro de ${materia} ya pasó lista el día de hoy para ${grado}°${grupo}.`);
+    return;
+  }
+
+  for (let i = 0; i < checkboxes.length; i++) {
+    const matricula = checkboxes[i].dataset.matricula;
+    const asistencia = checkboxes[i].checked;
+    const observacion = observaciones[i].value;
+
+    const { data: usuario, error } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('usuario', matricula)
+      .single();
+
+    if (error || !usuario) {
+      console.warn(`No se encontró usuario con matrícula: ${matricula}`);
+      continue;
+    }
+
+    const resultado = await supabase
+      .from('asistencias_esperadas')
+      .insert([{
+        matricula: usuario.usuario,
+        nombres: usuario.nombre,
+        apellido_paterno: usuario.apellido_paterno,
+        apellido_materno: usuario.apellido_materno,
+        grado: usuario.grado,
+        grupo: usuario.grupo,
+        fecha: fechaSeleccionada,
+        asistencia: asistencia,
+        observaciones: observacion,
+        materia: materia
+      }]);
+
+    if (resultado.error) {
+      console.error(`Error al guardar asistencia para ${usuario.usuario}:`, resultado.error.message);
+    }
+  }
+
+  alert("✅ Pase de lista guardado correctamente.");
+  window.location.href = "asistencias.html";
+}
+
+  </script>
+  <script src="Bloqueos.js"></script>
+</body>
+</html>

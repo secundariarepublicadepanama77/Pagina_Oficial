@@ -1,0 +1,83 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+  }
+  
+  /* Contenedor general del formulario */
+  form.form-grid {
+    width: 90%;
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.1);
+  }
+  
+  /* Campos */
+  form.form-grid input,
+  form.form-grid select,
+  form.form-grid textarea {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    transition: border 0.3s, box-shadow 0.3s;
+  }
+  
+  form.form-grid input:focus,
+  form.form-grid select:focus,
+  form.form-grid textarea:focus {
+    outline: none;
+    border-color: #002b7f;
+    box-shadow: 0 0 8px rgba(0,43,127,0.3);
+  }
+  
+  /* Botón */
+  form.form-grid button {
+    display: block;
+    width: 60%;
+    max-width: 350px;
+    margin: 2rem auto 0 auto;
+    padding: 1rem;
+    font-size: 1.2rem;
+    background: #002b7f;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+  
+  form.form-grid button:hover {
+    background: #001f5c;
+    transform: scale(1.03);
+  }
+  
+  /* Mensaje estado */
+  #mensaje {
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    form.form-grid {
+      padding: 1.2rem;
+    }
+    form.form-grid button {
+      width: 90%;
+    }
+  }
+  

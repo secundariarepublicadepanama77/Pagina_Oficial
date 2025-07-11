@@ -1,0 +1,149 @@
+
+/* Reset general */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #f4f6f9;
+  color: #333;
+  padding: 0;
+  margin: 0;
+}
+
+/* Encabezado */
+.barra-superior {
+  background: linear-gradient(to right, #0033a0, #d52b1e);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.barra-superior h1 {
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.menu a,
+.menu button {
+  background-color: #ffffff;
+  color: #002b7f;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.menu button:hover,
+.menu a:hover {
+  background-color: #ccdfff;
+}
+
+/* Filtros */
+.top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.top-bar input,
+.top-bar select {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Botones */
+.botones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.btn-exportar,
+.btn-volver {
+  background-color: #0033a0;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-exportar:hover,
+.btn-volver:hover {
+  background-color: #001f5c;
+}
+
+/* Tabla */
+table {
+  width: 95%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+table th, table td {
+  padding: 0.9rem;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+table th {
+  background-color: #002b7f;
+  color: white;
+}
+
+table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+/* Contador */
+#contador-resultados {
+  margin-left: auto;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .top-bar, .botones {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .barra-superior {
+    flex-direction: column;
+    align-items: center;
+  }
+}

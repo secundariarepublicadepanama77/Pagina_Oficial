@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Título de la página</title>
+  <link rel="stylesheet" href="estilo-global.css" />
+</head>
+<body>
+
+ <!-- ////////////////////////////////////////////////// -->
+  <header>
+    <div class="header-contenido">
+      <img src="img/logo.png" alt="Logo de la escuela" class="logo">
+      <h1>Escuela Secundaria N. 77 “República de Panamá”</h1>
+    </div>
+
+     <!-- ////////////////////////////////////////////////// -->
+    <nav>
+      <button class="menu-toggle" aria-label="Abrir menú">☰</button>
+      <ul class="nav-bar">
+        <li><a href="index.html"><span>🏠</span> Inicio</a></li>
+        <li><a href="noticias.html"><span>📰</span> Noticias</a></li>
+        <li><a href="historia.html"><span>📜</span> Historia</a></li>
+        <li><a href="docente.html"><span>👨‍🏫</span> Docentes</a></li>
+        <li><a href="instalaciones.html"><span>🏫</span> Instalaciones</a></li>
+        <li><a href="login.html"><span>🔒</span> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+   <!-- ////////////////////////////////////////////////// -->
+  <main class="contenido">
+    <section class="seccion">
+      <h2 class="titulo-rojo">🎯 Misión</h2>
+      <p>
+        La escuela secundaria diurna no. 77 república de panamá asume y administra la educación con un equipo de docentes profesionales y comprometidos en la formación moral y académica de sus estudiantes para que asuman retos, tomen decisiones y sean individuos útiles a la sociedad.
+      </p>
+    </section>
+
+    <section class="seccion">
+      <h2 class="titulo-azul">🌟 Visión</h2>
+      <p>
+        Evolucionar la escuela con el objetivo de propiciar la educación básica secundaria y dar cobertura a los estudiantes de la localidad, pero con la apropiación necesaria de los recursos físicos, materiales e intelectuales, que cubran en su mayoría las necesidades requeridas en este nivel para elevar la calidad en el servicio educativo de esta institución.
+      </p>
+    </section>
+
+    <section class="seccion">
+      <h2 class="titulo-rojo">📜 Historia</h2>
+      <p>Para la década de 1960, la única escuela secundaria en los alrededores de esta colonia era la escuela secundaria número 21 que se encuentra en Tacubaya...</p>
+    </section>
+
+    <section class="seccion">
+      <h2 class="titulo-azul">🎵 Himno de la Escuela Secundaria 77</h2>
+      <pre class="himno">
+        Institución del gran saber
+        eres el centro de mi camino
+        donde laboro mi porvenir
+        seremos fieles al cumplimiento
+        del reglamento de este plantel
+        te prometemos ser estudiantes
+        ejemplos dignos de la nación.
+        
+        Juramos desde niños
+        a la bandera nacional
+        luchar por siempre
+        por superarnos
+        
+        Para llegar hasta el final
+        a nuestra segunda enseñanza
+        misión que cumplen con afán
+        nuestros maestros que forjan
+        y nos alientan con gran amor
+        
+        ¡Oh! Secundaria 77
+        institución del gran saber
+        eres el centro de mi camino
+        donde laboro mi porvenir
+        seremos fieles al cumplimiento
+        del reglamento de este plantel
+        te prometemos ser estudiantes
+        ejemplos mismos de la nación.
+        
+        Prof. Luis Luvianos
+              
+      </pre>
+    </section>
+  </main>
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>  
+
+  <!-- ////////////////////////////////////////////////// -->
+  <script>
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const navBar = document.querySelector(".nav-bar");
+
+    toggleBtn.addEventListener("click", () => {
+      navBar.classList.toggle("open");
+    });
+  </script>
+<script src="Bloqueos.js"></script>
+</body>
+</html>
+

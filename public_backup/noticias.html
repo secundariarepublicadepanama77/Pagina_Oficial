@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Título de la página</title>
+  <link rel="stylesheet" href="estilo-global.css" />
+</head>
+<body>
+  
+<!--///////////////////////////////////-->
+  <header>
+    <div class="franja bandera"></div>
+    <div class="header-contenido">
+      <img src="img/logo.png" alt="Logo de la escuela" class="logo">
+      <h1>Escuela Secundaria N. 77 “República de Panamá”</h1>
+    </div>
+    <nav>
+      <button class="menu-toggle" aria-label="Abrir menú">☰</button>
+      <ul class="nav-bar">
+        <li><a href="index.html"><span>🏠</span> Inicio</a></li>
+        <li><a href="noticias.html"><span>📰</span> Noticias</a></li>
+        <li><a href="historia.html"><span>📜</span> Historia</a></li>
+        <li><a href="docente.html"><span>👨‍🏫</span> Docentes</a></li>
+        <li><a href="instalaciones.html"><span>🏫</span> Instalaciones</a></li>
+        <li><a href="login.html"><span>🔒</span> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<!--///////////////////////////////////-->
+  <main class="contenido-principal">
+    <div class="caja-bienvenida">
+      <h2>¡Bienvenidos a nuestra escuela!</h2>
+      <p>Noticias de la escuela, ¡Próximamente!</p>
+    </div>
+  </main>  
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>  
+
+  <!--///////////////////////////////////-->
+  <script>
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const navBar = document.querySelector(".nav-bar");
+
+    toggleBtn.addEventListener("click", () => {
+      navBar.classList.toggle("open");
+    });
+  </script>
+<script>
+  document.addEventListener("contextmenu", e => e.preventDefault());// Bloqueo de clic derecho
+  document.addEventListener("keydown", e => { // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
+    const bloqueadas = [
+      "F12",
+      "u", // Ctrl+U
+      "i", // Ctrl+Shift+I
+      "c"  // Ctrl+Shift+C 
+    ];
+    if (
+      bloqueadas.includes(e.key.toLowerCase()) && 
+      (e.ctrlKey || e.metaKey || e.shiftKey)
+    ) {
+      e.preventDefault();
+      console.log("🚫 Acción bloqueada");
+    }
+  });
+</script>
+</body>
+</html>

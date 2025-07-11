@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reporte de Conducta</title>
+  <link rel="stylesheet" href="reporte.css">
+</head>
+<body>
+  <div class="contenedor">
+    <h2>📋 Reporte de Conducta Individual</h2>
+    <form id="form-reporte">
+      <label>Nombre del alumno:</label>
+      <input type="text" id="nombre_alumno" placeholder="Nombre del alumno" readonly><br>
+    
+      <label>Matrícula del alumno:</label>
+      <input type="text" id="matricula_alumno" placeholder="Matrícula del alumno" required><br>
+        <!-- Campo oculto para la matrícula del docente -->
+<input type="hidden" id="matricula_docente">
+    
+      <label>Grado:</label>
+      <select id="grado" required>
+        <option value="">Grado</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+      </select><br>
+    
+      <label>Grupo:</label>
+      <select id="grupo" required>
+        <option value="">Grupo</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+        <option>D</option>
+        <option>E</option>
+      </select><br>
+    
+      <label>Clase:</label>
+      <select id="clase" required>
+        <option value="">Selecciona</option>
+        <option>Español</option>
+        <option>Lectura</option>
+        <option>Inglés</option>
+        <option>Matemáticas</option>
+        <option>Ciencias</option>
+        <option>Geografía</option>
+        <option>Historia</option>
+        <option>F. C y E</option>
+        <option>Educación física</option>
+        <option>Vida saludable</option>
+        <option>Artes</option>
+        <option>Tutoría</option>
+        <option>Taller</option>
+        <option>Otro</option>
+      </select><br>
+    
+      <label>Hora:</label>
+      <select id="hora" required>
+        <option value="">Selecciona</option>
+        <option>1a</option><option>2a</option><option>3a</option><option>4a</option>
+        <option>5a</option><option>6a</option><option>7a</option><option>8a</option>
+        <option>9a</option><option>1er descanso</option><option>2o descanso</option>
+      </select><br>
+    
+      <label>Descripción de la conducta:</label><br>
+      <textarea id="contenido" rows="5" required></textarea><br>
+    
+      <input type="submit" value="Enviar Reporte">
+    </form>
+    <div id="mensaje"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const docente = JSON.parse(localStorage.getItem("usuarioActual") || {});
+    
+        if (!docente.usuario) {
+          alert("❌ No se ha detectado el usuario docente. Por favor inicia sesión.");
+          return;
+        }
+    
+        console.log("✅ Docente detectado:", docente);
+        document.getElementById("matricula_docente").value = docente.usuario;
+    
+        document.getElementById("matricula_alumno").addEventListener("input", async () => {
+          const matricula = document.getElementById("matricula_alumno").value.trim();
+    
+          if (matricula.length < 4) return;
+    
+          try {
+            const res = await fetch(`https://pagina-oficial-amhj.onrender.com/api/usuarios/${matricula}`);
+            const data = await res.json();
+    
+            if (data.error) {
+              document.getElementById("nombre_alumno").value = "";
+              document.getElementById("grado").value = "";
+              document.getElementById("grupo").value = "";
+              return;
+            }
+    
+            document.getElementById("nombre_alumno").value = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+            document.getElementById("grado").value = data.grado;
+            document.getElementById("grupo").value = data.grupo;
+          } catch (err) {
+            console.error("❌ Error al obtener alumno:", err);
+          }
+        });
+    
+        document.getElementById("form-reporte").addEventListener("submit", async e => {
+          e.preventDefault();
+    
+          const data = {
+            matricula_alumno: document.getElementById("matricula_alumno").value.trim(),
+            matricula_docente: document.getElementById("matricula_docente").value.trim(),
+            fecha: new Date().toISOString().split("T")[0],
+            clase: document.getElementById("clase").value,
+            hora: document.getElementById("hora").value,
+            contenido: document.getElementById("contenido").value
+          };
+    
+          console.log("📨 Datos enviados al servidor:", data);
+    
+          try {
+            const res = await fetch("https://pagina-oficial-amhj.onrender.com/api/reportes", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data)
+            });
+    
+            const result = await res.json();
+            document.getElementById("mensaje").textContent = result.mensaje || "Reporte enviado con éxito.";
+            document.getElementById("form-reporte").reset();
+            document.getElementById("nombre_alumno").value = "";
+          } catch (err) {
+            console.error("❌ Error al enviar reporte:", err);
+            document.getElementById("mensaje").textContent = "Error al enviar reporte.";
+          }
+        });
+      });
+    </script>    
+<script src="Bloqueos.js"></script>      
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materiales | Panel Docente</title>
+  <link rel="stylesheet" href="estilo-global.css">
+  <style>
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .seccion {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .seccion h2 {
+      color: #002b7f;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+    .botones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .boton-material {
+      background-color: #e3f2fd;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: none;
+      color: #0d47a1;
+      transition: background 0.2s;
+      border: 1px solid #bbdefb;
+    }
+    .boton-material:hover {
+      background-color: #bbdefb;
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado como en el panel -->
+  <header>
+    <div style="background: linear-gradient(to right, #0d1b4c, #d32f2f); color: white; text-align: center; padding: 1rem;">
+      <img src="img/logo.png" alt="Escudo" style="height: 50px; vertical-align: middle;">
+      <h1 style="display: inline-block; margin-left: 1rem; vertical-align: middle;">Panel Docente</h1>
+    </div>
+    <nav style="background: white; padding: 0.5rem 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+      <a href="menu-docente.html" class="boton-material">🏠 Inicio</a>
+      <a href="reporte_docente.html" class="boton-material">📅 Reportes</a>
+      <a href="materiales.html" class="boton-material" style="background:#bbdefb">📂 Materiales</a>
+      <a href="asistencias.html"class="boton-material">📝 Asistencias</a>
+      <a class="boton-material" style="opacity: 0.5; pointer-events: none;">📅 Horarios</a>
+      <a class="boton-material" style="opacity: 0.5; pointer-events: none;">✨ Próximamente</a>
+      <a class="boton-material" style="opacity: 0.5; pointer-events: none;">👥 Próximamente</a>
+      <a class="boton-material" style="opacity: 0.5; pointer-events: none;">🔐 Próximamente</a>
+      <a href="login.html" class="boton-material" style="background:#e3f2fd; color:#0d47a1;">📕 Cerrar sesión</a>
+    </nav>
+  </header>
+  <!-- Contenido principal -->
+  <main>
+    <section class="seccion">
+      <h2>📚 Materiales</h2>
+      <div class="botones-grid">
+        <a href="https://docs.google.com/spreadsheets/d/1IjCpnzt8joAS4C0iSjD2TcY0wUrEybof/edit?gid=782907673#gid=782907673" target="_blank" class="boton-material">Listas de grupos (Excel)</a>
+        <a href="#" class="boton-material">Listas de grupos (PDF)</a>
+        <a href="#" class="boton-material">Escudo a color</a>
+        <a href="#" class="boton-material">Marca de agua (escudo)</a>
+        <a href="#" class="boton-material">Escudo blanco y negro</a>
+        <a href="#" class="boton-material">Reglamento escolar</a>
+        <a href="#" class="boton-material">Escudo 60 aniversario</a>
+        <a href="#" class="boton-material">Escudo 60 aniversario (estilizado)</a>
+      </div>
+    </section>
+
+    <section class="seccion">
+      <h2>📝 Formatos</h2>
+      <div class="botones-grid">
+        <a href="#" class="boton-material">Hoja de seguimiento</a>
+        <a href="#" class="boton-material">Citatorios</a>
+        <a href="#" class="boton-material">Reportes</a>
+      </div>
+    </section>
+
+    <section class="seccion">
+      <h2>📘 Normateca</h2>
+      <div class="botones-grid">
+        <a href="#" class="boton-material">Guía operativa - CDMX</a>
+        <a href="#" class="boton-material">Plan de estudios 2023</a>
+        <a href="#" class="boton-material">Marco convivencia escolar</a>
+        <a href="#" class="boton-material">Protocolo contra acoso escolar</a>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background-color: #d52b1e; color: white; text-align: center; padding: 1rem; font-size: 0.9rem;">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+  <script src="Bloqueos.js"></script>
+</body>
+</html>

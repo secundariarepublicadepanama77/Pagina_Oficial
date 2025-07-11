@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asistencias por Grupo</title>
+  <link rel="stylesheet" href="menu.css" />
+  <link rel="stylesheet" href="agrupo.css" />
+</head>
+<body>
+
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo" />
+    <h1>Panel Docente</h1>
+  </header>
+
+  <nav class="barra-botones">
+    <a href="menu-docente.html">🏠 Inicio</a>
+    <a href="reporte_docente.html">📅 Reportes</a>
+    <a href="materiales.html">📁 Materiales</a>
+    <a href="asistencias.html">📝 Asistencias</a>
+    <a class="disabled">📝 Próximamente</a>
+    <a class="disabled">👥 Próximamente</a>
+    <a class="disabled">📅 Horarios</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a href="#" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+  </nav>
+
+  <main class="contenido-menu">
+    <h2>PASE DE LISTA SELECCIONA EL GRADO Y GRUPO</h2>
+
+    <section>
+      <h3>Primeros Años</h3>
+      <button onclick="redirigir('1A')">1A</button>
+      <button onclick="redirigir('1B')">1B</button>
+      <button onclick="redirigir('1C')">1C</button>
+      <button onclick="redirigir('1D')">1D</button>
+      <button onclick="redirigir('1E')">1E</button>
+    </section>
+
+    <section>
+      <h3>Segundos Años</h3>
+      <button onclick="redirigir('2A')">2A</button>
+      <button onclick="redirigir('2B')">2B</button>
+      <button onclick="redirigir('2C')">2C</button>
+      <button onclick="redirigir('2D')">2D</button>
+      <button onclick="redirigir('2E')">2E</button>
+    </section>
+
+    <section>
+      <h3>Terceros Años</h3>
+      <button onclick="redirigir('3A')">3A</button>
+      <button onclick="redirigir('3B')">3B</button>
+      <button onclick="redirigir('3C')">3C</button>
+      <button onclick="redirigir('3D')">3D</button>
+      <button onclick="redirigir('3E')">3E</button>
+    </section>
+  </main>
+
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <script>
+    // Validar sesión
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+    if (!nombre || tipo !== "maestro") {
+      alert("Acceso denegado. Redirigiendo al login.");
+      window.location.href = "login.html";
+    }
+
+    // Redirección al pase de lista con grado y grupo
+    function redirigir(grupoCompleto) {
+      const grado = grupoCompleto.charAt(0);
+      const grupo = grupoCompleto.charAt(1);
+      const url = `pase_lista.html?grado=${grado}&grupo=${grupo}`;
+      window.location.href = url;
+    }
+
+    function cerrarSesion() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    // Mostrar grado y grupo en el encabezado si existen en la URL
+    function obtenerParametro(nombre) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(nombre);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const grado = obtenerParametro('grado');
+      const grupo = obtenerParametro('grupo');
+      document.getElementById("gradoText").textContent = grado || "—";
+      document.getElementById("grupoText").textContent = grupo || "—";
+    });
+
+    // Bloquear clic derecho y combinaciones de teclas
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      const bloqueadas = ["F12", "u", "i", "c"];
+      if ((e.ctrlKey || e.metaKey || e.shiftKey) && bloqueadas.includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        console.log("🚫 Acción bloqueada");
+      }
+    });
+  </script>
+
+</body>
+</html>

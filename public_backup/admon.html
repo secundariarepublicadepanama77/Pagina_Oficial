@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="admon1.css">
+</head>
+<body>
+  <header class="barra-superior">
+    <h1>📊 Panel de Control</h1>
+    <nav class="menu">
+      <a href="admon.html">🏠 Inicio</a>
+      <a href="registro_usuario.html">➕ Agregar usuario</a>
+      <a href="usuario.html">👥 Ver usuarios</a>
+      <a href="historial.html">📅 Historial</a>
+      <a class="disabled">🧪 Próximamente</a>
+      <a class="disabled">🧪 Próximamente</a>
+      <a class="disabled">🧪 Próximamente</a>
+      <button id="logout">🚪 Cerrar sesión</button>
+    </nav>
+  </header>
+
+  <div class="contenedor">
+    <input type="text" id="filtro" placeholder="Buscar por matrícula o nombre...">
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Matrícula</th>
+          <th>Nombre completo</th>
+          <th>Grado y grupo</th>
+          <th>Tipo</th>
+          <th>Fecha</th>
+          <th>Fecha Entrada</th>
+          <th>Fecha Salida</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla_registros">
+        <!-- Se llena dinámicamente -->
+      </tbody>
+    </table>
+  </div>
+
+  <div id="modal-editar-hora" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px gray; z-index:1000;">
+    <h3>Editar Horarios</h3>
+    <form id="form-editar-hora">
+      <input type="hidden" id="edit-id">
+      <label>Hora de entrada (HH:MM:SS):</label><br>
+      <input type="text" id="edit-hora-entrada" placeholder="HH:MM:SS"><br><br>
+      <label>Hora de salida (HH:MM:SS):</label><br>
+      <input type="text" id="edit-hora-salida" placeholder="HH:MM:SS"><br><br>
+      <button type="submit">Guardar</button>
+      <button type="button" onclick="cerrarModal()">Cancelar</button>
+    </form>
+  </div>
+
+  <script>
+    if (localStorage.getItem("sesionIniciada") !== "true") {
+      window.location.href = "login2.html";
+    }
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("sesionIniciada");
+      window.location.href = "login2.html";
+    });
+
+    function accionBoton1() { alert("Próxima actualización"); }
+    function accionBoton2() { alert("Próxima actualización"); }
+    function accionBoton3() { alert("Próxima actualización"); }
+
+    function formatearHora(hora) {
+  if (!hora) return "";
+
+  // Si ya contiene a.m. o p.m., la regresamos tal cual
+  if (hora.toLowerCase().includes("a.m.") || hora.toLowerCase().includes("p.m.")) {
+    return hora;
+  }
+
+  const partes = hora.split(":");
+  if (partes.length < 2) return hora;
+  let h = parseInt(partes[0]);
+  const m = partes[1];
+  const s = partes[2] || "00";
+  const ampm = h >= 12 ? "p.m." : "a.m.";
+  h = h % 12 || 12;
+  return `${h.toString().padStart(2, '0')}:${m}:${s} ${ampm}`;
+}
+
+    async function cargarRegistros() {
+      const res = await fetch("https://pagina-oficial-amhj.onrender.com/registros");
+      const data = await res.json();
+      const tbody = document.getElementById("tabla_registros");
+      tbody.innerHTML = "";
+
+      data.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.id}</td>
+          <td>${r.matricula}</td>
+          <td>${r.nombres} ${r.apellido_paterno} ${r.apellido_materno}</td>
+          <td>${r.grado || ""} ${r.grupo || ""}</td>
+          <td>${r.tipo}</td>
+          <td>${r.fecha}</td>
+          <td>${formatearHora(r.hora_entrada)}</td>
+          <td>${formatearHora(r.hora_salida)}</td>
+          <td>
+            <button onclick="editarHora(${r.id}, '${r.hora_entrada || ''}', '${r.hora_salida || ''}')">✏️ Editar hora</button>
+          <button onclick="eliminarRegistro(${r.id})" style="background:none; border:none; color:red;">🗑️ Eliminar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    function editarHora(id, entrada, salida) {
+  document.getElementById("modal-editar-hora").style.display = "block";
+  document.getElementById("edit-id").value = id;
+
+  const convertir = (horaStr) => {
+    if (!horaStr) return "";
+    const match = horaStr.match(/(\d{1,2}):(\d{2}):(\d{2})\s?(a\.m\.|p\.m\.)/i);
+    if (!match) return horaStr; // Ya está en 24 horas
+
+    let h = parseInt(match[1], 10);
+    const m = match[2];
+    const s = match[3];
+    const ampm = match[4].toLowerCase();
+
+    if (ampm === "p.m." && h !== 12) h += 12;
+    if (ampm === "a.m." && h === 12) h = 0;
+
+    return `${h.toString().padStart(2, '0')}:${m}:${s}`;
+  };
+
+  document.getElementById("edit-hora-entrada").value = convertir(entrada);
+  document.getElementById("edit-hora-salida").value = convertir(salida);
+}
+    function cerrarModal() {
+      document.getElementById("modal-editar-hora").style.display = "none";
+    }
+
+    document.getElementById("form-editar-hora").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("edit-id").value;
+      const entrada = document.getElementById("edit-hora-entrada").value.trim();
+      const salida = document.getElementById("edit-hora-salida").value.trim();
+      const regexHora = /^\d{2}:\d{2}:\d{2}$/;
+
+      if ((entrada && !regexHora.test(entrada)) || (salida && !regexHora.test(salida))) {
+        alert("⚠️ Formato inválido. Usa HH:MM:SS (ej. 06:15:32)");
+        return;
+      }
+
+      const res = await fetch("/actualizar-horarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, entrada, salida })
+      });
+
+      const result = await res.json();
+      alert(result.mensaje);
+      if (result.success) {
+        cerrarModal();
+        cargarRegistros();
+      }
+    });
+
+    document.getElementById("filtro").addEventListener("input", e => {
+      const valor = e.target.value.toLowerCase();
+      document.querySelectorAll("#tabla_registros tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(valor) ? "" : "none";
+      });
+    });
+    async function eliminarRegistro(id) {
+  const confirmar = confirm("¿Estás seguro de que deseas eliminar este registro?");
+  if (!confirmar) return;
+
+  try {
+    const res = await fetch(`https://pagina-oficial-amhj.onrender.com/eliminar-registro/${id}`, { method: "DELETE" });
+    const result = await res.json();
+
+    alert(result.mensaje || "Registro eliminado");
+    cargarRegistros(); // Esto actualiza la tabla en HTML
+  } catch (error) {
+    console.error("❌ Error al eliminar:", error);
+    alert("No se pudo conectar con el servidor.");
+  }
+}
+    cargarRegistros();
+  </script>
+  <script src="Bloqueos.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú Docente</title>
+  <link rel="stylesheet" href="menu.css" />
+</head>
+<body>
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" class="logo" />
+    <h1>Panel Docente</h1>
+  </header>
+
+  <nav class="barra-botones">
+    <a href="menu-docente.html">🏠 Inicio</a>
+    <a href="reporte_docente.html">📅 Reportes</a>
+    <a href="materiales.html">📁 Materiales</a>
+    <a href="asistencias.html">📝 Asistencias</a>
+    <a class="disabled">📅 Horarios</a>
+    <a class="disabled">📝 Próximamente</a>
+    <a class="disabled">👥 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+  </nav>
+  <main class="contenido-menu">
+    <p id="saludo"></p>
+    <section class="panel-datos">
+      <h2>👤 Tus Datos Generales</h2>
+      <ul>
+        <li><strong>Foto:</strong><br><img id="fotoDocente" src="" alt="Foto del Docente" width="120" style="margin-top: 8px; border-radius: 10px;" /></li>
+        <li><strong>Matrícula:</strong> <span id="matriculaDocente">—</span></li>
+        <li><strong>Nombre:</strong> <span id="nombreDocente">—</span></li>
+        <li><strong>Academia:</strong> <span id="academiaDocente">—</span></li>
+        <li><strong>Disciplina:</strong> <span id="disciplinaDocente">—</span></li>
+        <li><strong>Ciclo escolar:</strong> <span id="cicloDocente">—</span></li>
+        <li><strong>Asesor:</strong> <span id="asesorDocente">—</span></li>   
+      </ul>
+    </section>
+  <!-- Mensaje dinámico -->
+  <section class="panel-mensaje" id="mensajeComportamiento">
+    <!-- Se llena dinámicamente con JS -->
+  </section>
+    <section class="panel-extra" style="margin-top:30px;">
+      <h3></h3>
+      <div class="cuadro-horario" style="
+      min-height:80px;
+      border:2px dashed #0A4C68;
+      padding:15px;
+      border-radius:8px;
+      color:#555;
+      font-style:italic;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+    ">
+      <h2 style="margin-bottom: 15px; color: #0A4C68;">
+        📅 Tu horario ciclo escolar 2025-2026
+      </h2>
+      <img src="img/Horarios/HVicente.png" alt="Horario del docente" style="max-width:90%; border:1px solid #ccc; border-radius:8px;">
+    </div>    
+    </section>
+  </main>  
+
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+  <script>
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+    if (!nombre || tipo !== "maestro") {
+      alert("Acceso denegado. Redirigiendo al login.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
+    }
+    function cerrarSesion() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    } 
+  </script>
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  
+  const supabase = createClient(
+    "https://mhnzjhelbupyifdlpngv.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
+  );
+  
+  const matricula = localStorage.getItem("matriculaUsuario");
+  if (!matricula) {
+    console.warn("⚠️ No hay matrícula en localStorage");
+  } else {
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("usuario", matricula)
+      .single();
+  
+    if (error || !data) {
+      console.error("❌ No se encontraron datos:", error?.message);
+    } else {
+      console.log("✅ Datos recibidos:", data);
+      // PONEMOS SOLO LO NECESARIO, SIN NULOS
+      if (data.usuario) document.getElementById("matriculaDocente").textContent = data.usuario;
+      if (data.nombre || data.apellido_paterno || data.apellido_materno)
+        document.getElementById("nombreDocente").textContent =
+          `${data.nombre || ""} ${data.apellido_paterno || ""} ${data.apellido_materno || ""}`.trim();
+      if (data.academia) document.getElementById("academiaDocente").textContent = data.academia;
+      if (data.disciplina) document.getElementById("disciplinaDocente").textContent = data.disciplina;
+      if (data.ciclo_escolar) document.getElementById("cicloDocente").textContent = data.ciclo_escolar;
+      if (data.asesor) document.getElementById("asesorDocente").textContent = data.asesor;
+      if (data.foto) document.getElementById("fotoDocente").src = data.foto;
+    }
+  }
+  </script>      
+</body>
+</html>

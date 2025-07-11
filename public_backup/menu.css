@@ -1,0 +1,471 @@
+/* Reset general */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Encabezado */
+.menu-encabezado {
+  background: linear-gradient(to right, #002b7f, #d52b1e);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-encabezado .logo {
+  width: 80px;
+  margin-bottom: 0.5rem;
+}
+
+.menu-encabezado h1 {
+  font-size: 1.5rem;
+}
+
+/* Barra de botones */
+.barra-botones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: white;
+  padding: 1rem;
+  gap: 0.5rem;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+}
+
+.barra-botones a {
+  text-decoration: none;
+  color: #002b7f;
+  background-color: #e6f0ff;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  font-size: 0.95rem;
+}
+
+.barra-botones a:hover {
+  background-color: #cce0ff;
+}
+
+.barra-botones a.disabled {
+  background-color: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Contenido principal */
+.contenido-menu {
+  flex: 1;
+  padding: 2rem 1rem;
+  max-width: 2100px;
+  margin: 2rem auto 0 auto;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.contenido-menu p {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Pie de página */
+footer.pie {
+  background-color: #d52b1e;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Tabla de usuarios */
+.tabla-contenedor {
+  max-width: 95%;
+  margin: auto;
+  overflow-x: auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.tabla-contenedor h2 {
+  text-align: center;
+  color: #002b7f;
+  margin-bottom: 1rem;
+}
+
+#tabla-usuarios {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+#tabla-usuarios th, #tabla-usuarios td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #ddd;
+}
+
+#tabla-usuarios th {
+  background-color: #002b7f;
+  color: white;
+}
+
+#tabla-usuarios tr:hover {
+  background-color: #f5f5f5;
+}
+
+#tabla-usuarios button {
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+#tabla-usuarios button:hover {
+  opacity: 0.8;
+}
+
+/* Formulario */
+.formulario-card {
+  background-color: white;
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 12px;
+}
+
+.formulario-card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #002b7f;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+.campo label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.campo input,
+.campo select {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.campo-boton {
+  text-align: center;
+}
+
+.campo-boton button {
+  background-color: #002b7f;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.campo-boton button:hover {
+  background-color: #001f5c;
+}
+
+.mensaje {
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-contenido {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.modal-contenido h3 {
+  margin-bottom: 1rem;
+}
+
+.modal-contenido form > * {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* Navegación (hamburguesa) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #002b7f;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 0.5rem 0;
+  gap: 1rem;
+  background-color: white;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+}
+
+.nav-bar li a {
+  text-decoration: none;
+  color: #002b7f;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.nav-bar li a:hover {
+  background-color: #f0f0f0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .menu-encabezado {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .barra-botones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contenido-menu {
+    padding: 1rem;
+  }
+
+  .formulario-card {
+    padding: 1.2rem;
+  }
+
+  .modal-contenido {
+    padding: 1rem;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-bar {
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  .nav-bar.open {
+    max-height: 400px;
+    padding: 1rem 0;
+  }
+
+  .nav-bar li {
+    text-align: center;
+  }
+}
+/* Panel resumen general */
+.panel-resumen h2,
+.panel-datos h2,
+.panel-mensaje {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tarjetas-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tarjeta-resumen {
+  background-color: #f2f2f2;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-size: 1.2rem;
+  text-align: center;
+  min-width: 160px;
+}
+
+/* Datos generales */
+.panel-datos ul {
+  list-style: none;
+  padding: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.panel-datos li {
+  background: #fff;
+  padding: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.1rem;
+}
+
+/* Mensaje dinámico */
+.panel-mensaje {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #e8f5e9;
+  border-left: 6px solid #4caf50;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+}
+/* ======= Mejoras a inputs y selects para formularios ======= */
+.form-grid input,
+.form-grid select {
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  outline: none;
+  border-color: #002b7f;
+  box-shadow: 0 0 5px rgba(0,43,127,0.4);
+}
+
+/* Botón principal */
+.campo-boton button,
+.form-grid button {
+  font-size: 1rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.campo-boton button:hover,
+.form-grid button:hover {
+  background-color: #001f5c;
+  transform: scale(1.02);
+}
+
+/* Mensajes de validación o estado */
+.mensaje {
+  font-size: 1rem;
+}
+
+/* Inputs largos en mobile */
+@media (max-width: 600px) {
+  .form-grid input,
+  .form-grid select {
+    width: 100%;
+  }
+}
+
+/* Imagen previsualización o horario */
+img#preview-foto, 
+img#img-horario {
+  max-width: 250px;
+  border-radius: 10px;
+  margin-top: 1rem;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* Mejor spacing general para campos */
+.form-grid > * {
+  margin-bottom: 0.8rem;
+}
+
+/* Títulos consistentes en forms */
+.formulario-card h2,
+form h2 {
+  font-size: 1.6rem;
+  color: #002b7f;
+}
+
+/* Botones de selección (en seleccionar-usuario.html) */
+.boton-opcion {
+  display: inline-block;
+  background: #002b7f;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  margin: 0.5rem;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.boton-opcion:hover {
+  background: #001f5c;
+  transform: scale(1.05);
+}
+
+/* Horario imagen flotante */
+.horario-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.horario-box img {
+  max-width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.horario-box span {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+

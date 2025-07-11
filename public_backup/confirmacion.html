@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmación</title>
+  <link rel="stylesheet" href="confirmacion.css">
+</head>
+<body>
+    <div id="contenedor-confirmacion">
+        <h2 id="titulo-confirmacion">✅ Registro exitoso</h2>
+        <img id="foto" src="" alt="Foto de usuario">
+        <div class="dato" id="nombre"></div>
+        <div class="dato" id="tipo"></div>
+        <div class="dato" id="registro"></div>
+        <div class="dato" id="hora"></div>
+      </div>      
+      <script>
+        const params = new URLSearchParams(window.location.search);
+      
+        const nombre = params.get('nombre') || 'Nombre no disponible';
+        const tipo = params.get('tipo') || 'No especificado';
+        const foto = params.get('foto') || 'https://via.placeholder.com/100';
+        const tipoRegistro = params.get('registro') || 'entrada';
+        const hora = params.get('hora') || new Date().toLocaleTimeString();
+      
+        const titulo = document.getElementById('titulo-confirmacion');
+        const registroEl = document.getElementById('registro');
+      
+        document.getElementById('nombre').textContent = nombre;
+        document.getElementById('tipo').textContent = `Tipo: ${tipo}`;
+        document.getElementById('foto').src = foto;
+        document.getElementById('foto').alt = `Foto de ${nombre}`;
+        document.getElementById('hora').textContent = `Hora: ${hora}`;
+      
+        if (!nombre || nombre === 'Nombre no disponible') {
+          titulo.textContent = '❌ Error al obtener la información';
+          titulo.style.color = 'red';
+          registroEl.textContent = 'Verifica que hayas escrito correctamente tu matrícula o consulta al administrador.';
+          registroEl.style.color = 'orange';
+        } else if (tipoRegistro === 'entrada') {
+          titulo.textContent = '✅ Registro exitoso';
+          registroEl.textContent = 'Entrada registrada correctamente';
+          registroEl.classList.add('entrada');
+        } else if (tipoRegistro === 'salida') {
+          titulo.textContent = '✅ Registro exitoso';
+          registroEl.textContent = 'Salida registrada correctamente';
+          registroEl.classList.add('salida');
+        } else if (tipoRegistro === 'ya_registrado') {
+          titulo.textContent = '❌ Ya registraste entrada y salida hoy.';
+          titulo.style.color = 'red';
+          registroEl.textContent = 'Consulta con el administrador si necesitas hacer un cambio.';
+          registroEl.style.color = 'orange';
+        } else if (tipoRegistro === 'fallido') {
+          titulo.textContent = '❌ Usuario no encontrado';
+          titulo.style.color = 'red';
+          registroEl.textContent = '❌ Consulta con el administrador.';
+          registroEl.style.color = 'red';
+        }
+      
+        setTimeout(() => {
+          window.location.href = 'asistencia.html';
+        }, 400);
+      </script>  
+<script src="Bloqueos.js"></script>
+          
+</body>
+</html>
