@@ -3,42 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Panel Prefectura - Escuela Secundaria N. 77</title>
-  <link rel="stylesheet" href="estilo-global.css" />
+  <title>Panel de Prefectura</title>
+  <link rel="stylesheet" href="menu-prefectura.css">
 </head>
 <body>
-  <header class="header-contenido">
-    <img src="img/PRPM/logo.png" alt="Logo" class="logo">
-    <h2>Panel Prefectura - Escuela Secundaria N. 77</h2>
-    <button onclick="cerrarSesion()" style="margin-top: 1rem; background-color: #d32f2f; color: white; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer;">
-      🚪 Cerrar sesión
-    </button>
+
+  <!-- ENCABEZADO -->
+  <header>
+    <img src="img/PRPM/logo.png" alt="Logo" />
+    <h2>Panel de Prefectura</h2>
   </header>
 
-  <main class="contenido-principal">
-    <section class="fila fila-abajo">
-      <div class="tarjeta">
-        <h3>📚 Ver reportes de conducta</h3>
-        <p>Consulta los reportes emitidos por los docentes sobre el comportamiento de los alumnos.</p>
-        <a href="ver-reportes.html" class="btn-ingresar" style="display:inline-block;margin-top:10px;">Ir a reportes</a>
-      </div>
-      <div class="tarjeta">
-        <h3>📝 Registrar observación</h3>
-        <p>Registra observaciones directas sobre el comportamiento durante los recreos o transiciones.</p>
-        <a href="registrar-observacion.html" class="btn-ingresar" style="display:inline-block;margin-top:10px;">Registrar</a>
-      </div>
-    </section>
-  </main>
+  <!-- BOTONES -->
+  <nav class="barra-botones">
+    <a href="#">🏠 Inicio</a>
+    <a class="disabled" href="#">🔒 Próximamente</a>
+    <a class="disabled" href="#">🔒 Próximamente</a>
+    <a class="disabled" href="#">🔒 Próximamente</a>
+    <a class="disabled" href="#">🔒 Próximamente</a>
+    <a class="cerrar" href="login.html">Cerrar sesión</a>
+  </nav>
 
+  <!-- TARJETA CENTRAL -->
+  <div class="tarjeta-central">
+    <h3>👋 Hola Prefecto(a)</h3>
+    <p>Bienvenido al Panel de Prefectura</p>
+  </div>
+
+  <!-- PIE -->
   <footer class="pie">
-    © Escuela Secundaria N. 77 “República de Panamá”
+    © Escuela Secundaria N. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
-  <script>
-    function cerrarSesion() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    }
-  </script>
 </body>
 </html>
