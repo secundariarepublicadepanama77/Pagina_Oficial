@@ -1,117 +1,101 @@
-/* Reset básico */
+/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  body, html {
-    height: 100%;
-    font-family: "Segoe UI", sans-serif;
+  /* GENERAL */
+  body {
+    font-family: 'Segoe UI', sans-serif;
     background: #f9f9f9;
-    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: #002b7f;
   }
   
-  /* Encabezado degradado con logo */
+  /* HEADER */
   header {
-    background: linear-gradient(to right, #002b7f, #d32f2f);
+    background: linear-gradient(90deg, #0D1B4C, #0040b0);
     color: white;
-    padding: 1rem;
+    padding: 1.5rem;
     text-align: center;
   }
-  
   header img {
-    height: 50px;
+    width: 60px;
+    height: auto;
     margin-bottom: 0.5rem;
   }
   
-  header h2 {
-    font-size: 1.6rem;
-  }
-  
-  /* Barra de botones */
+  /* NAV BAR */
   .barra-botones {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.7rem;
-    background: white;
-    border-top: 4px solid #d32f2f;
+    background: #fff;
+    border-top: 4px solid #d52b1e;
     border-bottom: 1px solid #ccc;
-    padding: 0.8rem;
   }
-  
   .barra-botones a {
     text-decoration: none;
+    color: #0D1B4C;
     font-weight: bold;
-    color: #002b7f;
+    padding: 0.8rem 1.2rem;
+    transition: background 0.3s, color 0.3s;
+  }
+  .barra-botones a:hover {
     background: #f0f0f0;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    transition: all 0.3s;
   }
-  
-  .barra-botones a:hover:not(.disabled) {
-    background: #e0e0e0;
-  }
-  
   .barra-botones a.disabled {
+    color: #999;
     pointer-events: none;
-    opacity: 0.5;
   }
-  
-  /* Botón especial */
   .barra-botones a.cerrar {
-    background: #d32f2f;
+    background: #d52b1e;
     color: white;
+    border-radius: 5px;
   }
-  
   .barra-botones a.cerrar:hover {
-    background: #b71c1c;
+    background: #b30000;
   }
   
-  /* Tarjeta central */
+  /* CENTRAL CARD */
   .tarjeta-central {
-    max-width: 400px;
-    margin: 3rem auto;
+    flex: 1;
     background: white;
+    max-width: 600px;
+    margin: 3rem auto;
     padding: 2rem;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
   }
-  
   .tarjeta-central h3 {
-    font-size: 1.4rem;
-    color: #002b7f;
-    margin-bottom: 0.8rem;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
-  
   .tarjeta-central p {
-    font-size: 1rem;
-    color: #555;
+    font-size: 1.1rem;
+    color: #333;
   }
   
-  /* Footer */
+  /* FOOTER */
   footer.pie {
-    margin-top: auto;
-    background: #d32f2f;
+    background: #d52b1e;
     color: white;
     text-align: center;
     padding: 1rem;
     font-size: 0.9rem;
+    margin-top: auto;
   }
   
-  /* Adaptable */
+  /* RESPONSIVE */
   @media (max-width: 768px) {
-    .barra-botones {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .tarjeta-central {
-      margin: 2rem;
-      padding: 1.5rem;
+    .barra-botones a {
+      flex: 1 1 100%;
+      text-align: center;
+      border-bottom: 1px solid #eee;
     }
   }
   

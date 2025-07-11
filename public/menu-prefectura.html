@@ -21,12 +21,12 @@
     <a class="disabled" href="#">🔒 Próximamente</a>
     <a class="disabled" href="#">🔒 Próximamente</a>
     <a class="disabled" href="#">🔒 Próximamente</a>
-    <a class="cerrar" href="login.html">Cerrar sesión</a>
+    <a class="cerrar" href="#" onclick="cerrarSesion()">Cerrar sesión</a>
   </nav>
 
   <!-- TARJETA CENTRAL -->
   <div class="tarjeta-central">
-    <h3>👋 Hola Prefecto(a)</h3>
+    <h3 id="saludo">👋 Bienvenido</h3>
     <p>Bienvenido al Panel de Prefectura</p>
   </div>
 
@@ -35,5 +35,21 @@
     © Escuela Secundaria N. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
+  <script>
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+    if (!nombre || tipo !== "prefectura") {
+      alert("Acceso denegado. Redirigiendo al login.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("saludo").innerText = "👋 Hola " + nombre + ", bienvenido a tu panel.";
+    }
+
+    function cerrarSesion() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
 </body>
 </html>
+
