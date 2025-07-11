@@ -12,7 +12,7 @@
   <header>
     <div class="franja bandera"></div>
     <div class="header-contenido">
-      <img src="img/logo.png" alt="Logo de la escuela" class="logo">
+      <img src="img/PRPM/logo.png" alt="Logo de la escuela" class="logo">
       <h1>Escuela Secundaria N. 77 “República de Panamá”</h1>
     </div>
     <nav>
@@ -39,32 +39,8 @@
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>  
 
-  <!--///////////////////////////////////-->
-  <script>
-    const toggleBtn = document.querySelector(".menu-toggle");
-    const navBar = document.querySelector(".nav-bar");
-
-    toggleBtn.addEventListener("click", () => {
-      navBar.classList.toggle("open");
-    });
-  </script>
-<script>
-  document.addEventListener("contextmenu", e => e.preventDefault());// Bloqueo de clic derecho
-  document.addEventListener("keydown", e => { // Bloqueo de teclas: F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C
-    const bloqueadas = [
-      "F12",
-      "u", // Ctrl+U
-      "i", // Ctrl+Shift+I
-      "c"  // Ctrl+Shift+C 
-    ];
-    if (
-      bloqueadas.includes(e.key.toLowerCase()) && 
-      (e.ctrlKey || e.metaKey || e.shiftKey)
-    ) {
-      e.preventDefault();
-      console.log("🚫 Acción bloqueada");
-    }
-  });
-</script>
+  <!--javascript-->
+  <script src="js/responsive.js"></script>
+<script src="js/Bloqueos.js"></script>
 </body>
 </html>
