@@ -7,73 +7,80 @@
   <link rel="stylesheet" href="formulario.css">
 </head>
 <body>
-<header class="menu-encabezado">
-  <img src="img/logo.png" alt="Logo" class="logo" />
-  <h1>Agregar Alumno</h1>
-</header>
-<main class="contenido-menu">
-  <form id="form-alumno" class="form-grid">
-    <input type="text" name="nombre" placeholder="Nombre" required>
-    <input type="text" name="apellido_paterno" placeholder="Apellido Paterno" required>
-    <input type="text" name="apellido_materno" placeholder="Apellido Materno">
-    <input type="text" name="usuario" placeholder="Usuario" required>
-    <input type="password" name="contrasena" placeholder="Contraseña" required>
-    <input type="email" name="email" placeholder="Correo electrónico" required>
-    <input type="text" name="telegram_user" placeholder="Usuario de Telegram (@usuario)">
-    <select name="grado" required>
-      <option value="">Selecciona Grado</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-    </select>
-    <select name="grupo" required>
-      <option value="">Selecciona Grupo</option>
-      <option value="A">A</option>
-      <option value="B">B</option>
-      <option value="C">C</option>
-      <option value="D">D</option>
-    </select>
-    <select name="ciclo_escolar">
-      <option value="">Selecciona ciclo</option>
-      <option value="2024-2025">2024-2025</option>
-      <option value="2025-2026">2025-2026</option>
-    </select>
-    <input type="text" name="horario" placeholder="Ruta de horario ej: img/horarios/1A.png">
-    <input type="text" name="foto" placeholder="URL Foto">
-    <button type="submit">Agregar Alumno</button>
-    <div id="mensaje"></div>
-  </form>
-</main>
-<script>
-document.getElementById("form-alumno").addEventListener("submit", async e => {
-  e.preventDefault();
-  const f = e.target;
-  const datos = {
-  nombre: f.nombre.value,
-  apellido_paterno: f.apellido_paterno.value,
-  apellido_materno: f.apellido_materno.value,
-  usuario: f.usuario.value,
-  contrasena: f.contrasena.value,
-  email: f.email.value,
-  telegram_user: f.telegram_user.value,
-  tipo: "alumno",
-  grado: f.grado.value,
-  grupo: f.grupo.value,
-  ciclo_escolar: f.ciclo_escolar.value,
-  horario: f.horario.value,
-  academia: null,
-  disciplina: null,
-  asesor: null,
-  foto: f.foto.value
-};
-  const r = await fetch("/api/usuarios", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(datos)
-  });
-  const res = await r.json();
-  document.getElementById("mensaje").innerText = r.ok ? "✅ Alumno agregado" : "❌ " + (res.error || "Error");
-});
-</script>
+  <header class="menu-encabezado">
+    <img src="img/logo.png" alt="Logo" style="width: 80px; margin: 1rem auto; display: block;">
+    <h1 style="text-align: center; color: #002b7f;">Agregar Alumno</h1>
+  </header>
+
+  <main>
+    <form id="form-alumno" class="form-grid">
+      <input type="text" name="nombre" placeholder="Nombre" required>
+      <input type="text" name="apellido_paterno" placeholder="Apellido Paterno" required>
+      <input type="text" name="apellido_materno" placeholder="Apellido Materno">
+      <input type="text" name="usuario" placeholder="Usuario / Matrícula" required>
+      <input type="password" name="contrasena" placeholder="Contraseña" required>
+      <input type="email" name="email" placeholder="Correo electrónico" required>
+      <input type="text" name="telegram_user" placeholder="Usuario de Telegram (@usuario)">
+      <select name="grado" required>
+        <option value="">Selecciona Grado</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+      <select name="grupo" required>
+        <option value="">Selecciona Grupo</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+      </select>
+      <select name="ciclo_escolar">
+        <option value="">Selecciona Ciclo Escolar</option>
+        <option value="2024-2025">2024-2025</option>
+        <option value="2025-2026">2025-2026</option>
+      </select>
+      <input type="text" name="horario" placeholder="Ruta del horario ej: img/horarios/1A.png">
+      <input type="text" name="foto" placeholder="URL Foto">
+
+      <button type="submit">Agregar Alumno</button>
+      <div id="mensaje"></div>
+    </form>
+  </main>
+
+  <footer style="background: #d52b1e; color: white; text-align: center; padding: 1rem; margin-top: 2rem;">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <script>
+    document.getElementById("form-alumno").addEventListener("submit", async e => {
+      e.preventDefault();
+      const f = e.target;
+      const datos = {
+        nombre: f.nombre.value,
+        apellido_paterno: f.apellido_paterno.value,
+        apellido_materno: f.apellido_materno.value,
+        usuario: f.usuario.value,
+        contrasena: f.contrasena.value,
+        email: f.email.value,
+        telegram_user: f.telegram_user.value,
+        tipo: "alumno",
+        grado: f.grado.value,
+        grupo: f.grupo.value,
+        ciclo_escolar: f.ciclo_escolar.value,
+        horario: f.horario.value,
+        academia: null,
+        disciplina: null,
+        asesor: null,
+        foto: f.foto.value
+      };
+      const r = await fetch("/api/usuarios", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(datos)
+      });
+      const res = await r.json();
+      document.getElementById("mensaje").innerText = r.ok ? "✅ Alumno agregado" : "❌ " + (res.error || "Error");
+    });
+  </script>
 </body>
 </html>
