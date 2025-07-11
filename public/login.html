@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iniciar sesión</title>
   <link rel="stylesheet" href="login.css">
 </head>
- <!--/////////////////////////////////////////////-->
 <body>
   <div class="fondo-login">
     <div class="formulario-contenedor">
@@ -23,7 +22,7 @@
       <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
     </div>
   </div>
-  <!--/////////////////////////////////////////////-->
+
   <script>
     document.getElementById("form-login").addEventListener("submit", async function (event) {
       event.preventDefault();
@@ -39,25 +38,31 @@
         });
         const resultado = await respuesta.json();
         const mensaje = document.getElementById("mensaje");
+
         if (respuesta.ok) {
+          // Guardar en localStorage
           localStorage.setItem("usuarioID", resultado.id);
-localStorage.setItem("nombreUsuario", resultado.nombre);
-localStorage.setItem("tipoUsuario", resultado.tipo);
-localStorage.setItem("matriculaUsuario", datos.usuario);
-localStorage.setItem("usuarioActual", JSON.stringify({
-  usuario: datos.usuario,
-  tipo: resultado.tipo,
-  nombre: resultado.nombre
-}));
+          localStorage.setItem("nombreUsuario", resultado.nombre);
+          localStorage.setItem("tipoUsuario", resultado.tipo);
+          localStorage.setItem("matriculaUsuario", datos.usuario);
+          localStorage.setItem("usuarioActual", JSON.stringify({
+            usuario: datos.usuario,
+            tipo: resultado.tipo,
+            nombre: resultado.nombre
+          }));
+
+          // Redirección según tipo
           if (resultado.tipo === "administrativo") {
-                window.location.href = "menu-admin.html";
-} else if (resultado.tipo === "maestro") {
-  window.location.href = "menu-docente.html";
-} else if (resultado.tipo === "alumno") {
-  window.location.href = "menu-alumno.html";
-} else {
-  mensaje.innerText = "❌ Tipo de usuario no reconocido: " + resultado.tipo;
-}
+            window.location.href = "menu-admin.html";
+          } else if (resultado.tipo === "maestro") {
+            window.location.href = "menu-docente.html";
+          } else if (resultado.tipo === "alumno") {
+            window.location.href = "menu-alumno.html";
+          } else if (resultado.tipo === "secretario") {
+            window.location.href = "menu-secretario.html";
+          } else {
+            mensaje.innerText = "❌ Tipo de usuario no reconocido: " + resultado.tipo;
+          }
         } else {
           mensaje.innerText = "❌ " + resultado.error;
         }
@@ -66,12 +71,14 @@ localStorage.setItem("usuarioActual", JSON.stringify({
       }
     });
   </script>
+
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient(
       'https://mhnzjhelbupyifdlpngv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
     );
+
     const matricula = localStorage.getItem("matriculaUsuario");
     if (matricula) {
       const { data, error } = await supabase
@@ -79,13 +86,14 @@ localStorage.setItem("usuarioActual", JSON.stringify({
         .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
         .eq("usuario", matricula)
         .single();
-  
+      
       if (error || !data) {
-        console.error("❌ No se pudieron obtener los datos del alumno:", error);
+        console.error("❌ No se pudieron obtener los datos del usuario:", error);
       } else {
-        document.getElementById("matriculaAlumno").textContent = data.usuario;
-        document.getElementById("nombreAlumno").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
-        document.getElementById("grupoAlumno").textContent = `${data.grado || '—'}° ${data.grupo || '—'}`;
+        // Esto solo funcionará si tienes elementos con esos IDs en tus páginas
+        document.getElementById("matriculaAlumno")?.textContent = data.usuario;
+        document.getElementById("nombreAlumno")?.textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+        document.getElementById("grupoAlumno")?.textContent = `${data.grado || '—'}° ${data.grupo || '—'}`;
       }
     } else {
       console.warn("⚠️ No se encontró matrícula en localStorage");
