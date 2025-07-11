@@ -9,7 +9,7 @@
 <body>
   <div class="fondo-login">
     <div class="formulario-contenedor">
-      <img src="img/logo.png" alt="Logo escuela" class="logo-login">
+      <img src="img/PRPM/logo.png" alt="Logo escuela" class="logo-login">
       <h2>Inicia sesión</h2>
       <form id="form-login">
         <input type="text" id="usuario" placeholder="Usuario" required>
@@ -22,7 +22,6 @@
       <div id="mensaje" style="margin-top: 1rem; color: red;"></div>
     </div>
   </div>
-
   <script>
     document.getElementById("form-login").addEventListener("submit", async function (event) {
       event.preventDefault();
@@ -38,7 +37,7 @@
         });
         const resultado = await respuesta.json();
         const mensaje = document.getElementById("mensaje");
-
+  
         if (respuesta.ok) {
           // Guardar en localStorage
           localStorage.setItem("usuarioID", resultado.id);
@@ -50,7 +49,7 @@
             tipo: resultado.tipo,
             nombre: resultado.nombre
           }));
-
+  
           // Redirección según tipo
           if (resultado.tipo === "administrativo") {
             window.location.href = "menu-admin.html";
@@ -60,6 +59,8 @@
             window.location.href = "menu-alumno.html";
           } else if (resultado.tipo === "secretario") {
             window.location.href = "menu-secretario.html";
+          } else if (resultado.tipo === "prefectura" || resultado.tipo === "prefecto") {
+            window.location.href = "menu-prefectura.html";
           } else {
             mensaje.innerText = "❌ Tipo de usuario no reconocido: " + resultado.tipo;
           }
@@ -71,7 +72,7 @@
       }
     });
   </script>
-
+  
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
     const supabase = createClient(
