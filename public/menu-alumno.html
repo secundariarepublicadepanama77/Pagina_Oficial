@@ -7,12 +7,11 @@
   <link rel="stylesheet" href="menu.css" />
 </head>
 <body>
-  <!-- Encabezado -->
   <header class="menu-encabezado">
     <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
     <h1>Panel del Alumno</h1>
   </header>
-  <!-- Barra de botones del alumno -->
+  <!-- botones del alumno -->
   <nav class="barra-botones">
     <a href="menu-alumno.html">🏠 Inicio</a>
     <a href="horario.html">📅 Horario</a>
@@ -23,12 +22,8 @@
     <a class="disabled">🔒 Próximamente</a>
     <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
   </nav>
-  <!-- Contenido principal -->
-  <<!-- Se mantiene tu DOCTYPE y encabezado como está -->
 <main class="contenido-menu">
   <p id="saludo"></p>
-
-  <!-- Resumen general -->
   <section class="panel-resumen">
     <h2>📊 Tu Historial en la Escuela</h2>
     <div class="tarjetas-resumen">
@@ -39,7 +34,6 @@
       <div class="tarjeta-resumen">🔴 Reportes Graves: <span id="graves">—</span></div>
     </div>
   </section>
-
   <!-- Datos generales -->
   <section class="panel-datos">
     <h2>👤 Tus Datos Generales</h2>
@@ -52,32 +46,17 @@
       <li><strong>Ciclo escolar:</strong> <span id="cicloAlumno">—</span></li>
     </ul>
   </section>
-
-  <!-- Mensaje dinámico -->
   <section class="panel-mensaje" id="mensajeComportamiento">
-    <!-- Se llena dinámicamente con JS -->
   </section>
 </main>
-  <!-- Pie de página -->
+  <!-- Pie de pág. -->
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
   <!-- Scripts -->
-  <script>
-    const nombre = localStorage.getItem("nombreUsuario");
-    const tipo = localStorage.getItem("tipoUsuario");
-    if (!nombre || tipo !== "alumno") {
-      alert("Sesión no válida. Redirigiendo al login.");
-      window.location.href = "login.html";
-    } else {
-      document.getElementById("saludo").innerText = "👋 Hola, " + nombre + ". Bienvenido a tu panel.";
-    }
-    function cerrarSesion() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    }
-  </script>
+  <script src="js/Malumno.js"></script>
+  <script src="js/responsive.js"></script>
 <script src="Bloqueos.js"></script>
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
