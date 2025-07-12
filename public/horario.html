@@ -15,7 +15,7 @@
     <h1>Panel del Alumno</h1>
   </header>
 
-  <!-- Barra de navegación -->
+  <!-- Botones -->
   <nav class="barra-botones">
     <a href="menu-alumno.html">🏠 Inicio</a>
     <a href="#">📅 Horario</a>
@@ -31,7 +31,7 @@
   <main class="contenido-menu" style="text-align: center;">
     <h2>📅 Este es tu horario del ciclo 2025-2026</h2>
     <img id="imgHorario" src="img/default-horario.png" alt="Horario" style="width: 90%; max-width: 600px; border-radius: 12px; margin-top: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.1);" />
-    <!-- Horario de atención fijo -->
+    <!-- atención padres de familia imagen muy grande -->
     <section class="panel-atencion" style="margin-top: 2rem; text-align: center;">
       <h2>🕑 Horario de atención a padres de familia</h2>
       <img src="img/PRPM/atencion.png" alt="Horario atención padres" style="max-width: 100%; height: auto; border-radius: 12px; margin-top: 1rem;">
@@ -43,25 +43,16 @@
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
-  <!-- Script para validar sesión -->
-  <script>
-    const nombre = localStorage.getItem("nombreUsuario");
-    const tipo = localStorage.getItem("tipoUsuario");
-    if (!nombre || (tipo !== "alumno" && tipo !== "maestro")) {
-      alert("Sesión no válida. Redirigiendo al login.");
-      window.location.href = "login.html";
-    }
-    function cerrarSesion() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    }
-  </script>
-
-  <!-- Script para traer horario -->
+  <!-- Script-->
+   <!-- Validar sesión -->
+  <script src="js/vshorario.js"></script>
+  <script src="js/responsive.js"></script>
+<script src="js/Bloqueos.js"></script>
+  <!-- jalar horario -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     const supabase = createClient(
-      "https://mhnzjhelbupyifdlpngv.supabase.co", // Tu URL de Supabase
+      "https://mhnzjhelbupyifdlpngv.supabase.co", 
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
     );
     const matricula = localStorage.getItem("matriculaUsuario");
