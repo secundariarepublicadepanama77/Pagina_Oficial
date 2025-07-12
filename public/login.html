@@ -40,7 +40,6 @@
       if (error || !data) {
         console.error("❌ No se pudieron obtener los datos del usuario:", error);
       } else {
-        // Esto solo funcionará si tienes elementos con esos IDs en tus páginas
         document.getElementById("matriculaAlumno")?.textContent = data.usuario;
         document.getElementById("nombreAlumno")?.textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
         document.getElementById("grupoAlumno")?.textContent = `${data.grado || '—'}° ${data.grupo || '—'}`;
