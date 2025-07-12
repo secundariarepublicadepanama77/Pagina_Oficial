@@ -1,0 +1,26 @@
+.panel-atencion img {
+    max-width: 90%;
+    height: auto;
+    margin: 1rem auto 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: block;
+  }
+  
+  .panel-atencion h2 {
+    color: #002b7f;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  @media (max-width: 600px) {
+    .panel-atencion img {
+      max-width: 95%;
+    }
+  
+    .panel-atencion h2 {
+      font-size: 1.2rem;
+    }
+  }
+  
