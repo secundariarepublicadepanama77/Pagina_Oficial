@@ -83,13 +83,12 @@
         .eq("usuario", matricula)
         .single();
 
-      if (error || !data) {
-        console.error("❌ No se pudo obtener el horario:", error?.message || "No encontrado");
-      } else {
-        document.getElementById("imgHorario").src = data.horario || "img/default-horario.png";
-      }
-    }
+        if (error || !data) {
+  console.error("❌ No se pudo obtener el horario:", error?.message || "No encontrado");
+} else {
+  console.log("✅ Datos del usuario:", data);
+  document.getElementById("imgHorario").src = data.horario || "img/default-horario.png";
+}}
   </script>
-
 </body>
 </html>
