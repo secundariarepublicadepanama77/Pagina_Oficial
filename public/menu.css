@@ -467,5 +467,22 @@ form h2 {
   font-weight: bold;
   color: #333;
 }
+.panel-horario {
+  text-align: center;
+  padding: 2rem;
+}
+
+.panel-horario h2 {
+  font-size: 1.6rem;
+  color: #002b7f;
+  margin-bottom: 1rem;
+}
+
+.img-horario {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
 

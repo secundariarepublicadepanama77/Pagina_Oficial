@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Horario</title>
+  <link rel="stylesheet" href="menu.css" />
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="menu-encabezado">
+    <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
+    <h1>Panel del Alumno</h1>
+  </header>
+
+  <!-- BARRA DE BOTONES -->
+  <nav class="barra-botones">
+    <a href="menu-alumno.html">🏠 Inicio</a>
+    <a href="horario.html">📅 Horario</a>
+    <a href="mis_reportes.html">📝 Reportes</a>
+    <a class="disabled">🎓 Calificaciones</a>
+    <a class="disabled">💬 Mensajes</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="contenido-menu">
+    <section class="panel-horario">
+      <h2>🗓️ Este es tu horario del ciclo 2025-2026</h2>
+      <img id="imgHorario" src="img/default-horario.png" alt="Horario del alumno" class="img-horario"/>
+    </section>
+  </main>
+
+  <!-- PIE -->
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+    if (!nombre || tipo !== "alumno") {
+      alert("Sesión no válida. Redirigiendo al login.");
+      window.location.href = "login.html";
+    }
+
+    function cerrarSesion() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+  <script src="Bloqueos.js"></script>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabase = createClient(
+      "https://mhnzjhelbupyifdlpngv.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    );
+
+    const matricula = localStorage.getItem("matriculaUsuario");
+
+    if (matricula) {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("horario")
+        .eq("usuario", matricula)
+        .single();
+
+      if (error || !data) {
+        console.error("❌ No se pudo obtener el horario:", error?.message || "No encontrado");
+      } else {
+        document.getElementById("imgHorario").src = data.horario || "img/default-horario.png";
+      }
+    } else {
+      console.warn("⚠️ No hay matrícula guardada");
+    }
+  </script>
+
+</body>
+</html>
