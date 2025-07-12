@@ -1,12 +1,12 @@
 .panel-atencion img {
-    max-width: 90%;
+    width: 100%;
+    max-width: 600px; /* evita que sea más grande de 600px */
     height: auto;
     margin: 1rem auto 0 auto;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     display: block;
-  }
-  
+  }  
   .panel-atencion h2 {
     color: #002b7f;
     font-size: 1.4rem;
