@@ -8,16 +8,16 @@
 </head>
 <body>
 
-  <!-- ENCABEZADO -->
+  <!-- Encabezado -->
   <header class="menu-encabezado">
     <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
-    <h1 id="tituloPanel">Panel</h1>
+    <h1>Panel del Alumno</h1>
   </header>
 
-  <!-- BARRA DE BOTONES -->
+  <!-- Barra de navegación -->
   <nav class="barra-botones">
     <a href="menu-alumno.html">🏠 Inicio</a>
-    <a href="horario.html">📅 Horario</a>
+    <a href="#">📅 Horario</a>
     <a href="mis_reportes.html">📝 Reportes</a>
     <a class="disabled">🎓 Calificaciones</a>
     <a class="disabled">💬 Mensajes</a>
@@ -26,56 +26,40 @@
     <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
   </nav>
 
-  <!-- CONTENIDO -->
-  <main class="contenido-menu">
-    <section class="panel-horario">
-      <h2 id="tituloHorario">🗓️ Este es tu horario</h2>
-      <img id="imgHorario" src="img/default-horario.png" alt="Horario" class="img-horario"/>
-    </section>
+  <!-- Contenido principal -->
+  <main class="contenido-menu" style="text-align: center;">
+    <h2>📅 Este es tu horario del ciclo 2025-2026</h2>
+    <img id="imgHorario" src="img/default-horario.png" alt="Horario" style="width: 90%; max-width: 600px; border-radius: 12px; margin-top: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.1);" />
   </main>
 
-  <!-- PIE -->
+  <!-- Pie -->
   <footer class="pie">
     © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
   </footer>
 
-  <!-- SCRIPTS -->
+  <!-- Script para validar sesión -->
   <script>
+    const nombre = localStorage.getItem("nombreUsuario");
+    const tipo = localStorage.getItem("tipoUsuario");
+    if (!nombre || (tipo !== "alumno" && tipo !== "maestro")) {
+      alert("Sesión no válida. Redirigiendo al login.");
+      window.location.href = "login.html";
+    }
     function cerrarSesion() {
       localStorage.clear();
       window.location.href = "login.html";
     }
   </script>
-  <script src="Bloqueos.js"></script>
 
+  <!-- Script para traer horario -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
     const supabase = createClient(
-      "https://mhnzjhelbupyifdlpngv.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      "https://mhnzjhelbupyifdlpngv.supabase.co", // Tu URL de Supabase
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY"
     );
-
     const matricula = localStorage.getItem("matriculaUsuario");
-    const tipo = localStorage.getItem("tipoUsuario");
-    const nombre = localStorage.getItem("nombreUsuario");
 
-    // Cambiar título según tipo
-    const tituloPanel = document.getElementById("tituloPanel");
-    const tituloHorario = document.getElementById("tituloHorario");
-
-    if (tipo === "alumno") {
-      tituloPanel.textContent = "Panel del Alumno";
-      tituloHorario.textContent = "🗓️ Este es tu horario del ciclo 2025-2026";
-    } else if (tipo === "maestro") {
-      tituloPanel.textContent = "Panel del Docente";
-      tituloHorario.textContent = "🗓️ Este es tu horario como docente";
-    } else {
-      alert("Acceso denegado. Redirigiendo al login.");
-      window.location.href = "login.html";
-    }
-
-    // Consultar horario
     if (matricula) {
       const { data, error } = await supabase
         .from("usuarios")
@@ -83,12 +67,16 @@
         .eq("usuario", matricula)
         .single();
 
-        if (error || !data) {
-  console.error("❌ No se pudo obtener el horario:", error?.message || "No encontrado");
-} else {
-  console.log("✅ Datos del usuario:", data);
-  document.getElementById("imgHorario").src = data.horario || "img/default-horario.png";
-}}
+      if (error || !data) {
+        console.error("❌ No se pudo obtener el horario:", error?.message || "No encontrado");
+      } else {
+        console.log("✅ Horario del usuario:", data.horario);
+        document.getElementById("imgHorario").src = data.horario || "img/default-horario.png";
+      }
+    } else {
+      console.warn("⚠️ No hay matrícula almacenada");
+    }
   </script>
+
 </body>
 </html>
