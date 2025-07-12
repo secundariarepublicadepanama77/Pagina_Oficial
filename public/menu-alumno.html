@@ -101,7 +101,7 @@
       } else {
         console.log("✅ Datos del alumno:", data);
         document.getElementById("matriculaAlumno").textContent = data.usuario || "—";
-        document.getElementById("nombreAlumno").textContent = `${data.nombre} ${data.apellido_paterno} ${data.apellido_materno}`;
+        document.getElementById("nombreAlumno").textContent = `${data.nombre} ${data.apellido_paterno}`;
         document.getElementById("grupoAlumno").textContent = `${data.grado}° ${data.grupo}`;
         document.getElementById("cicloAlumno").textContent = data.ciclo_escolar || "—";
         document.getElementById("fotoAlumno").src = data.foto || "img/default.jpg";
