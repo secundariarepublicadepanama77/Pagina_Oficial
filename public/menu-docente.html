@@ -104,9 +104,9 @@
       console.log("✅ Datos recibidos:", data);
       // PONEMOS SOLO LO NECESARIO, SIN NULOS
       if (data.usuario) document.getElementById("matriculaDocente").textContent = data.usuario;
-      if (data.nombre || data.apellido_paterno)
+      if (data.nombre || data.apellido_paterno || data.apellido_materno)
         document.getElementById("nombreDocente").textContent =
-          `${data.nombre || ""} ${data.apellido_paterno || ""} ${data.apellido_materno || ""}`.trim();
+          `${data.nombre || ""} ${data.apellido_paterno || ""}`.trim();
       if (data.academia) document.getElementById("academiaDocente").textContent = data.academia;
       if (data.disciplina) document.getElementById("disciplinaDocente").textContent = data.disciplina;
       if (data.ciclo_escolar) document.getElementById("cicloDocente").textContent = data.ciclo_escolar;
