@@ -2,56 +2,162 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Alerta Temprana</title>
-  <link rel="stylesheet" href="alerta.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="pase_lista.css">
 </head>
 <body>
-  <header>
-    <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
-    <h1>Panel de Alerta Temprana</h1>
-  </header>
+  <h2>ALERTA TEMPRANA</h2>
 
-  <main>
-    <section class="seleccion">
-      <label>Grado:
-        <select id="grado">
-          <option>1</option><option>2</option><option>3</option>
-        </select>
-      </label>
+  <label for="grado">Grado:</label>
+  <select id="grado">
+    <option value="">Selecciona</option>
+    <option value="1">1°</option>
+    <option value="2">2°</option>
+    <option value="3">3°</option>
+  </select>
 
-      <label>Grupo:
-        <select id="grupo">
-          <option>A</option><option>B</option><option>C</option><option>D</option>
-        </select>
-      </label>
+  <label for="grupo">Grupo:</label>
+  <select id="grupo">
+    <option value="">Selecciona</option>
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+    <option value="E">E</option>
+  </select>
 
-      <label>Materia:
-        <input type="text" id="materia" placeholder="Ej: Matemáticas" required />
-      </label>
+  <label for="materia">Materia:</label>
+  <select id="materia">
+    <option value="">Selecciona</option>
+    <option>Español</option>
+    <option>Inglés</option>
+    <option>Matemáticas</option>
+    <option>Ciencias</option>
+    <option>Historia</option>
+    <option>Taller</option>
+  </select>
 
-      <label>Trimestre:
-        <select id="trimestre">
-          <option value="1">1°</option>
-          <option value="2">2°</option>
-          <option value="3">3°</option>
-        </select>
-      </label>
+  <label for="trimestre">Trimestre:</label>
+  <select id="trimestre">
+    <option value="">Selecciona</option>
+    <option value="1">1°</option>
+    <option value="2">2°</option>
+    <option value="3">3°</option>
+  </select>
 
-      <button onclick="cargarAlumnos()">📋 Cargar alumnos</button>
-    </section>
+  <button onclick="cargarAlumnos()">Cargar alumnos</button>
 
-    <section id="contenedorAlumnos">
-      <!-- Aquí se listarán los alumnos dinámicamente -->
-    </section>
+  <table id="tabla-alertas">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Matrícula</th>
+        <th>Nombre</th>
+        <th>Alerta</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpo-tabla"></tbody>
+  </table>
 
-    <button id="guardarBtn" onclick="guardarAlertas()" style="display:none;">💾 Guardar alertas</button>
-  </main>
+  <button onclick="guardarAlertas()">Guardar alertas</button>
 
-  <footer>
-    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
-  </footer>
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://mhnzjhelbupyifdlpngv.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
+    );
 
-  <script src="alerta.js" type="module"></script>
+    async function cargarAlumnos() {
+      const grado = document.getElementById("grado").value;
+      const grupo = document.getElementById("grupo").value;
+
+      if (!grado || !grupo) {
+        alert("Selecciona grado y grupo.");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
+        .eq("grado", grado)
+        .eq("grupo", grupo)
+        .eq("tipo", "alumno")
+        .order("apellido_paterno", { ascending: true });
+
+      if (error || !data.length) {
+        alert("No se encontraron alumnos.");
+        return;
+      }
+
+      const cuerpo = document.getElementById("cuerpo-tabla");
+      cuerpo.innerHTML = "";
+
+      data.forEach((alumno, index) => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${alumno.usuario}</td>
+          <td>${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
+          <td>
+            <select data-matricula="${alumno.usuario}">
+              <option value="verde">✅ Verde</option>
+              <option value="rojo">🚨 Rojo</option>
+            </select>
+          </td>
+        `;
+        cuerpo.appendChild(fila);
+      });
+    }
+
+    async function guardarAlertas() {
+      const materia = document.getElementById("materia").value;
+      const trimestre = document.getElementById("trimestre").value;
+      const selects = document.querySelectorAll('td select');
+
+      if (!materia || !trimestre) {
+        alert("Selecciona materia y trimestre.");
+        return;
+      }
+
+      for (const select of selects) {
+        const matricula = select.dataset.matricula;
+        const alerta = select.value;
+
+        // Obtener datos del alumno
+        const { data: alumno, error } = await supabase
+          .from("usuarios")
+          .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
+          .eq("usuario", matricula)
+          .single();
+
+        if (error || !alumno) {
+          console.warn("No encontrado:", matricula);
+          continue;
+        }
+
+        // Insertar alerta
+        const { error: insertError } = await supabase
+          .from("alertas")
+          .insert([{
+            matricula: alumno.usuario,
+            nombre: `${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}`,
+            grado: alumno.grado,
+            grupo: alumno.grupo,
+            materia,
+            alerta,
+            trimestre
+          }]);
+
+        if (insertError) {
+          console.error("Error al guardar alerta:", insertError.message);
+        }
+      }
+
+      alert("✅ Alertas guardadas correctamente.");
+      window.location.href = "menu-docente.html";
+    }
+  </script>
+  <script src="Bloqueos.js"></script>
 </body>
 </html>
