@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Alerta Temprana</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <link rel="stylesheet" href="pase_lista.css">
 </head>
 <body>
@@ -63,10 +64,14 @@
   <button onclick="guardarAlertas()">Guardar alertas</button>
 
   <script>
+    // Inicializa Supabase
     const supabase = window.supabase.createClient(
       'https://mhnzjhelbupyifdlpngv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
     );
+
+    // Inicializa EmailJS
+    emailjs.init("rMAlPzvhYdLsr2IMy");
 
     async function cargarAlumnos() {
       const grado = document.getElementById("grado").value;
@@ -79,7 +84,7 @@
 
       const { data, error } = await supabase
         .from("usuarios")
-        .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
+        .select("usuario, nombre, apellido_paterno, apellido_materno")
         .eq("grado", grado)
         .eq("grupo", grupo)
         .eq("tipo", "alumno")
@@ -111,33 +116,32 @@
     }
 
     async function guardarAlertas() {
+      const grado = document.getElementById("grado").value;
+      const grupo = document.getElementById("grupo").value;
       const materia = document.getElementById("materia").value;
       const trimestre = document.getElementById("trimestre").value;
       const selects = document.querySelectorAll('td select');
 
-      if (!materia || !trimestre) {
-        alert("Selecciona materia y trimestre.");
+      if (!grado || !grupo || !materia || !trimestre) {
+        alert("Completa todos los campos.");
         return;
       }
+
+      let total = 0;
 
       for (const select of selects) {
         const matricula = select.dataset.matricula;
         const alerta = select.value;
 
-        // Obtener datos del alumno
         const { data: alumno, error } = await supabase
           .from("usuarios")
           .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
           .eq("usuario", matricula)
           .single();
 
-        if (error || !alumno) {
-          console.warn("No encontrado:", matricula);
-          continue;
-        }
+        if (!alumno || error) continue;
 
-        // Insertar alerta
-        const { error: insertError } = await supabase
+        await supabase
           .from("alertas")
           .insert([{
             matricula: alumno.usuario,
@@ -149,13 +153,40 @@
             trimestre
           }]);
 
-        if (insertError) {
-          console.error("Error al guardar alerta:", insertError.message);
-        }
+        total++;
       }
 
-      alert("✅ Alertas guardadas correctamente.");
-      window.location.href = "menu-docente.html";
+      // Envía el correo al docente
+      enviarCorreoConfirmacion({
+        email: localStorage.getItem("correoUsuario") || "destino@dominio.com",
+        to_name: localStorage.getItem("nombreUsuario") || "Docente",
+        materia,
+        grado,
+        grupo,
+        trimestre,
+        total
+      });
+    }
+
+    function enviarCorreoConfirmacion({ email, to_name, materia, grado, grupo, trimestre, total }) {
+      emailjs.send("service_y15ev6l", "template_rbd3zrf", {
+        email,
+        to_name,
+        materia,
+        grado,
+        grupo,
+        trimestre,
+        total
+      })
+      .then(response => {
+        console.log("✅ Correo enviado:", response.status);
+        alert("✅ Alertas guardadas y comprobante enviado al docente.");
+        window.location.href = "menu-docente.html";
+      }, error => {
+        console.error("❌ Error al enviar correo:", error);
+        alert("✅ Alertas guardadas pero no se pudo enviar el comprobante.");
+        window.location.href = "menu-docente.html";
+      });
     }
   </script>
   <script src="Bloqueos.js"></script>
