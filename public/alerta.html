@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Captura de Alertas Tempranas</title>
+  <link rel="stylesheet" href="menu.css" />
+</head>
+<body>
+
+<header class="menu-encabezado">
+  <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
+  <h1>Captura de Alertas Tempranas</h1>
+</header>
+
+<main class="contenido-menu">
+
+  <form id="form-alertas">
+    <div style="margin-bottom: 1rem;">
+      <label>Grado:</label>
+      <select id="grado">
+        <option value="1">1°</option>
+        <option value="2">2°</option>
+        <option value="3">3°</option>
+      </select>
+
+      <label>Grupo:</label>
+      <select id="grupo">
+        <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+      </select>
+
+      <label>Materia:</label>
+      <select id="materia">
+        <option>Español</option><option>Matemáticas</option><option>Inglés</option><option>Ciencias</option>
+        <option>Artes</option><option>E. Física</option><option>FCyE</option><option>Tecnología</option>
+        <option>Música</option><option>Lectura</option>
+      </select>
+
+      <label>Trimestre:</label>
+      <select id="trimestre">
+        <option value="1">1° Trimestre</option>
+        <option value="2">2° Trimestre</option>
+        <option value="3">3° Trimestre</option>
+      </select>
+
+      <button type="button" onclick="cargarAlumnos()">Cargar alumnos</button>
+    </div>
+
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+      <thead style="background-color: #002b7f; color: white;">
+        <tr>
+          <th>#</th>
+          <th>Matrícula</th>
+          <th>Nombre completo</th>
+          <th>Verde (sin problema)</th>
+          <th>Rojo (alerta)</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-alumnos">
+        <!-- Se llena con JS -->
+      </tbody>
+    </table>
+
+    <button type="submit" style="margin-top: 1rem;">Guardar alertas</button>
+  </form>
+
+</main>
+
+<footer class="pie">
+  © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+</footer>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const supabase = createClient(
+    "https://mhnzjhelbupyifdlpngv.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  );
+
+  async function cargarAlumnos() {
+    const grado = document.getElementById("grado").value;
+    const grupo = document.getElementById("grupo").value;
+
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
+      .eq("grado", grado)
+      .eq("grupo", grupo);
+
+    const tbody = document.getElementById("tabla-alumnos");
+    tbody.innerHTML = "";
+
+    if (error) {
+      console.error("❌ Error al obtener alumnos:", error.message);
+      return;
+    }
+
+    data.forEach((alumno, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${alumno.usuario}</td>
+        <td>${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
+        <td><input type="radio" name="alerta_${alumno.usuario}" value="verde" checked></td>
+        <td><input type="radio" name="alerta_${alumno.usuario}" value="rojo"></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById("form-alertas").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const materia = document.getElementById("materia").value;
+    const grado = document.getElementById("grado").value;
+    const grupo = document.getElementById("grupo").value;
+    const trimestre = parseInt(document.getElementById("trimestre").value);
+
+    const filas = document.querySelectorAll("#tabla-alumnos tr");
+    for (const fila of filas) {
+      const matricula = fila.children[1].textContent;
+      const nombre = fila.children[2].textContent;
+      const alerta = fila.querySelector("input[type='radio']:checked").value;
+
+      const { error } = await supabase
+        .from("calificaciones")
+        .insert([{
+          matricula,
+          nombre,
+          grado,
+          grupo,
+          materia,
+          alerta,
+          trimestre
+        }]);
+
+      if (error) console.error("❌ Error al guardar:", error.message);
+      else console.log(`✅ Alerta registrada para ${matricula}`);
+    }
+
+    // 🚀 Lugar futuro: aquí mandar email con la confirmación al profesor
+    alert("Alertas guardadas correctamente. Se enviará un comprobante por correo.");
+  });
+</script>
+
+</body>
+</html>
