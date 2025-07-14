@@ -104,7 +104,7 @@
       console.log("✅ Datos recibidos:", data);
       // PONEMOS SOLO LO NECESARIO, SIN NULOS
       if (data.usuario) document.getElementById("matriculaDocente").textContent = data.usuario;
-      if (data.nombre || data.apellido_paterno || data.apellido_materno)
+      if (data.nombre || data.apellido_paterno)
         document.getElementById("nombreDocente").textContent =
           `${data.nombre || ""} ${data.apellido_paterno || ""} ${data.apellido_materno || ""}`.trim();
       if (data.academia) document.getElementById("academiaDocente").textContent = data.academia;
