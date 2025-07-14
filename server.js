@@ -566,28 +566,34 @@
       res.status(500).json({ error: "Error interno del servidor" });
     }
   });
-  app.get("/api/alumnos", async (req, res) => {
+  // 📝 Endpoint para obtener alumnos
+app.get("/api/alumnos", async (req, res) => {
+  try {
+    // Consulta a la tabla usuarios, solo tipo alumno
     const { data, error } = await supabase
       .from("usuarios")
       .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
       .eq("tipo", "alumno");
-  
+
     if (error) {
       console.error("❌ Error al obtener alumnos:", error.message);
       return res.status(500).json({ error: "Error al obtener alumnos" });
     }
-  
-    // Mapear para simplificar
+
+    // Mapear para devolver nombre completo
     const alumnos = data.map(al => ({
       matricula: al.usuario,
       nombre: `${al.nombre} ${al.apellido_paterno} ${al.apellido_materno}`,
       grado: al.grado,
       grupo: al.grupo
     }));
-  
+
     res.json(alumnos);
-  });
-  
+  } catch (err) {
+    console.error("❌ Error inesperado:", err.message);
+    res.status(500).json({ error: "Error inesperado del servidor" });
+  }
+});
   // Inicia el servidor
   app.listen(PORT, () => {
     console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
