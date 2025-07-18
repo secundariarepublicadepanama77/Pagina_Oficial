@@ -156,12 +156,11 @@
 
       // Buscar al docente por materia (disciplina)
       const { data: docente, error: errorDoc } = await supabase
-        .from("usuarios")
-        .select("email, nombre")
-        .eq("tipo", "maestro")
-        .eq("disciplina", materia)
-        .single();
-
+  .from("usuarios")
+  .select("email, nombre")
+  .eq("tipo", "maestro")
+  .ilike("disciplina", `%${materia}%`)
+  .maybeSingle();
       if (!docente || !docente.email) {
         alert("✅ Alertas guardadas pero no se encontró correo del docente.");
         return;
