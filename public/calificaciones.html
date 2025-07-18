@@ -11,7 +11,7 @@
 
 <header class="menu-encabezado">
   <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
-  <h1>Calificaciones del Alumno</h1>
+  <h1>Perfil del Alumno</h1>
 </header>
 
 <nav class="barra-botones">
@@ -21,92 +21,64 @@
   <a class="active">🎓 Calificaciones</a>
   <a class="disabled">💬 Mensajes</a>
   <a class="disabled">🔒 Próximamente</a>
-  <a class="disabled">🔒 Próximamente</a>
   <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
 </nav>
 
 <main class="contenedor-calificaciones">
-  <h2>📚 Ciclo Escolar 2025-2026</h2>
+  <h2>📘 Calificaciones por Trimestre</h2>
 
-  <!-- Trimestres -->
-  <section class="trimestre-card" id="trimestre1">
-    <h3>🟦 1er Trimestre</h3>
-    <div class="datos-trimestre">
-      <p><strong>Promedio:</strong> <span class="promedio">8.4</span></p>
-      <p><strong>Materias en alerta:</strong></p>
-      <ul class="alertas">
-        <li class="alerta-roja">Matemáticas</li>
-        <li class="alerta-roja">Ciencias</li>
+  <!-- Tarjetas por Trimestre -->
+  <div class="trimestre-card">
+    <h3>🟦 Primer Trimestre</h3>
+    
+    <section class="materias">
+      <h4>📚 Calificaciones</h4>
+      <ul>
+        <li>Matemáticas: 8.5</li>
+        <li>Español: 9.0</li>
+        <li>Ciencias: 7.8</li>
+        <li>Lectura: 8.0</li>
+        <li>Inglés: 9.0</li>
+        <li>Artes: 7.5</li>
+        <li>FCyE: 8.2</li>
+        <li>Tecnologías: 9.5</li>
+        <li>Música: 8.0</li>
       </ul>
+    </section>
 
+    <section class="examenes">
+      <h4>✏️ Exámenes</h4>
       <table class="tabla-examenes">
-        <thead>
-          <tr>
-            <th>Materia</th>
-            <th>Examen</th>
-            <th>Calificación</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Matemáticas</td><td>Conocimiento</td><td>6.5</td></tr>
-          <tr><td>Español</td><td>Conocimiento</td><td>9.0</td></tr>
-        </tbody>
+        <tr><th>Tipo</th><th>Materia</th><th>Calificación</th></tr>
+        <tr><td>Conocimiento</td><td>Matemáticas</td><td>8.5</td></tr>
+        <tr><td>Extraordinario</td><td>Ciencias</td><td>9.0</td></tr>
       </table>
-    </div>
-  </section>
+    </section>
 
-  <section class="trimestre-card" id="trimestre2">
-    <h3>🟨 2do Trimestre</h3>
-    <div class="datos-trimestre">
-      <p><strong>Promedio:</strong> <span class="promedio">8.8</span></p>
-      <p><strong>Materias en alerta:</strong></p>
-      <ul class="alertas">
-        <li class="alerta-verde">Ninguna 🎉</li>
+    <section class="alertas">
+      <h4>⚠️ Alertas</h4>
+      <ul>
+        <li class="alerta-roja">Ciencias (riesgo)</li>
+        <li class="alerta-verde">Español (sin riesgo)</li>
       </ul>
+    </section>
 
-      <table class="tabla-examenes">
-        <thead>
-          <tr>
-            <th>Materia</th>
-            <th>Examen</th>
-            <th>Calificación</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Lectura</td><td>Extraordinario</td><td>9.2</td></tr>
-          <tr><td>Inglés</td><td>Conocimiento</td><td>8.9</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <div class="promedio">🎯 Promedio: 8.3</div>
+  </div>
 
-  <section class="trimestre-card" id="trimestre3">
-    <h3>🟩 3er Trimestre</h3>
-    <div class="datos-trimestre">
-      <p><strong>Promedio:</strong> <span class="promedio">9.1</span></p>
-      <p><strong>Materias en alerta:</strong></p>
-      <ul class="alertas">
-        <li class="alerta-roja">Artes</li>
-      </ul>
+  <!-- Repite esto para 2do y 3er Trimestre -->
+  <div class="trimestre-card">
+    <h3>🟧 Segundo Trimestre</h3>
+    <!-- ... mismas secciones ... -->
+  </div>
 
-      <table class="tabla-examenes">
-        <thead>
-          <tr>
-            <th>Materia</th>
-            <th>Examen</th>
-            <th>Calificación</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Artes</td><td>Extraordinario</td><td>6.8</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+  <div class="trimestre-card">
+    <h3>🟩 Tercer Trimestre</h3>
+    <!-- ... mismas secciones ... -->
+  </div>
 
-  <!-- Promedio final -->
   <div class="promedio-final">
-    🏆 <strong>Promedio Final:</strong> <span class="promedio">8.7</span>
+    🏆 Promedio final del ciclo: <strong>8.4</strong>
   </div>
 </main>
 
