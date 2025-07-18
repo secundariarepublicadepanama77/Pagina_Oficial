@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Calificaciones</title>
+  <link rel="stylesheet" href="menu.css" />
+  <style>
+    .panel-calificaciones {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 2px solid #0D1B4C;
+      border-radius: 12px;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .panel-calificaciones h2 {
+      color: #0D1B4C;
+      margin-bottom: 2rem;
+    }
+
+    .panel-calificaciones button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid red;
+      color: red;
+      background-color: transparent;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .panel-calificaciones button:hover {
+      background-color: rgba(255, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header class="menu-encabezado">
+    <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
+    <h1>Panel Docente</h1>
+  </header>
+
+  <!-- Botones -->
+  <nav class="barra-botones">
+    <a href="menu-docente.html">🏠 Inicio</a>
+    <a href="reportes.html">📄 Reportes</a>
+    <a href="materiales.html">📁 Materiales</a>
+    <a href="asistencias.html">📝 Asistencias</a>
+    <a href="horarios.html">🕒 Horarios</a>
+    <a href="calificaciones2.html">🎓 Calificaciones</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a class="disabled">🔒 Próximamente</a>
+    <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="contenido-menu">
+    <section class="panel-calificaciones">
+      <h2>SELECCIONA QUÉ TIPO DE CALIFICACIÓN VAS A REGISTRAR</h2>
+      <button onclick="irA('alerta-temprana.html')">ALERTA TEMPRANA</button>
+      <button onclick="irA('calificacion-primer-trimestre.html')">CALIFICACIÓN PRIMER TRIMESTRE</button>
+      <button onclick="irA('calificacion-segundo-trimestre.html')">CALIFICACIÓN SEGUNDO TRIMESTRE</button>
+      <button onclick="irA('calificacion-tercer-trimestre.html')">CALIFICACIÓN TERCER TRIMESTRE</button>
+      <button onclick="irA('examen-extra-1.html')">EXAMEN EXTRAORDINARIO</button>
+      <button onclick="irA('examen-extra-2.html')">EXAMEN EXTRAORDINARIO</button>
+    </section>
+  </main>
+
+  <!-- Pie -->
+  <footer class="pie">
+    © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function irA(ruta) {
+      window.location.href = ruta;
+    }
+  </script>
+  <script src="js/responsive.js"></script>
+  <script src="js/Bloqueos.js"></script>
+</body>
+</html>
