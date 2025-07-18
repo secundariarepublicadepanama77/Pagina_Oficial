@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calificaciones del Alumno</title>
+  <title>Perfil del Alumno - Calificaciones</title>
   <link rel="stylesheet" href="menu.css" />
-  <link rel="stylesheet" href="calificaciones.css" />
+  <link rel="stylesheet" href="cal.css" />
 </head>
 <body>
 
@@ -18,68 +18,94 @@
   <a href="menu-alumno.html">🏠 Inicio</a>
   <a href="horario.html">📅 Horario</a>
   <a href="mis_reportes.html">📝 Reportes</a>
-  <a class="active">🎓 Calificaciones</a>
+  <a href="calificaciones.html">🎓 Calificaciones</a>
   <a class="disabled">💬 Mensajes</a>
+  <a class="disabled">🔒 Próximamente</a>
   <a class="disabled">🔒 Próximamente</a>
   <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
 </nav>
 
-<main class="contenedor-calificaciones">
-  <h2>📘 Calificaciones por Trimestre</h2>
+<main class="calificaciones-panel">
+  <h2>👋 Hola Juan, Ciclo 2025-2026</h2>
 
-  <!-- Tarjetas por Trimestre -->
-  <div class="trimestre-card">
-    <h3>🟦 Primer Trimestre</h3>
-    
-    <section class="materias">
-      <h4>📚 Calificaciones</h4>
+  <!-- Tarjetas de calificaciones -->
+  <div class="tarjetas-trimestre">
+    <div class="trimestre">
+      <h3>1er Trimestre</h3>
       <ul>
         <li>Matemáticas: 8.5</li>
         <li>Español: 9.0</li>
         <li>Ciencias: 7.8</li>
-        <li>Lectura: 8.0</li>
-        <li>Inglés: 9.0</li>
-        <li>Artes: 7.5</li>
-        <li>FCyE: 8.2</li>
-        <li>Tecnologías: 9.5</li>
-        <li>Música: 8.0</li>
+        <li>Lectura: 8.5</li>
+        <li>Ingles: 9.0</li>
+        <li>Artes: 7.8</li>
+        <li>FCyE: 8.5</li>
+        <li>Tecnologías: 9.0</li>
+        <li>Musica: 7.8</li>
+
       </ul>
-    </section>
-
-    <section class="examenes">
-      <h4>✏️ Exámenes</h4>
-      <table class="tabla-examenes">
-        <tr><th>Tipo</th><th>Materia</th><th>Calificación</th></tr>
-        <tr><td>Conocimiento</td><td>Matemáticas</td><td>8.5</td></tr>
-        <tr><td>Extraordinario</td><td>Ciencias</td><td>9.0</td></tr>
-      </table>
-    </section>
-
-    <section class="alertas">
-      <h4>⚠️ Alertas</h4>
+    </div>
+    <div class="trimestre">
+      <h3>2do Trimestre</h3>
       <ul>
-        <li class="alerta-roja">Ciencias (riesgo)</li>
-        <li class="alerta-verde">Español (sin riesgo)</li>
+        <li>Matemáticas: 8.5</li>
+        <li>Español: 9.0</li>
+        <li>Ciencias: 7.8</li>
+        <li>Lectura: 8.5</li>
+        <li>Ingles: 9.0</li>
+        <li>Artes: 7.8</li>
+        <li>FCyE: 8.5</li>
+        <li>Tecnologías: 9.0</li>
+        <li>Musica: 7.8</li>
       </ul>
-    </section>
-
-    <div class="promedio">🎯 Promedio: 8.3</div>
+    </div>
+    <div class="trimestre">
+      <h3>3er Trimestre</h3>
+      <ul>
+        <li>Matemáticas: 8.5</li>
+        <li>Español: 9.0</li>
+        <li>Ciencias: 7.8</li>
+        <li>Lectura: 8.5</li>
+        <li>Ingles: 9.0</li>
+        <li>Artes: 7.8</li>
+        <li>FCyE: 8.5</li>
+        <li>Tecnologías: 9.0</li>
+        <li>Musica: 7.8</li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Repite esto para 2do y 3er Trimestre -->
-  <div class="trimestre-card">
-    <h3>🟧 Segundo Trimestre</h3>
-    <!-- ... mismas secciones ... -->
-  </div>
-
-  <div class="trimestre-card">
-    <h3>🟩 Tercer Trimestre</h3>
-    <!-- ... mismas secciones ... -->
-  </div>
-
+  <!-- Promedio final -->
   <div class="promedio-final">
-    🏆 Promedio final del ciclo: <strong>8.4</strong>
+    🏆 Promedio final: 8.6
   </div>
+
+  <!-- Alerta temprana -->
+  <div class="alerta-temprana alerta-verde">
+    ✅ ¡Todo bien! No tienes materias en riesgo.
+  </div>
+  <!-- <div class="alerta-temprana alerta-roja">
+    ⚠️ Atención: Tienes materias en riesgo (Alerta Temprana).
+  </div> -->
+
+  <!-- Tabla de exámenes -->
+  <table class="tabla-examenes">
+    <tr>
+      <th>Tipo de Examen</th>
+      <th>Materia</th>
+      <th>Calificación</th>
+    </tr>
+    <tr>
+      <td>Conocimiento</td>
+      <td>Matemáticas</td>
+      <td>8.5</td>
+    </tr>
+    <tr>
+      <td>Extraordinario</td>
+      <td>Ciencias</td>
+      <td>9.0</td>
+    </tr>
+  </table>
 </main>
 
 <footer class="pie">
@@ -92,6 +118,7 @@
     window.location.href = "login.html";
   }
 </script>
+
 <script src="Bloqueos.js"></script>
 </body>
 </html>

@@ -1,44 +1,31 @@
 .contenedor-calificaciones {
   max-width: 1100px;
   margin: 2rem auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.contenedor-calificaciones h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #002b7f;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
 }
 
 .trimestre-card {
-  background: #f5faff;
-  border-left: 6px solid #002b7f;
-  padding: 1.5rem;
   margin-bottom: 2rem;
+  border-left: 6px solid #002b7f;
+  padding: 1rem;
+  background-color: #f9f9f9;
   border-radius: 10px;
 }
 
 .trimestre-card h3 {
   color: #002b7f;
-  margin-bottom: 1rem;
 }
 
-.trimestre-card h4 {
-  color: #444;
-  margin-top: 1rem;
+.datos-trimestre p {
+  margin: 0.3rem 0;
 }
 
-.materias ul, .alertas ul {
-  list-style: none;
-  padding: 0;
-}
-
-.materias li, .alertas li {
-  padding: 6px 0;
-  border-bottom: 1px solid #ddd;
+.alertas {
+  padding-left: 1rem;
+  list-style: square;
 }
 
 .alerta-roja {
@@ -53,33 +40,30 @@
 
 .tabla-examenes {
   width: 100%;
-  border-collapse: collapse;
   margin-top: 1rem;
+  border-collapse: collapse;
 }
 
-.tabla-examenes th, .tabla-examenes td {
-  border: 1px solid #ccc;
-  padding: 0.8rem;
+.tabla-examenes th,
+.tabla-examenes td {
+  padding: 0.7rem;
+  border: 1px solid #ddd;
   text-align: center;
 }
 
 .tabla-examenes th {
-  background-color: #002b7f;
+  background: #002b7f;
   color: white;
 }
 
 .promedio {
-  margin-top: 1.5rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-align: right;
+  font-size: 1.3rem;
   color: #002b7f;
 }
 
 .promedio-final {
   text-align: center;
-  font-size: 1.8rem;
   margin-top: 3rem;
+  font-size: 1.8rem;
   color: #002b7f;
-  font-weight: bold;
 }
