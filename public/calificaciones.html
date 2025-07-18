@@ -3,109 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Perfil del Alumno - Calificaciones</title>
+  <title>Calificaciones del Alumno</title>
   <link rel="stylesheet" href="menu.css" />
-  <link rel="stylesheet" href="cal.css" />
+  <link rel="stylesheet" href="calificaciones.css" />
 </head>
 <body>
 
 <header class="menu-encabezado">
   <img src="img/PRPM/logo.png" alt="Logo" class="logo" />
-  <h1>Perfil del Alumno</h1>
+  <h1>Calificaciones del Alumno</h1>
 </header>
 
 <nav class="barra-botones">
   <a href="menu-alumno.html">🏠 Inicio</a>
   <a href="horario.html">📅 Horario</a>
   <a href="mis_reportes.html">📝 Reportes</a>
-  <a href="calificaciones.html">🎓 Calificaciones</a>
+  <a class="active">🎓 Calificaciones</a>
   <a class="disabled">💬 Mensajes</a>
   <a class="disabled">🔒 Próximamente</a>
   <a class="disabled">🔒 Próximamente</a>
   <a href="login.html" onclick="cerrarSesion()">🚪 Cerrar sesión</a>
 </nav>
 
-<main class="calificaciones-panel">
-  <h2>👋 Hola Juan, Ciclo 2025-2026</h2>
+<main class="contenedor-calificaciones">
+  <h2>📚 Ciclo Escolar 2025-2026</h2>
 
-  <!-- Tarjetas de calificaciones -->
-  <div class="tarjetas-trimestre">
-    <div class="trimestre">
-      <h3>1er Trimestre</h3>
-      <ul>
-        <li>Matemáticas: 8.5</li>
-        <li>Español: 9.0</li>
-        <li>Ciencias: 7.8</li>
-        <li>Lectura: 8.5</li>
-        <li>Ingles: 9.0</li>
-        <li>Artes: 7.8</li>
-        <li>FCyE: 8.5</li>
-        <li>Tecnologías: 9.0</li>
-        <li>Musica: 7.8</li>
+  <!-- Trimestres -->
+  <section class="trimestre-card" id="trimestre1">
+    <h3>🟦 1er Trimestre</h3>
+    <div class="datos-trimestre">
+      <p><strong>Promedio:</strong> <span class="promedio">8.4</span></p>
+      <p><strong>Materias en alerta:</strong></p>
+      <ul class="alertas">
+        <li class="alerta-roja">Matemáticas</li>
+        <li class="alerta-roja">Ciencias</li>
+      </ul>
 
-      </ul>
+      <table class="tabla-examenes">
+        <thead>
+          <tr>
+            <th>Materia</th>
+            <th>Examen</th>
+            <th>Calificación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Matemáticas</td><td>Conocimiento</td><td>6.5</td></tr>
+          <tr><td>Español</td><td>Conocimiento</td><td>9.0</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="trimestre">
-      <h3>2do Trimestre</h3>
-      <ul>
-        <li>Matemáticas: 8.5</li>
-        <li>Español: 9.0</li>
-        <li>Ciencias: 7.8</li>
-        <li>Lectura: 8.5</li>
-        <li>Ingles: 9.0</li>
-        <li>Artes: 7.8</li>
-        <li>FCyE: 8.5</li>
-        <li>Tecnologías: 9.0</li>
-        <li>Musica: 7.8</li>
+  </section>
+
+  <section class="trimestre-card" id="trimestre2">
+    <h3>🟨 2do Trimestre</h3>
+    <div class="datos-trimestre">
+      <p><strong>Promedio:</strong> <span class="promedio">8.8</span></p>
+      <p><strong>Materias en alerta:</strong></p>
+      <ul class="alertas">
+        <li class="alerta-verde">Ninguna 🎉</li>
       </ul>
+
+      <table class="tabla-examenes">
+        <thead>
+          <tr>
+            <th>Materia</th>
+            <th>Examen</th>
+            <th>Calificación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Lectura</td><td>Extraordinario</td><td>9.2</td></tr>
+          <tr><td>Inglés</td><td>Conocimiento</td><td>8.9</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="trimestre">
-      <h3>3er Trimestre</h3>
-      <ul>
-        <li>Matemáticas: 8.5</li>
-        <li>Español: 9.0</li>
-        <li>Ciencias: 7.8</li>
-        <li>Lectura: 8.5</li>
-        <li>Ingles: 9.0</li>
-        <li>Artes: 7.8</li>
-        <li>FCyE: 8.5</li>
-        <li>Tecnologías: 9.0</li>
-        <li>Musica: 7.8</li>
+  </section>
+
+  <section class="trimestre-card" id="trimestre3">
+    <h3>🟩 3er Trimestre</h3>
+    <div class="datos-trimestre">
+      <p><strong>Promedio:</strong> <span class="promedio">9.1</span></p>
+      <p><strong>Materias en alerta:</strong></p>
+      <ul class="alertas">
+        <li class="alerta-roja">Artes</li>
       </ul>
+
+      <table class="tabla-examenes">
+        <thead>
+          <tr>
+            <th>Materia</th>
+            <th>Examen</th>
+            <th>Calificación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Artes</td><td>Extraordinario</td><td>6.8</td></tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+  </section>
 
   <!-- Promedio final -->
   <div class="promedio-final">
-    🏆 Promedio final: 8.6
+    🏆 <strong>Promedio Final:</strong> <span class="promedio">8.7</span>
   </div>
-
-  <!-- Alerta temprana -->
-  <div class="alerta-temprana alerta-verde">
-    ✅ ¡Todo bien! No tienes materias en riesgo.
-  </div>
-  <!-- <div class="alerta-temprana alerta-roja">
-    ⚠️ Atención: Tienes materias en riesgo (Alerta Temprana).
-  </div> -->
-
-  <!-- Tabla de exámenes -->
-  <table class="tabla-examenes">
-    <tr>
-      <th>Tipo de Examen</th>
-      <th>Materia</th>
-      <th>Calificación</th>
-    </tr>
-    <tr>
-      <td>Conocimiento</td>
-      <td>Matemáticas</td>
-      <td>8.5</td>
-    </tr>
-    <tr>
-      <td>Extraordinario</td>
-      <td>Ciencias</td>
-      <td>9.0</td>
-    </tr>
-  </table>
 </main>
 
 <footer class="pie">
@@ -118,7 +120,6 @@
     window.location.href = "login.html";
   }
 </script>
-
 <script src="Bloqueos.js"></script>
 </body>
 </html>
