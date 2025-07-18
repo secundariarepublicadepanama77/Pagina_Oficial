@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Alerta Temprana</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <link rel="stylesheet" href="pase_lista.css" />
+  <link rel="stylesheet" href="pase_lista.css">
 </head>
 <body>
   <h2>ALERTA TEMPRANA</h2>
@@ -63,126 +63,140 @@
 
   <button onclick="guardarAlertas()">Guardar alertas</button>
 
-  <script>
-    const supabase = window.supabase.createClient(
-      'https://mhnzjhelbupyifdlpngv.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
-    );
+<script>
+  const supabase = window.supabase.createClient(
+    'https://mhnzjhelbupyifdlpngv.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
+  );
+  emailjs.init("rMAlPzvhYdLsr2IMy");
 
-    emailjs.init("rMAlPzvhYdLsr2IMy");
+  function mapMateriaToDisciplina(materia) {
+    const mapa = {
+      "Taller": "TALLER OFIMATICA",
+      "Inglés": "INGLÉS",
+      "Español": "ESPAÑOL",
+      "Matemáticas": "MATEMÁTICAS",
+      "Ciencias": "CIENCIAS",
+      "Historia": "HISTORIA"
+    };
+    return mapa[materia] || materia;
+  }
 
-    async function cargarAlumnos() {
-      const grado = document.getElementById("grado").value;
-      const grupo = document.getElementById("grupo").value;
+  async function cargarAlumnos() {
+    const grado = document.getElementById("grado").value;
+    const grupo = document.getElementById("grupo").value;
 
-      if (!grado || !grupo) {
-        alert("Selecciona grado y grupo.");
-        return;
-      }
+    if (!grado || !grupo) {
+      alert("Selecciona grado y grupo.");
+      return;
+    }
 
-      const { data, error } = await supabase
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("usuario, nombre, apellido_paterno, apellido_materno")
+      .eq("grado", grado)
+      .eq("grupo", grupo)
+      .eq("tipo", "alumno")
+      .order("apellido_paterno", { ascending: true });
+
+    if (error || !data.length) {
+      alert("No se encontraron alumnos.");
+      return;
+    }
+
+    const cuerpo = document.getElementById("cuerpo-tabla");
+    cuerpo.innerHTML = "";
+
+    data.forEach((alumno, index) => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${alumno.usuario}</td>
+        <td>${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
+        <td>
+          <select data-matricula="${alumno.usuario}">
+            <option value="verde">✅ Verde</option>
+            <option value="rojo">🚨 Rojo</option>
+          </select>
+        </td>
+      `;
+      cuerpo.appendChild(fila);
+    });
+  }
+
+  async function guardarAlertas() {
+    const materia = document.getElementById("materia").value;
+    const trimestre = document.getElementById("trimestre").value;
+    const grado = document.getElementById("grado").value;
+    const grupo = document.getElementById("grupo").value;
+    const selects = document.querySelectorAll('td select');
+
+    if (!materia || !trimestre || !grado || !grupo) {
+      alert("Selecciona todos los campos.");
+      return;
+    }
+
+    let total = 0;
+
+    for (const select of selects) {
+      const matricula = select.dataset.matricula;
+      const alerta = select.value;
+
+      const { data: alumno, error } = await supabase
         .from("usuarios")
-        .select("usuario, nombre, apellido_paterno, apellido_materno")
-        .eq("grado", grado)
-        .eq("grupo", grupo)
-        .eq("tipo", "alumno")
-        .order("apellido_paterno", { ascending: true });
+        .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
+        .eq("usuario", matricula)
+        .single();
 
-      if (error || !data.length) {
-        alert("No se encontraron alumnos.");
-        return;
-      }
+      if (!alumno || error) continue;
 
-      const cuerpo = document.getElementById("cuerpo-tabla");
-      cuerpo.innerHTML = "";
+      await supabase
+        .from("alertas")
+        .insert([{
+          matricula: alumno.usuario,
+          nombre: `${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}`,
+          grado: alumno.grado,
+          grupo: alumno.grupo,
+          materia,
+          alerta,
+          trimestre
+        }]);
 
-      data.forEach((alumno, index) => {
-        const fila = document.createElement("tr");
-        fila.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${alumno.usuario}</td>
-          <td>${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}</td>
-          <td>
-            <select data-matricula="${alumno.usuario}">
-              <option value="verde">✅ Verde</option>
-              <option value="rojo">🚨 Rojo</option>
-            </select>
-          </td>
-        `;
-        cuerpo.appendChild(fila);
-      });
+      total++;
     }
 
-    async function guardarAlertas() {
-      const materia = document.getElementById("materia").value;
-      const trimestre = document.getElementById("trimestre").value;
-      const grado = document.getElementById("grado").value;
-      const grupo = document.getElementById("grupo").value;
-      const selects = document.querySelectorAll('td select');
+    const disciplina = mapMateriaToDisciplina(materia);
 
-      if (!materia || !trimestre || !grado || !grupo) {
-        alert("Selecciona todos los campos.");
-        return;
-      }
+    const { data: docente, error: errorDoc } = await supabase
+      .from("usuarios")
+      .select("email, nombre")
+      .eq("tipo", "maestro")
+      .ilike("disciplina", `%${disciplina}%`)
+      .maybeSingle();
 
-      let total = 0;
+    console.log("Docente encontrado:", docente);
 
-      for (const select of selects) {
-        const matricula = select.dataset.matricula;
-        const alerta = select.value;
-
-        const { data: alumno, error } = await supabase
-          .from("usuarios")
-          .select("usuario, nombre, apellido_paterno, apellido_materno, grado, grupo")
-          .eq("usuario", matricula)
-          .single();
-
-        if (!alumno || error) continue;
-
-        await supabase
-          .from("alertas")
-          .insert([{
-            matricula: alumno.usuario,
-            nombre: `${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno}`,
-            grado: alumno.grado,
-            grupo: alumno.grupo,
-            materia,
-            alerta,
-            trimestre
-          }]);
-
-        total++;
-      }
-
-      // Buscar al docente por materia (disciplina)
-      const { data: docente, error: errorDoc } = await supabase
-  .from("usuarios")
-  .select("email, nombre")
-  .eq("tipo", "maestro")
-  .ilike("disciplina", `%${materia}%`)
-  .maybeSingle();
-      if (!docente || !docente.email) {
-        alert("✅ Alertas guardadas pero no se encontró correo del docente.");
-        return;
-      }
-
-      // Enviar correo al docente
-      emailjs.send("service_y15ev6l", "template_rbd3zrf", {
-        email: docente.email,
-        to_name: docente.nombre || "Docente",
-        materia,
-        grado,
-        grupo,
-        trimestre,
-        total
-      }).then(() => {
-        alert("✅ Alertas guardadas y comprobante enviado al docente.");
-        window.location.href = "menu-docente.html";
-      }, (err) => {
-        console.error("❌ Error enviando correo:", err);
-        alert("✅ Alertas guardadas pero no se pudo enviar el correo.");
-      });
+    if (!docente || !docente.email) {
+      alert("✅ Alertas guardadas pero no se encontró correo del docente.");
+      return;
     }
-  </script>
+
+    emailjs.send("service_y15ev6l", "template_rbd3zrf", {
+      email: docente.email,
+      to_name: docente.nombre || "Docente",
+      materia,
+      grado,
+      grupo,
+      trimestre,
+      total
+    }).then(() => {
+      alert("✅ Alertas guardadas y comprobante enviado al docente.");
+      window.location.href = "menu-docente.html";
+    }, (err) => {
+      console.error("❌ Error enviando correo:", err);
+      alert("✅ Alertas guardadas pero no se pudo enviar el correo.");
+    });
+  }
+</script>
 </body>
 </html>
