@@ -5,7 +5,7 @@
   <title>Alerta Temprana</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <link rel="stylesheet" href="pase_lista.css">
+  <link rel="stylesheet" href="pase_lista.css" />
 </head>
 <body>
   <h2>ALERTA TEMPRANA</h2>
@@ -62,13 +62,14 @@
   </table>
 
   <button onclick="guardarAlertas()">Guardar alertas</button>
+
   <script>
     const supabase = window.supabase.createClient(
       'https://mhnzjhelbupyifdlpngv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
     );
 
-    emailjs.init("rMAlPzvhYdLsr2IMy"); // Tu public key de EmailJS
+    emailjs.init("rMAlPzvhYdLsr2IMy");
 
     async function cargarAlumnos() {
       const grado = document.getElementById("grado").value;
@@ -153,13 +154,12 @@
         total++;
       }
 
-      // Buscar email del docente según grado, grupo y materia
+      // Buscar al docente por materia (disciplina)
       const { data: docente, error: errorDoc } = await supabase
         .from("usuarios")
         .select("email, nombre")
         .eq("tipo", "maestro")
-        .eq("grado", grado)
-        .eq("grupo", grupo)
+        .eq("disciplina", materia)
         .single();
 
       if (!docente || !docente.email) {
@@ -167,7 +167,7 @@
         return;
       }
 
-      // Enviar correo
+      // Enviar correo al docente
       emailjs.send("service_y15ev6l", "template_rbd3zrf", {
         email: docente.email,
         to_name: docente.nombre || "Docente",
@@ -186,3 +186,4 @@
     }
   </script>
 </body>
+</html>
