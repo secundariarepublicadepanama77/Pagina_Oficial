@@ -18,7 +18,7 @@
   <a href="menu-alumno.html">🏠 Inicio</a>
   <a href="horario.html">📅 Horario</a>
   <a href="mis_reportes.html">📝 Reportes</a>
-  <a href="calificaciones.html">🎓 Calificaciones</a>
+  <a class="disabled">🎓 Calificaciones</a>
   <a class="disabled">💬 Mensajes</a>
   <a class="disabled">🔒 Próximamente</a>
   <a class="disabled">🔒 Próximamente</a>
@@ -26,99 +26,125 @@
 </nav>
 
 <main class="calificaciones-panel">
-  <h2>👋 Hola Juan, Ciclo 2025-2026</h2>
+  <h2 id="saludo">👋 Hola, Alumno</h2>
 
   <!-- Tarjetas de calificaciones -->
-  <div class="tarjetas-trimestre">
-    <div class="trimestre">
-      <h3>1er Trimestre</h3>
-      <ul>
-        <li>Matemáticas: 8.5</li>
-        <li>Español: 9.0</li>
-        <li>Ciencias: 7.8</li>
-        <li>Lectura: 8.5</li>
-        <li>Ingles: 9.0</li>
-        <li>Artes: 7.8</li>
-        <li>FCyE: 8.5</li>
-        <li>Tecnologías: 9.0</li>
-        <li>Musica: 7.8</li>
-
-      </ul>
-    </div>
-    <div class="trimestre">
-      <h3>2do Trimestre</h3>
-      <ul>
-        <li>Matemáticas: 8.5</li>
-        <li>Español: 9.0</li>
-        <li>Ciencias: 7.8</li>
-        <li>Lectura: 8.5</li>
-        <li>Ingles: 9.0</li>
-        <li>Artes: 7.8</li>
-        <li>FCyE: 8.5</li>
-        <li>Tecnologías: 9.0</li>
-        <li>Musica: 7.8</li>
-      </ul>
-    </div>
-    <div class="trimestre">
-      <h3>3er Trimestre</h3>
-      <ul>
-        <li>Matemáticas: 8.5</li>
-        <li>Español: 9.0</li>
-        <li>Ciencias: 7.8</li>
-        <li>Lectura: 8.5</li>
-        <li>Ingles: 9.0</li>
-        <li>Artes: 7.8</li>
-        <li>FCyE: 8.5</li>
-        <li>Tecnologías: 9.0</li>
-        <li>Musica: 7.8</li>
-      </ul>
-    </div>
-  </div>
+  <div class="tarjetas-trimestre" id="calificacionesTrimestres"></div>
 
   <!-- Promedio final -->
-  <div class="promedio-final">
-    🏆 Promedio final: 8.6
-  </div>
+  <div class="promedio-final" id="promedioFinal">🏆 Promedio final: -</div>
 
   <!-- Alerta temprana -->
-  <div class="alerta-temprana alerta-verde">
-    ✅ ¡Todo bien! No tienes materias en riesgo.
-  </div>
-  <!-- <div class="alerta-temprana alerta-roja">
-    ⚠️ Atención: Tienes materias en riesgo (Alerta Temprana).
-  </div> -->
+  <div id="alertaEstado" class="alerta-temprana">Verificando alertas...</div>
 
-  <!-- Tabla de exámenes -->
-  <table class="tabla-examenes">
-    <tr>
-      <th>Tipo de Examen</th>
-      <th>Materia</th>
-      <th>Calificación</th>
-    </tr>
-    <tr>
-      <td>Conocimiento</td>
-      <td>Matemáticas</td>
-      <td>8.5</td>
-    </tr>
-    <tr>
-      <td>Extraordinario</td>
-      <td>Ciencias</td>
-      <td>9.0</td>
-    </tr>
-  </table>
+  <!-- Resultados por trimestre -->
+  <h3 style="margin-top: 2rem;">Tus Resultados:</h3>
+  <div id="resultadosTrimestres" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;"></div>
 </main>
 
 <footer class="pie">
   © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
 </footer>
 
+<script src="Bloqueos.js"></script>
 <script>
-  function cerrarSesion() {
-    localStorage.clear();
-    window.location.href = "login.html";
-  }
+function cerrarSesion() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
 </script>
 
-<script src="Bloqueos.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+const supabase = createClient(
+  'https://mhnzjhelbupyifdlpngv.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
+);
+
+const matricula = localStorage.getItem("matriculaUsuario") || "";
+const nombre = localStorage.getItem("nombreUsuario") || "Alumno";
+document.getElementById("saludo").textContent = `👋 Hola ${nombre}, Ciclo 2025-2026`;
+
+// Mostrar resultados de alertas (3 trimestres)
+async function cargarAlertas() {
+  const container = document.getElementById("resultadosTrimestres");
+  container.innerHTML = "";
+  let materias = ["Español", "Matematicas", "Tecnología", "FcyE", "Lectura", "Artes", "Ingles", "Ciencias", "Historia", "E. Física"];
+  let hayRiesgo = false;
+
+  for (let t = 1; t <= 3; t++) {
+    const { data, error } = await supabase
+      .from("alertas")
+      .select("materia, estado")
+      .eq("usuario", matricula)
+      .eq("trimestre", t);
+
+    const tabla = document.createElement("table");
+    tabla.innerHTML = `<caption>${t}er Trimestre</caption><tr>${materias.map(m => `<th>${m}</th>`).join("")}</tr>`;
+
+    const estadoRow = document.createElement("tr");
+    materias.forEach(materia => {
+      const alerta = data?.find(d => d.materia === materia);
+      const estado = alerta?.estado === "rojo" ? "rojo" : "verde";
+      if (estado === "rojo") hayRiesgo = true;
+      const td = document.createElement("td");
+      td.textContent = estado;
+      td.style.background = estado;
+      td.style.color = "white";
+      tabla.appendChild(td);
+      estadoRow.appendChild(td);
+    });
+    tabla.appendChild(estadoRow);
+    container.appendChild(tabla);
+  }
+
+  const alertaBox = document.getElementById("alertaEstado");
+  if (hayRiesgo) {
+    alertaBox.className = "alerta-temprana alerta-roja";
+    alertaBox.innerHTML = "⚠️ Atención: Tienes materias en riesgo (Alerta Temprana).";
+  } else {
+    alertaBox.className = "alerta-temprana alerta-verde";
+    alertaBox.innerHTML = "✅ ¡Todo bien! No tienes materias en riesgo.";
+  }
+}
+
+// Mostrar calificaciones
+async function cargarCalificaciones() {
+  const { data, error } = await supabase
+    .from("calificaciones")
+    .select("*")
+    .eq("usuario", matricula);
+
+  if (!data || error) return;
+
+  const trimestres = { 1: [], 2: [], 3: [] };
+  let total = 0, cantidad = 0;
+
+  data.forEach(row => {
+    if (trimestres[row.trimestre]) {
+      trimestres[row.trimestre].push(`<li>${row.materia}: ${row.calificacion}</li>`);
+      total += parseFloat(row.calificacion || 0);
+      cantidad++;
+    }
+  });
+
+  const container = document.getElementById("calificacionesTrimestres");
+  container.innerHTML = "";
+
+  for (let t = 1; t <= 3; t++) {
+    const div = document.createElement("div");
+    div.className = "trimestre";
+    div.innerHTML = `<h3>${t}er Trimestre</h3><ul>${trimestres[t].join("") || "<li>-</li>"}</ul>`;
+    container.appendChild(div);
+  }
+
+  const promedio = cantidad > 0 ? (total / cantidad).toFixed(1) : "-";
+  document.getElementById("promedioFinal").innerHTML = `🏆 Promedio final: ${promedio}`;
+}
+
+cargarCalificaciones();
+cargarAlertas();
+</script>
+
 </body>
 </html>
