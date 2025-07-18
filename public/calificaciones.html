@@ -26,124 +26,113 @@
 </nav>
 
 <main class="calificaciones-panel">
-  <h2 id="saludo">👋 Hola, Alumno</h2>
+  <h2 id="saludo">👋 Hola, Ciclo 2025-2026</h2>
 
-  <!-- Tarjetas de calificaciones -->
-  <div class="tarjetas-trimestre" id="calificacionesTrimestres"></div>
+  <!-- Contenedor de tablas por trimestre -->
+  <div class="contenedor-trimestres">
+    <div class="tabla-trimestre">
+      <h3>1er Trimestre</h3>
+      <table class="tabla-resultados" id="tabla-trimestre-1"></table>
+    </div>
+    <div class="tabla-trimestre">
+      <h3>2do Trimestre</h3>
+      <table class="tabla-resultados" id="tabla-trimestre-2"></table>
+    </div>
+    <div class="tabla-trimestre">
+      <h3>3er Trimestre</h3>
+      <table class="tabla-resultados" id="tabla-trimestre-3"></table>
+    </div>
+  </div>
 
   <!-- Promedio final -->
-  <div class="promedio-final" id="promedioFinal">🏆 Promedio final: -</div>
+  <div class="promedio-final" id="promedioFinal">
+    🏆 Promedio final: -
+  </div>
 
   <!-- Alerta temprana -->
-  <div id="alertaEstado" class="alerta-temprana">Verificando alertas...</div>
-
-  <!-- Resultados por trimestre -->
-  <h3 style="margin-top: 2rem;">Tus Resultados:</h3>
-  <div id="resultadosTrimestres" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;"></div>
+  <div id="alertaBox" class="alerta-temprana">
+    Cargando alertas...
+  </div>
 </main>
 
 <footer class="pie">
   © Escuela Secundaria No. 77 “República de Panamá”. Academia de Tecnologías
 </footer>
 
-<script src="Bloqueos.js"></script>
 <script>
-function cerrarSesion() {
-  localStorage.clear();
-  window.location.href = "login.html";
-}
+  function cerrarSesion() {
+    localStorage.clear();
+    window.location.href = "login.html";
+  }
 </script>
+<script src="Bloqueos.js"></script>
 
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-const supabase = createClient(
-  'https://mhnzjhelbupyifdlpngv.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1obnpqaGVsYnVweWlmZGxwbmd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyMTg1MjUsImV4cCI6MjA2NDc5NDUyNX0.tZAtvUL6kAFfEhwrXgopbQLcnq9qCCm5zpPBkm6z8wY'
-);
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-const matricula = localStorage.getItem("matriculaUsuario") || "";
-const nombre = localStorage.getItem("nombreUsuario") || "Alumno";
-document.getElementById("saludo").textContent = `👋 Hola ${nombre}, Ciclo 2025-2026`;
+  const supabase = createClient(
+    "https://mhnzjhelbupyifdlpngv.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  );
 
-// Mostrar resultados de alertas (3 trimestres)
-async function cargarAlertas() {
-  const container = document.getElementById("resultadosTrimestres");
-  container.innerHTML = "";
-  let materias = ["Español", "Matematicas", "Tecnología", "FcyE", "Lectura", "Artes", "Ingles", "Ciencias", "Historia", "E. Física"];
-  let hayRiesgo = false;
+  const matricula = localStorage.getItem("matriculaUsuario");
+  const nombre = localStorage.getItem("nombreUsuario") || "Alumno";
 
-  for (let t = 1; t <= 3; t++) {
+  document.getElementById("saludo").innerText = `👋 Hola ${nombre}, Ciclo 2025-2026`;
+
+  const trimestres = {
+    1: document.getElementById("tabla-trimestre-1"),
+    2: document.getElementById("tabla-trimestre-2"),
+    3: document.getElementById("tabla-trimestre-3")
+  };
+
+  const colores = {
+    rojo: "background-color: #f44336; color: white;",
+    verde: "background-color: #4CAF50; color: white;"
+  };
+
+  if (matricula) {
     const { data, error } = await supabase
       .from("alertas")
-      .select("materia, estado")
-      .eq("usuario", matricula)
-      .eq("trimestre", t);
+      .select("materia, estado, trimestre")
+      .eq("usuario", matricula);
 
-    const tabla = document.createElement("table");
-    tabla.innerHTML = `<caption>${t}er Trimestre</caption><tr>${materias.map(m => `<th>${m}</th>`).join("")}</tr>`;
+    if (error || !data) {
+      console.error("❌ Error al obtener alertas:", error?.message);
+      document.getElementById("alertaBox").innerText = "⚠️ No se pudieron cargar los resultados.";
+    } else {
+      let materiasEnRiesgo = 0;
 
-    const estadoRow = document.createElement("tr");
-    materias.forEach(materia => {
-      const alerta = data?.find(d => d.materia === materia);
-      const estado = alerta?.estado === "rojo" ? "rojo" : "verde";
-      if (estado === "rojo") hayRiesgo = true;
-      const td = document.createElement("td");
-      td.textContent = estado;
-      td.style.background = estado;
-      td.style.color = "white";
-      tabla.appendChild(td);
-      estadoRow.appendChild(td);
-    });
-    tabla.appendChild(estadoRow);
-    container.appendChild(tabla);
-  }
+      // Agrupar por trimestre
+      const agrupadas = { 1: [], 2: [], 3: [] };
+      data.forEach(row => {
+        const fila = `<tr>
+          <td>${row.materia}</td>
+          <td style="${colores[row.estado] || ''}">${row.estado}</td>
+        </tr>`;
+        agrupadas[row.trimestre]?.push(fila);
+        if (row.estado === "rojo") materiasEnRiesgo++;
+      });
 
-  const alertaBox = document.getElementById("alertaEstado");
-  if (hayRiesgo) {
-    alertaBox.className = "alerta-temprana alerta-roja";
-    alertaBox.innerHTML = "⚠️ Atención: Tienes materias en riesgo (Alerta Temprana).";
-  } else {
-    alertaBox.className = "alerta-temprana alerta-verde";
-    alertaBox.innerHTML = "✅ ¡Todo bien! No tienes materias en riesgo.";
-  }
-}
+      // Insertar tablas
+      [1, 2, 3].forEach(t => {
+        const tabla = agrupadas[t].join("") || "<tr><td colspan='2'>Sin datos</td></tr>";
+        trimestres[t].innerHTML = `<tr><th>Materia</th><th>Estado</th></tr>${tabla}`;
+      });
 
-// Mostrar calificaciones
-async function cargarCalificaciones() {
-  const { data, error } = await supabase
-    .from("calificaciones")
-    .select("*")
-    .eq("usuario", matricula);
-
-  if (!data || error) return;
-
-  const trimestres = { 1: [], 2: [], 3: [] };
-  let total = 0, cantidad = 0;
-
-  data.forEach(row => {
-    if (trimestres[row.trimestre]) {
-      trimestres[row.trimestre].push(`<li>${row.materia}: ${row.calificacion}</li>`);
-      total += parseFloat(row.calificacion || 0);
-      cantidad++;
+      // Mostrar alerta temprana
+      const alertaBox = document.getElementById("alertaBox");
+      if (materiasEnRiesgo > 0) {
+        alertaBox.innerHTML = `⚠️ Atención: Tienes <strong>${materiasEnRiesgo}</strong> materias en riesgo (Alerta Temprana).`;
+        alertaBox.classList.add("alerta-roja");
+      } else {
+        alertaBox.innerHTML = `✅ ¡Todo bien! No tienes materias en riesgo.`;
+        alertaBox.classList.add("alerta-verde");
+      }
     }
-  });
-
-  const container = document.getElementById("calificacionesTrimestres");
-  container.innerHTML = "";
-
-  for (let t = 1; t <= 3; t++) {
-    const div = document.createElement("div");
-    div.className = "trimestre";
-    div.innerHTML = `<h3>${t}er Trimestre</h3><ul>${trimestres[t].join("") || "<li>-</li>"}</ul>`;
-    container.appendChild(div);
+  } else {
+    document.getElementById("alertaBox").innerText = "⚠️ No se encontró matrícula";
   }
-
-  const promedio = cantidad > 0 ? (total / cantidad).toFixed(1) : "-";
-  document.getElementById("promedioFinal").innerHTML = `🏆 Promedio final: ${promedio}`;
-}
-
-cargarCalificaciones();
-cargarAlertas();
 </script>
 
 </body>
