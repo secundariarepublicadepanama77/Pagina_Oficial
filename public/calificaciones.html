@@ -18,7 +18,7 @@
   <a href="menu-alumno.html">🏠 Inicio</a>
   <a href="horario.html">📅 Horario</a>
   <a href="mis_reportes.html">📝 Reportes</a>
-  <a class="disabled">🎓 Calificaciones</a>
+  <a href="calificaciones.html">🎓 Calificaciones</a>
   <a class="disabled">💬 Mensajes</a>
   <a class="disabled">🔒 Próximamente</a>
   <a class="disabled">🔒 Próximamente</a>
@@ -26,33 +26,86 @@
 </nav>
 
 <main class="calificaciones-panel">
-  <h2 id="saludo">👋 Hola, Ciclo 2025-2026</h2>
+  <h2>👋 Hola Juan, Ciclo 2025-2026</h2>
 
-  <!-- Contenedor de tablas por trimestre -->
-  <div class="contenedor-trimestres">
-    <div class="tabla-trimestre">
+  <!-- Tarjetas de calificaciones -->
+  <div class="tarjetas-trimestre">
+    <div class="trimestre">
       <h3>1er Trimestre</h3>
-      <table class="tabla-resultados" id="tabla-trimestre-1"></table>
+      <ul>
+        <li>Matemáticas: 8.5</li>
+        <li>Español: 9.0</li>
+        <li>Ciencias: 7.8</li>
+        <li>Lectura: 8.5</li>
+        <li>Ingles: 9.0</li>
+        <li>Artes: 7.8</li>
+        <li>FCyE: 8.5</li>
+        <li>Tecnologías: 9.0</li>
+        <li>Musica: 7.8</li>
+
+      </ul>
     </div>
-    <div class="tabla-trimestre">
+    <div class="trimestre">
       <h3>2do Trimestre</h3>
-      <table class="tabla-resultados" id="tabla-trimestre-2"></table>
+      <ul>
+        <li>Matemáticas: 8.5</li>
+        <li>Español: 9.0</li>
+        <li>Ciencias: 7.8</li>
+        <li>Lectura: 8.5</li>
+        <li>Ingles: 9.0</li>
+        <li>Artes: 7.8</li>
+        <li>FCyE: 8.5</li>
+        <li>Tecnologías: 9.0</li>
+        <li>Musica: 7.8</li>
+      </ul>
     </div>
-    <div class="tabla-trimestre">
+    <div class="trimestre">
       <h3>3er Trimestre</h3>
-      <table class="tabla-resultados" id="tabla-trimestre-3"></table>
+      <ul>
+        <li>Matemáticas: 8.5</li>
+        <li>Español: 9.0</li>
+        <li>Ciencias: 7.8</li>
+        <li>Lectura: 8.5</li>
+        <li>Ingles: 9.0</li>
+        <li>Artes: 7.8</li>
+        <li>FCyE: 8.5</li>
+        <li>Tecnologías: 9.0</li>
+        <li>Musica: 7.8</li>
+      </ul>
     </div>
   </div>
 
   <!-- Promedio final -->
-  <div class="promedio-final" id="promedioFinal">
-    🏆 Promedio final: -
+  <div class="promedio-final">
+    🏆 Promedio final: 8.6
   </div>
 
   <!-- Alerta temprana -->
-  <div id="alertaBox" class="alerta-temprana">
-    Cargando alertas...
+  <div class="alerta-temprana alerta-verde">
+    ✅ ¡Todo bien! No tienes materias en riesgo.
   </div>
+  <!-- <div class="alerta-temprana alerta-roja">
+    ⚠️ Atención: Tienes materias en riesgo (Alerta Temprana).
+  </div> -->
+
+  <!-- Tabla de exámenes -->
+  <table class="tabla-examenes">
+    <tr>
+      <th>Tipo de Examen</th>
+      <th>Materia</th>
+      <th>Calificación</th>
+    </tr>
+    <tr>
+      <td>Conocimiento</td>
+      <td>Matemáticas</td>
+      <td>8.5</td>
+    </tr>
+    <tr>
+      <td>Extraordinario</td>
+      <td>Ciencias</td>
+      <td>9.0</td>
+    </tr>
+  </table>
 </main>
 
 <footer class="pie">
@@ -65,75 +118,7 @@
     window.location.href = "login.html";
   }
 </script>
+
 <script src="Bloqueos.js"></script>
-
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-  const supabase = createClient(
-    "https://mhnzjhelbupyifdlpngv.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  );
-
-  const matricula = localStorage.getItem("matriculaUsuario");
-  const nombre = localStorage.getItem("nombreUsuario") || "Alumno";
-
-  document.getElementById("saludo").innerText = `👋 Hola ${nombre}, Ciclo 2025-2026`;
-
-  const trimestres = {
-    1: document.getElementById("tabla-trimestre-1"),
-    2: document.getElementById("tabla-trimestre-2"),
-    3: document.getElementById("tabla-trimestre-3")
-  };
-
-  const colores = {
-    rojo: "background-color: #f44336; color: white;",
-    verde: "background-color: #4CAF50; color: white;"
-  };
-
-  if (matricula) {
-    const { data, error } = await supabase
-      .from("alertas")
-      .select("materia, estado, trimestre")
-      .eq("usuario", matricula);
-
-    if (error || !data) {
-      console.error("❌ Error al obtener alertas:", error?.message);
-      document.getElementById("alertaBox").innerText = "⚠️ No se pudieron cargar los resultados.";
-    } else {
-      let materiasEnRiesgo = 0;
-
-      // Agrupar por trimestre
-      const agrupadas = { 1: [], 2: [], 3: [] };
-      data.forEach(row => {
-        const fila = `<tr>
-          <td>${row.materia}</td>
-          <td style="${colores[row.estado] || ''}">${row.estado}</td>
-        </tr>`;
-        agrupadas[row.trimestre]?.push(fila);
-        if (row.estado === "rojo") materiasEnRiesgo++;
-      });
-
-      // Insertar tablas
-      [1, 2, 3].forEach(t => {
-        const tabla = agrupadas[t].join("") || "<tr><td colspan='2'>Sin datos</td></tr>";
-        trimestres[t].innerHTML = `<tr><th>Materia</th><th>Estado</th></tr>${tabla}`;
-      });
-
-      // Mostrar alerta temprana
-      const alertaBox = document.getElementById("alertaBox");
-      if (materiasEnRiesgo > 0) {
-        alertaBox.innerHTML = `⚠️ Atención: Tienes <strong>${materiasEnRiesgo}</strong> materias en riesgo (Alerta Temprana).`;
-        alertaBox.classList.add("alerta-roja");
-      } else {
-        alertaBox.innerHTML = `✅ ¡Todo bien! No tienes materias en riesgo.`;
-        alertaBox.classList.add("alerta-verde");
-      }
-    }
-  } else {
-    document.getElementById("alertaBox").innerText = "⚠️ No se encontró matrícula";
-  }
-</script>
-
 </body>
 </html>
